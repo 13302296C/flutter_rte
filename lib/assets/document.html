@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en" data-squireinit="true">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title></title>
+<style type="text/css">
+  html {
+    height: 100%;
+  }
+  body {
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 100%;
+    padding: 1em;
+    background: transparent;
+    color: #2b2b2b;
+    font: 13px/1.35 Helvetica, arial, sans-serif;
+    cursor: text;
+  }
+  a {
+    text-decoration: underline;
+  }
+  h1 {
+    font-size: 138.5%;
+  }
+  h2 {
+    font-size: 123.1%;
+  }
+  h3 {
+    font-size: 108%;
+  }
+  h1,h2,h3,p {
+    margin: 1em 0;
+  }
+  h4,h5,h6 {
+    margin: 0;
+  }
+  ul, ol {
+    margin: 0 1em;
+    padding: 0 1em;
+  }
+  blockquote {
+    border-left: 2px solid blue;
+    margin: 0;
+    padding: 0 10px;
+  }
+</style>
+<script type="text/javascript">
+/* - - - Init Script - - - */
+</script>
+
+</head>
+<body><div id="editor"></div>
+<script type="text/javascript" src="squire-raw.js"></script>
+<script type="text/javascript">
+  let editor;
+  // let viewId="asd";
+  document.addEventListener("DOMContentLoaded", function(event) {
+    // try{
+
+    //   // init
+    //   editor = new Squire( document.getElementsByTagName('div')[0], {
+    //     blockTag: 'P',
+    //     //blockAttributes: {'style': 'text-indent:3.5em; font-size: 16px;'}
+    //   });
+    //   initCallbacks();
+    //   console.log('Editor loading done');
+    //   window.parent.postMessage(JSON.stringify({"view": viewId, 
+    //     "type": "toDart: initSquire", "result": "Ok"}), "*");
+
+    // } catch(e) {
+    //   window.parent.postMessage(JSON.stringify({"view": viewId, 
+    //   "type": "toDart: initSquire", "result": "Fail"}), "*");
+    //   console.log(e);
+    // }
+    window.parent.addEventListener('message', handleMessage, false);
+    //document.onselectionchange = onSelectionChange;
+  }); 
+
+  function handleMessage(e) {
+    if (e && e.data && e.data.includes("toIframe:")) {
+      var data = JSON.parse(e.data);
+      console.log(data);
+      if (data["view"].includes(viewId)) {
+
+        let command = data["type"].split(' ')[1];
+        if(command == 'execCommand')command = data['command'];
+        console.log(command);
+        switch(command){
+
+          case 'initSquire':
+            try{
+
+              // init
+              editor = new Squire( document, {
+                blockTag: 'P',
+                //blockAttributes: {'style': 'text-indent:3.5em; font-size: 16px;'}
+              });
+              initCallbacks();
+              console.log('Editor loading done');
+              window.parent.postMessage(JSON.stringify({"view": viewId, 
+                "type": "toDart: initSquire", "result": "Ok"}), "*");
+
+            } catch(e) {
+              window.parent.postMessage(JSON.stringify({"view": viewId, 
+              "type": "toDart: initSquire", "result": "Fail"}), "*");
+              console.log(e);
+            }
+            
+            break;
+
+          case 'getHeight':
+            var height = document.body.scrollHeight;
+            window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: htmlHeight", "height": height}), "*");
+            break;
+
+          case 'getText':
+            window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: getText", "text": editor.getHtml()}), "*");
+            break;
+          
+          case 'setText':
+            editor.setHTML(data['text']);
+            break;
+
+          case 'insertText':
+            editor.insertHTML(data['text']);
+            break;
+
+          case 'insertHtml':
+            editor.insertHTML(data['html']);
+            break;
+
+          case 'dispose':
+            editor.destroy();
+            break;
+          
+          // case 'getSelectedText':
+          //   break;
+          // case 'getPath':
+          //   break;
+          // case 'getFontInfo':
+          //   break;
+          // case 'createRange':
+          //   break;
+          // case 'getCursorPosition':
+          //   break;
+          // case 'getSelection':
+          //   break;
+          // case 'setSelection':
+          //   break;
+          // case 'moveCursorToStart':
+          //   break;
+          // case 'moveCursorToEnd':
+          //   break;
+          // case 'saveUndoState':
+          //   break;
+          case 'undo':
+            editor.undo();
+            break;
+          case 'redo':
+            editor.redo();
+            break;
+          // case 'hasFormat':
+          //   break;
+          case 'bold':
+            break;
+          case 'italic':
+            break;
+          case 'undeline':
+            break;
+          case 'removeBold':
+            break;
+          case 'removeItalic':
+            break;
+          case 'removeUnderline':
+            break;
+          // case 'makeLInk':
+          //   break;
+          // case 'removeLink':
+          //   break;
+          // case 'setFontFace':
+          //   break;
+          // case 'setFontSize':
+          //   break;
+          case 'setTextColour':
+          case 'foreColor':
+            console.log(`color: ${data['argument']}`);
+            editor.setTextColour(`#${data['argument']}`);
+            break;
+          // case 'setHighlightColour':
+          //   break;
+          // case 'setTextAlignment':
+          //   break;
+          // case 'setTextDirection':
+          //   break;
+          // case 'forEachBlock':
+          //   break;
+          // case 'modifyBlocks':
+          //   break;
+          // case 'increaseQuoteLevel':
+          //   break;
+          // case 'decreaseQuoteLevel':
+          //   break;
+          // case 'makeUnorderedList':
+          //   break;
+          // case 'makeOrderedList':
+          //   break;
+          // case 'removeList':
+          //   break;
+          // case 'increaseListLevel':
+          //   break;
+          // case 'decreaseListLevel':
+          //   break;
+          // case 'code':
+          //   break;
+          // case 'removeCode':
+          //   break;
+          case 'toggleCode':
+            editor.toggleCode();
+            break;
+          case 'removeFormat':
+          editor.removeAllFormatting();
+            break;
+          // case 'changeFormat':
+          //   break;
+          // case 'modifyDocument':
+          //   break;
+          // case 'linkRegExp':
+          //   break;
+
+        }
+
+        
+        
+        
+        // if (data["type"].includes("setInputType")) {
+        //   document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(htmlEditorOptions.inputType)}');
+        // }
+        
+        // if (data["type"].includes("setFullScreen")) {
+        //   $("#summernote-2").summernote("fullscreen.toggle");
+        // }
+        // if (data["type"].includes("setFocus")) {
+        //   $('#summernote-2').summernote('focus');
+        // }
+        // if (data["type"].includes("clear")) {
+        //   $('#summernote-2').summernote('reset');
+        // }
+        // if (data["type"].includes("setHint")) {
+        //   $(".note-placeholder").html(data["text"]);
+        // }
+        // if (data["type"].includes("toggleCodeview")) {
+        //   $('#summernote-2').summernote('codeview.toggle');
+        // }
+        // if (data["type"].includes("disable")) {
+        //   $('#summernote-2').summernote('disable');
+        // }
+        // if (data["type"].includes("enable")) {
+        //   $('#summernote-2').summernote('enable');
+        // }
+        // if (data["type"].includes("undo")) {
+        //   $('#summernote-2').summernote('undo');
+        // }
+        // if (data["type"].includes("redo")) {
+        //   $('#summernote-2').summernote('redo');
+        // }
+        
+        // if (data["type"].includes("insertNetworkImage")) {
+        //   $('#summernote-2').summernote('insertImage', data["url"], data["filename"]);
+        // }
+        // if (data["type"].includes("insertLink")) {
+        //   $('#summernote-2').summernote('createLink', {
+        //     text: data["text"],
+        //     url: data["url"],
+        //     isNewWindow: data["isNewWindow"]
+        //   });
+        // }
+        // if (data["type"].includes("reload")) {
+        //   window.location.reload();
+        // }
+        // if (data["type"].includes("addNotification")) {
+        //   if (data["alertType"] === null) {
+        //     $('.note-status-output').html(
+        //       data["html"]
+        //     );
+        //   } else {
+        //     $('.note-status-output').html(
+        //       '<div class="' + data["alertType"] + '">' +
+        //         data["html"] +
+        //       '</div>'
+        //     );
+        //   }
+        // }
+        // if (data["type"].includes("removeNotification")) {
+        //   $('.note-status-output').empty();
+        // }
+        // if (data["type"].includes("execCommand")) {
+        //   if (data["argument"] === null) {
+        //     document.execCommand(data["command"], false);
+        //   } else {
+        //     document.execCommand(data["command"], false, data["argument"]);
+        //   }
+        // }
+        // if (data["type"].includes("changeListStyle")) {
+        //   var $focusNode = $(window.getSelection().focusNode);
+        //   var $parentList = $focusNode.closest("div.note-editable ol, div.note-editable ul");
+        //   $parentList.css("list-style-type", data["changed"]);
+        // }
+        // if (data["type"].includes("changeLineHeight")) {
+        //   $('#summernote-2').summernote('lineHeight', data["changed"]);
+        // }
+        // if (data["type"].includes("changeTextDirection")) {
+        //   var s=document.getSelection();			
+        //   if(s==''){
+        //       document.execCommand("insertHTML", false, "<p dir='"+data['direction']+"'></p>");
+        //   }else{
+        //       document.execCommand("insertHTML", false, "<div dir='"+data['direction']+"'>"+ document.getSelection()+"</div>");
+        //   }
+        // }
+        // if (data["type"].includes("changeCase")) {
+        //   var selected = $('#summernote-2').summernote('createRange');
+        //     if(selected.toString()){
+        //         var texto;
+        //         var count = 0;
+        //         var value = data["case"];
+        //         console.log(value);
+        //         var nodes = selected.nodes();
+        //         for (var i=0; i< nodes.length; ++i) {
+        //             if (nodes[i].nodeName == "#text") {
+        //                 count++;
+        //                 texto = nodes[i].nodeValue.toLowerCase();
+        //                 nodes[i].nodeValue = texto;
+        //                 if (value == 'upper') {
+        //                    nodes[i].nodeValue = texto.toUpperCase();
+        //                 }
+        //                 else if (value == 'sentence' && count==1) {
+        //                    nodes[i].nodeValue = texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+        //                 } else if (value == 'title') {
+        //                   var sentence = texto.split(" ");
+        //                   for(var j = 0; j< sentence.length; j++){
+        //                      sentence[j] = sentence[j][0].toUpperCase() + sentence[j].slice(1);
+        //                   }
+        //                   nodes[i].nodeValue = sentence.join(" ");
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // if (data["type"].includes("insertTable")) {
+        //   $('#summernote-2').summernote('insertTable', data["dimensions"]);
+        // }
+        // if (data["type"].includes("getSelectedTextHtml")) {
+        //   var range = window.getSelection().getRangeAt(0);
+        //   var content = range.cloneContents();
+        //   var span = document.createElement('span');
+            
+        //   span.appendChild(content);
+        //   var htmlContent = span.innerHTML;
+          
+        //   window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": htmlContent}), "*");
+        // } else if (data["type"].includes("getSelectedText")) {
+        //   window.parent.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": window.getSelection().toString()}), "*");
+        // }
+        // $userScripts
+      }
+    }
+  }
+  
+  // function onSelectionChange() {
+  //   let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
+  //   var isBold = false;
+  //   var isItalic = false;
+  //   var isUnderline = false;
+  //   var isStrikethrough = false;
+  //   var isSuperscript = false;
+  //   var isSubscript = false;
+  //   var isUL = false;
+  //   var isOL = false;
+  //   var isLeft = false;
+  //   var isRight = false;
+  //   var isCenter = false;
+  //   var isFull = false;
+  //   var parent;
+  //   var fontName;
+  //   var fontSize = 16;
+  //   var foreColor = "000000";
+  //   var backColor = "FFFF00";
+  //   var focusNode2 = $(window.getSelection().focusNode);
+  //   var parentList = focusNode2.closest("div.note-editable ol, div.note-editable ul");
+  //   var parentListType = parentList.css('list-style-type');
+  //   var lineHeight = $(focusNode.parentNode).css('line-height');
+  //   var direction = $(focusNode.parentNode).css('direction');
+  //   if (document.queryCommandState) {
+  //     isBold = document.queryCommandState('bold');
+  //     isItalic = document.queryCommandState('italic');
+  //     isUnderline = document.queryCommandState('underline');
+  //     isStrikethrough = document.queryCommandState('strikeThrough');
+  //     isSuperscript = document.queryCommandState('superscript');
+  //     isSubscript = document.queryCommandState('subscript');
+  //     isUL = document.queryCommandState('insertUnorderedList');
+  //     isOL = document.queryCommandState('insertOrderedList');
+  //     isLeft = document.queryCommandState('justifyLeft');
+  //     isRight = document.queryCommandState('justifyRight');
+  //     isCenter = document.queryCommandState('justifyCenter');
+  //     isFull = document.queryCommandState('justifyFull');
+  //   }
+  //   if (document.queryCommandValue) {
+  //     parent = document.queryCommandValue('formatBlock');
+  //     fontSize = document.queryCommandValue('fontSize');
+  //     foreColor = document.queryCommandValue('foreColor');
+  //     backColor = document.queryCommandValue('hiliteColor');
+  //     fontName = document.queryCommandValue('fontName');
+  //   }
+  //   var message = {
+  //     'view': viewId, 
+  //     'type': "toDart: updateToolbar",
+  //     'style': parent,
+  //     'fontName': fontName,
+  //     'fontSize': fontSize,
+  //     'font': [isBold, isItalic, isUnderline],
+  //     'miscFont': [isStrikethrough, isSuperscript, isSubscript],
+  //     'color': [foreColor, backColor],
+  //     'paragraph': [isUL, isOL],
+  //     'listStyle': parentListType,
+  //     'align': [isLeft, isCenter, isRight, isFull],
+  //     'lineHeight': lineHeight,
+  //     'direction': direction,
+  //   };
+  //   window.parent.postMessage(JSON.stringify(message), "*");
+  // }
+
+
+  function initCallbacks(){
+
+    // change content
+    editor.addEventListener('input', function(){
+        const str = editor.getHTML();
+        window.parent.postMessage(
+          JSON.stringify({ "view": viewId, 
+            "type": "toDart: onChangeContent", "contents": str}), "*");
+        console.log(`onChangeContent: ${str}`);
+      });
+    
+      //on focus
+      editor.addEventListener('focus', function(){
+        window.parent.postMessage(JSON.stringify({"view": viewId, 
+        "type": "toDart: onFocus"}), "*");
+      });
+
+      //on blur
+      editor.addEventListener('blur', function(){
+        window.parent.postMessage(JSON.stringify({"view": viewId, 
+        "type": "toDart: onBlur"}), "*");
+      });
+
+      //on keyDown
+      editor.addEventListener('keydown', function(e){
+        window.parent.postMessage(JSON.stringify({"view": viewId, 
+        "type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
+      });
+
+      //on keyUp
+      editor.addEventListener('keyup', function(e){
+        window.parent.postMessage(JSON.stringify({"view": viewId, 
+        "type": "toDart: onKeyUp", "keyCode": e.keyCode}), "*");
+      });
+
+      //on keyPress
+      editor.addEventListener('keypress', function(e){
+        window.parent.postMessage(JSON.stringify({"view": viewId, 
+        "type": "toDart: onKeyPress", "keyCode": e.keyCode}), "*");
+      });
+
+      //willPaste
+      editor.addEventListener('willPaste', function(e){
+        window.parent.postMessage(JSON.stringify({"view": viewId, 
+        "type": "toDart: onPaste", "text": e.fragment}), "*");
+      });
+
+
+    
+
+    //   if (c.onBeforeCommand != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBeforeCommand", "contents": contents}), "*");
+    //       });\n
+    //     """;
+    // }
+    // if (c.onChangeCodeview != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onChangeCodeview", "contents": contents}), "*");
+    //       });\n
+    //     """;
+    // }
+    // if (c.onDialogShown != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.dialog.shown', function() {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onDialogShown"}), "*");
+    //       });\n
+    //     """;
+    // }
+    // if (c.onEnter != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.enter', function() {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onEnter"}), "*");
+    //       });\n
+    //     """;
+    // }
+
+    // if (c.onBlurCodeview != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.blur.codeview', function() {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBlurCodeview"}), "*");
+    //       });\n
+    //     """;
+    // }
+
+    // if (c.onMouseDown != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.mousedown', function(_) {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onMouseDown"}), "*");
+    //       });\n
+    //     """;
+    // }
+    // if (c.onMouseUp != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.mouseup', function(_) {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onMouseUp"}), "*");
+    //       });\n
+    //     """;
+    // }
+
+    // if (c.onScroll != null) {
+    //   callbacks = callbacks +
+    //       """
+    //       \$('#summernote-2').on('summernote.scroll', function(_) {
+    //         window.parent.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onScroll"}), "*");
+    //       });\n
+    //     """;
+    // }
+
+  
+  }
+</script>
+</body>
+</html>
