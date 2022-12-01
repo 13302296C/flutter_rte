@@ -18,7 +18,7 @@ extension StreamProcessor on HtmlEditorController {
     var channelMethod = (response['type'] as String).split(' ')[1];
 
     switch (channelMethod) {
-      case 'initSquire':
+      case 'initEditor':
         if (response['result'] == 'Ok') {
           _log('======= $viewId INIT SUCCESSFUL ==========');
         } else {

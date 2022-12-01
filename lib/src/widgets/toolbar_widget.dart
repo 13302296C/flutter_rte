@@ -1058,7 +1058,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             _colorSelected[index], updateStatus) ??
                     true;
                 if (proceed) {
-                  await widget.controller.execCommand('foreColor',
+                  await widget.controller.execCommand('textColor',
                       argument: (Colors.black.value & 0xFFFFFF)
                           .toRadixString(16)
                           .padLeft(6, '0')
@@ -1072,7 +1072,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             updateStatus) ??
                     true;
                 if (proceed) {
-                  await widget.controller.execCommand('hiliteColor',
+                  await widget.controller.execCommand('highlightColor',
                       argument: (Colors.yellow.value & 0xFFFFFF)
                           .toRadixString(16)
                           .padLeft(6, '0')
@@ -1151,8 +1151,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     });
                                     widget.controller.execCommand(
                                         'removeFormat',
-                                        argument: 'foreColor');
-                                    widget.controller.execCommand('foreColor',
+                                        argument: 'textColor');
+                                    widget.controller.execCommand('textColor',
                                         argument: 'initial');
                                   }
                                   if (t.getIcons()[index].icon ==
@@ -1162,8 +1162,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                     });
                                     widget.controller.execCommand(
                                         'removeFormat',
-                                        argument: 'hiliteColor');
-                                    widget.controller.execCommand('hiliteColor',
+                                        argument: 'highlightColor');
+                                    widget.controller.execCommand(
+                                        'highlightColor',
                                         argument: 'initial');
                                   }
                                   Navigator.of(context).pop();
@@ -1173,7 +1174,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               onPressed: () {
                                 if (t.getIcons()[index].icon ==
                                     Icons.format_color_text) {
-                                  widget.controller.execCommand('foreColor',
+                                  widget.controller.execCommand('textColor',
                                       argument: (newColor.value & 0xFFFFFF)
                                           .toRadixString(16)
                                           .padLeft(6, '0')
@@ -1184,7 +1185,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 }
                                 if (t.getIcons()[index].icon ==
                                     Icons.format_color_fill) {
-                                  widget.controller.execCommand('hiliteColor',
+                                  widget.controller.execCommand(
+                                      'highlightColor',
                                       argument: (newColor.value & 0xFFFFFF)
                                           .toRadixString(16)
                                           .padLeft(6, '0')

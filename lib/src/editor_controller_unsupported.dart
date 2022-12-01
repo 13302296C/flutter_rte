@@ -125,7 +125,7 @@ class HtmlEditorController extends ChangeNotifier {
   void clearFocus() {}
 
   /// disables the Html editor
-  Future<void> initSummernote(BuildContext initBC, double initHeight) async {}
+  Future<void> initEditor(BuildContext initBC, double initHeight) async {}
 
   /// disables the Html editor
   Future<void> disable() async {}

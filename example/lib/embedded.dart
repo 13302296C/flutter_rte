@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -23,7 +24,7 @@ class EmbeddedState extends State<Embedded> {
           HtmlEditor(
             controller: widget.controller,
             isReadOnly: false,
-            htmlEditorOptions: HtmlEditorOptions(
+            htmlEditorOptions: const HtmlEditorOptions(
               hint: 'Your text here...',
               shouldEnsureVisible: false,
               //initialText: "<p>text content initial, if any</p>",
@@ -54,7 +55,7 @@ class EmbeddedState extends State<Embedded> {
                 return true;
               },
             ),
-            otherOptions: OtherOptions(),
+            otherOptions: const OtherOptions(),
             callbacks: Callbacks(onBeforeCommand: (String? currentHtml) {
               print('html before change is $currentHtml');
             }, onChangeContent: (String? changed) {
@@ -143,9 +144,10 @@ class EmbeddedState extends State<Embedded> {
                   onPressed: () {
                     widget.controller.undo();
                   },
-                  child: Text('Undo', style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text('Undo', style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -153,9 +155,10 @@ class EmbeddedState extends State<Embedded> {
                   onPressed: () {
                     widget.controller.clear();
                   },
-                  child: Text('Reset', style: TextStyle(color: Colors.white)),
+                  child: const Text('Reset',
+                      style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -171,12 +174,12 @@ class EmbeddedState extends State<Embedded> {
                       result = txt;
                     });
                   },
-                  child: Text(
+                  child: const Text(
                     'Submit',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -185,7 +188,7 @@ class EmbeddedState extends State<Embedded> {
                   onPressed: () {
                     widget.controller.redo();
                   },
-                  child: Text(
+                  child: const Text(
                     'Redo',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -207,9 +210,10 @@ class EmbeddedState extends State<Embedded> {
                   onPressed: () {
                     widget.controller.disable();
                   },
-                  child: Text('Disable', style: TextStyle(color: Colors.white)),
+                  child: const Text('Disable',
+                      style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -218,7 +222,7 @@ class EmbeddedState extends State<Embedded> {
                   onPressed: () async {
                     await widget.controller.enable();
                   },
-                  child: Text(
+                  child: const Text(
                     'Enable',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -226,7 +230,7 @@ class EmbeddedState extends State<Embedded> {
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -238,10 +242,10 @@ class EmbeddedState extends State<Embedded> {
                   onPressed: () {
                     widget.controller.insertText('Google');
                   },
-                  child: Text('Insert Text',
+                  child: const Text('Insert Text',
                       style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -251,7 +255,7 @@ class EmbeddedState extends State<Embedded> {
                     widget.controller.insertHtml(
                         '''<p style="color: blue">Google in blue</p>''');
                   },
-                  child: Text('Insert HTML',
+                  child: const Text('Insert HTML',
                       style: TextStyle(color: Colors.white)),
                 ),
               ],
@@ -269,12 +273,12 @@ class EmbeddedState extends State<Embedded> {
                     await widget.controller.insertLink(
                         'Google linked', 'https://google.com', true);
                   },
-                  child: Text(
+                  child: const Text(
                     'Insert Link',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -285,7 +289,7 @@ class EmbeddedState extends State<Embedded> {
                         'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
                         filename: 'Google network image');
                   },
-                  child: Text(
+                  child: const Text(
                     'Insert network image',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -293,7 +297,7 @@ class EmbeddedState extends State<Embedded> {
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -305,9 +309,10 @@ class EmbeddedState extends State<Embedded> {
                     widget.controller.addNotification(
                         'Info notification', NotificationType.info);
                   },
-                  child: Text('Info', style: TextStyle(color: Colors.white)),
+                  child:
+                      const Text('Info', style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -316,9 +321,10 @@ class EmbeddedState extends State<Embedded> {
                     widget.controller.addNotification(
                         'Warning notification', NotificationType.warning);
                   },
-                  child: Text('Warning', style: TextStyle(color: Colors.white)),
+                  child: const Text('Warning',
+                      style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -328,12 +334,12 @@ class EmbeddedState extends State<Embedded> {
                     widget.controller.addNotification(
                         'Success notification', NotificationType.success);
                   },
-                  child: Text(
+                  child: const Text(
                     'Success',
                     style: TextStyle(color: Colors.white),
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -343,7 +349,7 @@ class EmbeddedState extends State<Embedded> {
                     widget.controller.addNotification(
                         'Danger notification', NotificationType.danger);
                   },
-                  child: Text(
+                  child: const Text(
                     'Danger',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -351,7 +357,7 @@ class EmbeddedState extends State<Embedded> {
               ],
             ),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
@@ -363,10 +369,10 @@ class EmbeddedState extends State<Embedded> {
                     widget.controller.addNotification(
                         'Plaintext notification', NotificationType.plaintext);
                   },
-                  child:
-                      Text('Plaintext', style: TextStyle(color: Colors.white)),
+                  child: const Text('Plaintext',
+                      style: TextStyle(color: Colors.white)),
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 16,
                 ),
                 TextButton(
@@ -375,7 +381,7 @@ class EmbeddedState extends State<Embedded> {
                   onPressed: () async {
                     widget.controller.removeNotification();
                   },
-                  child: Text(
+                  child: const Text(
                     'Remove',
                     style: TextStyle(color: Colors.white),
                   ),

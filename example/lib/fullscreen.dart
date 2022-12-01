@@ -57,14 +57,14 @@ class _FullscreenState extends State<Fullscreen> {
                       // SizedBox(height: 48),
                       // Divider(),
                       // MouseRegion(
-                      //   onEnter: (e) {
-                      //     _withinHypothesisRegion = true;
-                      //     if (mounted) setState(() {});
-                      //   },
-                      //   onExit: (e) {
-                      //     _withinHypothesisRegion = false;
-                      //     if (mounted) setState(() {});
-                      //   },
+                      //   // onEnter: (e) {
+                      //   //   _withinHypothesisRegion = true;
+                      //   //   if (mounted) setState(() {});
+                      //   // },
+                      //   // onExit: (e) {
+                      //   //   _withinHypothesisRegion = false;
+                      //   //   if (mounted) setState(() {});
+                      //   // },
                       //   child: Padding(
                       //     padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                       //     child: Column(
@@ -98,65 +98,70 @@ class _FullscreenState extends State<Fullscreen> {
 
                       const SizedBox(height: 48),
                       const Divider(),
-                      MouseRegion(
-                        // onEnter: (e) {
-                        //   // _withinEquipmentRegion = true;
-                        //   // if (mounted) setState(() {});
-                        //   _e!.enable();
-                        // },
-                        // onExit: (e) {
-                        //   // _withinEquipmentRegion = false;
-                        //   // if (mounted) setState(() {});
-                        //   _e!.disable();
-                        // },
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Text('Equipment and Materials Used:',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6!
-                                          .copyWith(
-                                              decoration:
-                                                  TextDecoration.underline)),
-                                ],
-                              ),
-                              HtmlEditor(
-                                controller: _e!,
-                                minHeight: 100,
-                                isReadOnly: !_withinEquipmentRegion,
-                                onChanged: (s) {
-                                  _eqpt = s!;
-                                },
-                                // htmlEditorOptions: HtmlEditorOptions(
-                                //     hint: 'Your text here ...',
-                                //     initialText: _eqpt),
-                                htmlToolbarOptions:
-                                    HtmlToolbarOptions(defaultToolbarButtons: [
-                                  const FontButtons(),
-                                  const ListButtons(listStyles: false),
-                                  const ColorButtons(),
-                                  const ParagraphButtons(
-                                      caseConverter: false,
-                                      textDirection: false,
-                                      decreaseIndent: kIsWeb,
-                                      lineHeight: false,
-                                      increaseIndent: kIsWeb),
-                                  //const StyleButtons(),
-                                  if (kIsWeb)
-                                    const InsertButtons(
-                                        picture: false,
-                                        audio: false,
-                                        video: false,
-                                        otherFile: false),
-                                  if (kDebugMode && kIsWeb)
-                                    const OtherButtons(fullscreen: false),
-                                ], toolbarType: ToolbarType.nativeExpandable),
-                              ),
-                            ],
+                      Container(
+                        color: Colors.grey[100],
+                        child: MouseRegion(
+                          // onEnter: (e) {
+                          //   // _withinEquipmentRegion = true;
+                          //   // if (mounted) setState(() {});
+                          //   _e!.enable();
+                          // },
+                          // onExit: (e) {
+                          //   // _withinEquipmentRegion = false;
+                          //   // if (mounted) setState(() {});
+                          //   _e!.disable();
+                          // },
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Text('Equipment and Materials Used:',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline6!
+                                            .copyWith(
+                                                decoration:
+                                                    TextDecoration.underline)),
+                                  ],
+                                ),
+                                HtmlEditor(
+                                  controller: _e!,
+                                  minHeight: 200,
+                                  isReadOnly: !_withinEquipmentRegion,
+                                  onChanged: (s) {
+                                    _eqpt = s!;
+                                  },
+                                  // htmlEditorOptions: HtmlEditorOptions(
+                                  //     hint: 'Your text here ...',
+                                  //     initialText: _eqpt),
+                                  htmlToolbarOptions: HtmlToolbarOptions(
+                                      defaultToolbarButtons: [
+                                        const FontButtons(),
+                                        const ListButtons(listStyles: false),
+                                        const ColorButtons(),
+                                        ParagraphButtons(
+                                            caseConverter: false,
+                                            textDirection: false,
+                                            decreaseIndent: kIsWeb,
+                                            lineHeight: false,
+                                            increaseIndent: kIsWeb),
+                                        //const StyleButtons(),
+                                        if (kIsWeb)
+                                          const InsertButtons(
+                                              picture: false,
+                                              audio: false,
+                                              video: false,
+                                              otherFile: false),
+                                        if (kDebugMode && kIsWeb)
+                                          const OtherButtons(fullscreen: false),
+                                      ],
+                                      toolbarType:
+                                          ToolbarType.nativeExpandable),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

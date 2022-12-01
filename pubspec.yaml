@@ -1,5 +1,6 @@
 name: flutter_rich_text_editor
 description: A new Flutter package project.
+
 version: 0.0.1
 homepage:
 
@@ -30,11 +31,13 @@ dev_dependencies:
 
 # The following section is specific to Flutter.
 flutter:
-
   assets:
-    - packages/flutter_rich_text_editor/assets/document.html
-    - packages/flutter_rich_text_editor/assets/squire.js
-    - packages/flutter_rich_text_editor/assets/squire-raw.js
+    - packages/flutter_rich_text_editor/document.html
+    - packages/flutter_rich_text_editor/squire.js
+    - packages/flutter_rich_text_editor/squire-raw.js
+    - lib/assets/document.html
+    - lib/assets/squire.js
+    - lib/assets/squire-raw.js
 
   # To add assets to your package, add an assets section, like this:
   # assets:

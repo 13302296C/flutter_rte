@@ -11,6 +11,7 @@ import 'package:flutter_rich_text_editor/src/editor_controller_unsupported.dart'
     as unsupported;
 import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
 part 'editor_controller_web_events.dart';
+part 'editor_controller_web_fn.dart';
 
 /// Controller for web
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -72,6 +73,81 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   String get viewId => _viewId!;
 
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+  // - - - - - - - - METHODS API - - - - - - - - - - - - - - - - - - - - - //
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+
+  /// Sets the focus to the editor.
+  @override
+  void setFocus() {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: setFocus'});
+  }
+
+  /// Clears the focus from the webview
+  @override
+  void clearFocus() {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: clearFocus'});
+  }
+
+  /// disables the Html editor
+  @override
+  Future<void> disable() async {
+    if (alreadyDisabled) return;
+    toolbar?.disable();
+    await _evaluateJavascriptWeb(data: {'type': 'toIframe: disable'});
+    await recalculateHeight();
+    notifyListeners();
+    alreadyDisabled = true;
+  }
+
+  /// enables the Html editor
+  @override
+  Future<void> enable() async {
+    toolbar?.enable();
+    await _evaluateJavascriptWeb(data: {'type': 'toIframe: enable'});
+    await recalculateHeight();
+    notifyListeners();
+    setFocus();
+    alreadyDisabled = false;
+  }
+
+  /// Undoes the last action
+  @override
+  void undo() {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: undo'});
+  }
+
+  /// Redoes the last action
+  @override
+  void redo() {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: redo'});
+  }
+
+  /// Sets the text of the editor. Some pre-processing is applied to convert
+  /// [String] elements like "\n" to HTML elements.
+  @override
+  void setText(String text) {
+    text = _processHtml(html: text);
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: setText', 'text': text});
+  }
+
+  /// Insert text at the end of the current HTML content in the editor
+  /// Note: This method should only be used for plaintext strings
+  @override
+  Future<void> insertText(String text) async {
+    await _evaluateJavascriptWeb(
+        data: {'type': 'toIframe: insertText', 'text': text});
+  }
+
+  /// Insert HTML at the position of the cursor in the editor
+  /// Note: This method should not be used for plaintext strings
+  @override
+  Future<void> insertHtml(String html) async {
+    html = _processHtml(html: html);
+    await _evaluateJavascriptWeb(
+        data: {'type': 'toIframe: insertHtml', 'html': html});
+  }
+
   /// Gets the text from the editor and returns it as a [String].
   @override
   Future<String> getText() async {
@@ -83,6 +159,15 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     unawaited(_evaluateJavascriptWeb(data: {'type': 'toIframe: getText'}));
     return _openRequests['toDart: getText']?.future as Future<String>;
   }
+
+  /// Clears the editor of any text.
+  @override
+  Future<void> clear() async {
+    await _evaluateJavascriptWeb(data: {'type': 'toIframe: clear'});
+  }
+
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
+  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
   @override
   Future<String> getSelectedTextWeb({bool withHtmlTags = false}) async {
@@ -107,31 +192,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     //     .future; // json.decode(e.data)['text'];
   }
 
-  /// Sets the text of the editor. Some pre-processing is applied to convert
-  /// [String] elements like "\n" to HTML elements.
-  @override
-  void setText(String text) {
-    text = _processHtml(html: text);
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: setText', 'text': text});
-  }
-
   /// Sets the editor to full-screen mode.
-  @override
-  void setFullScreen() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: setFullScreen'});
-  }
-
-  /// Sets the focus to the editor.
-  @override
-  void setFocus() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: setFocus'});
-  }
-
-  /// Clears the editor of any text.
-  @override
-  Future<void> clear() async {
-    await _evaluateJavascriptWeb(data: {'type': 'toIframe: clear'});
-  }
+  // @override
+  // void setFullScreen() {
+  //   _evaluateJavascriptWeb(data: {'type': 'toIframe: setFullScreen'});
+  // }
 
   /// Sets the hint for the editor.
   @override
@@ -146,69 +211,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: toggleCode'});
   }
 
-  /// disables the Html editor
-  @override
-  Future<void> disable() async {
-    if (alreadyDisabled) return;
-    toolbar?.disable();
-    await _evaluateJavascriptWeb(data: {'type': 'toIframe: disable'});
-
-    await recalculateHeight();
-    notifyListeners();
-    alreadyDisabled = true;
-  }
-
-  /// enables the Html editor
-  @override
-  Future<void> enable() async {
-    toolbar?.enable();
-    await _evaluateJavascriptWeb(data: {'type': 'toIframe: enable'});
-
-    await recalculateHeight();
-    notifyListeners();
-    setFocus();
-    alreadyDisabled = false;
-  }
-
-  /// Undoes the last action
-  @override
-  void undo() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: undo'});
-  }
-
-  /// Redoes the last action
-  @override
-  void redo() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: redo'});
-  }
-
-  /// Insert text at the end of the current HTML content in the editor
-  /// Note: This method should only be used for plaintext strings
-  @override
-  Future<void> insertText(String text) async {
-    await _evaluateJavascriptWeb(
-        data: {'type': 'toIframe: insertText', 'text': text});
-  }
-
-  /// Insert HTML at the position of the cursor in the editor
-  /// Note: This method should not be used for plaintext strings
-  @override
-  Future<void> insertHtml(String html) async {
-    html = _processHtml(html: html);
-    await _evaluateJavascriptWeb(
-        data: {'type': 'toIframe: insertHtml', 'html': html});
-  }
-
-  /// Insert a network image at the position of the cursor in the editor
-  @override
-  void insertNetworkImage(String url, {String filename = ''}) {
-    _evaluateJavascriptWeb(data: {
-      'type': 'toIframe: insertNetworkImage',
-      'url': url,
-      'filename': filename
-    });
-  }
-
   /// Insert a link at the position of the cursor in the editor
   @override
   Future<void> insertLink(String text, String url, bool isNewWindow) async {
@@ -218,15 +220,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       'url': url,
       'isNewWindow': isNewWindow
     });
-  }
-
-  /// Clears the focus from the webview by hiding the keyboard, calling the
-  /// clearFocus method on the [InAppWebViewController], and resetting the height
-  /// in case it was changed.
-  @override
-  void clearFocus() {
-    throw Exception(
-        'Flutter Web environment detected, please make sure you are importing package:flutter_rich_text_editor/html_editor.dart and check kIsWeb before calling this method.');
   }
 
   /// Resets the height of the editor back to the original if it was changed to
@@ -322,31 +315,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         data: {'type': 'toIframe: insertTable', 'dimensions': dimensions});
   }
 
-  /// Add a notification to the bottom of the editor. This is styled similar to
-  /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
-  /// and the notificationType determines how the alert is displayed.
-  @override
-  void addNotification(String html, NotificationType notificationType) {
-    if (notificationType == NotificationType.plaintext) {
-      _evaluateJavascriptWeb(
-          data: {'type': 'toIframe: addNotification', 'html': html});
-    } else {
-      _evaluateJavascriptWeb(data: {
-        'type': 'toIframe: addNotification',
-        'html': html,
-        'alertType': 'alert alert-${describeEnum(notificationType)}'
-      });
-    }
-    recalculateHeight();
-  }
-
-  /// Remove the current notification from the bottom of the editor
-  @override
-  void removeNotification() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: removeNotification'});
-    recalculateHeight();
-  }
-
   /// Helper function to process input html
   String _processHtml({required html}) {
     if (processInputHtml) {
@@ -375,7 +343,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   @override
-  Future<void> initSummernote(BuildContext initBC, double initHeight) async {
+  Future<void> initEditor(BuildContext initBC, double initHeight) async {
     if (initialized) throw Exception('Already initialized');
     log('================== INIT CALLED ======================');
     log('height: $initHeight');
@@ -517,16 +485,27 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             '\n';
       });
     }
-    var initScript = '''
-  const viewId = '$viewId';
-    ''';
-    var filePath = 'packages/flutter_rich_text_editor/assets/document.html';
+    var initScript = 'const viewId = \'$viewId\';';
+    var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
     if (htmlEditorOptions.filePath != null) {
       filePath = htmlEditorOptions.filePath!;
     }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
         htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
+
+    /// if no discrete height is provided - hide the scrollbar as the
+    /// container height will always adjust to the document height
+    if (otherOptions.height == null) {
+      var hideScrollbarCss = '''
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+''';
+      htmlString = htmlString.replaceFirst(
+          '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
+    }
 
     final iframe = html.IFrameElement()
       ..width = MediaQuery.of(initBC).size.width.toString() //'800'
@@ -563,7 +542,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         //   }
         // });
 
-        var data = <String, Object>{'type': 'toIframe: initSquire'};
+        var data = <String, Object>{'type': 'toIframe: initEditor'};
         data['view'] = viewId;
         final jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);

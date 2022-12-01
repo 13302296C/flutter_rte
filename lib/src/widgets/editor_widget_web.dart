@@ -48,7 +48,7 @@ class HtmlEditorWidget extends StatelessWidget {
       if (controller.isReadOnly) {
         controller.toolbarHeight = 0;
         if (!controller.initialized) {
-          controller.initSummernote(initBC, otherOptions.height ?? _height);
+          controller.initEditor(initBC, otherOptions.height ?? _height);
         }
         log('======toolbar height = ${controller.toolbarHeight}');
       } else {
@@ -56,8 +56,7 @@ class HtmlEditorWidget extends StatelessWidget {
         //setState(mounted, this.setState, () {
 
         if (!controller.initialized) {
-          controller.initSummernote(
-              initBC, _height - controller.toolbarHeight!);
+          controller.initEditor(initBC, _height - controller.toolbarHeight!);
         }
         controller.toolbarHeight = controller.isReadOnly ? 0 : 51;
         log('======toolbar height = ${controller.toolbarHeight}');
@@ -70,7 +69,7 @@ class HtmlEditorWidget extends StatelessWidget {
         builder: (context, _) {
           //log('controllerInited: ${controller.initialized}');
           return Container(
-            height: _height,
+            height: _height + 51,
             child: Column(
               children: <Widget>[
                 if (htmlToolbarOptions.toolbarPosition ==
