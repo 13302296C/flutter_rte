@@ -44,7 +44,12 @@ class HtmlEditorController extends ChangeNotifier {
   ValueNotifier<double> contentHeight = ValueNotifier(0);
   double get actualHeight => contentHeight.value;
 
-  double? toolbarHeight;
+  double? _toolbarHeight;
+  double? get toolbarHeight => _toolbarHeight;
+  set toolbarHeight(double? height) {
+    _toolbarHeight = height;
+    notifyListeners();
+  }
 
   /// The editor will automatically adjust its height once the page is loaded to
   /// ensure there is no vertical scrolling or empty space. It will only perform

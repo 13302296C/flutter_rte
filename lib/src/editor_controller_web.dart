@@ -129,6 +129,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   void setText(String text) {
     text = _processHtml(html: text);
     _evaluateJavascriptWeb(data: {'type': 'toIframe: setText', 'text': text});
+    recalculateHeight();
   }
 
   /// Insert text at the end of the current HTML content in the editor
@@ -166,6 +167,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     await _evaluateJavascriptWeb(data: {'type': 'toIframe: clear'});
   }
 
+  /// toggles the codeview in the Html editor
+  @override
+  void toggleCodeView() {
+    _evaluateJavascriptWeb(data: {'type': 'toIframe: toggleCode'});
+  }
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
@@ -199,23 +206,17 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   // }
 
   /// Sets the hint for the editor.
-  @override
-  void setHint(String text) {
-    text = _processHtml(html: text);
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: setHint', 'text': text});
-  }
-
-  /// toggles the codeview in the Html editor
-  @override
-  void toggleCodeView() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: toggleCode'});
-  }
+  // @override
+  // void setHint(String text) {
+  //   text = _processHtml(html: text);
+  //   _evaluateJavascriptWeb(data: {'type': 'toIframe: setHint', 'text': text});
+  // }
 
   /// Insert a link at the position of the cursor in the editor
   @override
   Future<void> insertLink(String text, String url, bool isNewWindow) async {
     await _evaluateJavascriptWeb(data: {
-      'type': 'toIframe: insertLink',
+      'type': 'toIframe: makeLink',
       'text': text,
       'url': url,
       'isNewWindow': isNewWindow
@@ -414,61 +415,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         }
       }
     }
-    if (callbacks != null) {
-      if (callbacks!.onImageLinkInsert != null) {
-        summernoteCallbacks = summernoteCallbacks +
-            '''
-          onImageLinkInsert: function(url) {
-            window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onImageLinkInsert", "url": url}), "*");
-          },
-        ''';
-      }
-      if (callbacks!.onImageUpload != null) {
-        summernoteCallbacks = summernoteCallbacks +
-            """
-          onImageUpload: function(files) {
-            var reader = new FileReader();
-            var base64 = "<an error occurred>";
-            reader.onload = function (_) {
-              base64 = reader.result;
-              var newObject = {
-                 'lastModified': files[0].lastModified,
-                 'lastModifiedDate': files[0].lastModifiedDate,
-                 'name': files[0].name,
-                 'size': files[0].size,
-                 'type': files[0].type,
-                 'base64': base64
-              };
-              window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onImageUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type, "base64": base64}), "*");
-            };
-            reader.onerror = function (_) {
-              var newObject = {
-                 'lastModified': files[0].lastModified,
-                 'lastModifiedDate': files[0].lastModifiedDate,
-                 'name': files[0].name,
-                 'size': files[0].size,
-                 'type': files[0].type,
-                 'base64': base64
-              };
-              window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onImageUpload", "lastModified": files[0].lastModified, "lastModifiedDate": files[0].lastModifiedDate, "name": files[0].name, "size": files[0].size, "mimeType": files[0].type, "base64": base64}), "*");
-            };
-            reader.readAsDataURL(files[0]);
-          },
-        """;
-      }
-      if (callbacks!.onImageUploadError != null) {
-        summernoteCallbacks = summernoteCallbacks +
-            """
-              onImageUploadError: function(file, error) {
-                if (typeof file === 'string') {
-                  window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onImageUploadError", "base64": file, "error": error}), "*");
-                } else {
-                  window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onImageUploadError", "lastModified": file.lastModified, "lastModifiedDate": file.lastModifiedDate, "name": file.name, "size": file.size, "mimeType": file.type, "error": error}), "*");
-                }
-              },
-            """;
-      }
-    }
+
     summernoteCallbacks = summernoteCallbacks + '}';
     if ((Theme.of(initBC).brightness == Brightness.dark ||
             htmlEditorOptions.darkMode == true) &&
@@ -521,9 +468,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         }
         if (callbacks != null && callbacks!.onInit != null) {
           callbacks!.onInit!.call();
-        }
-        if (htmlEditorOptions.initialText != null) {
-          setText(htmlEditorOptions.initialText!);
         }
 
         // html.window.onMessage.listen((event) {

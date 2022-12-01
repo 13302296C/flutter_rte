@@ -45,8 +45,10 @@
   } */
   blockquote {
     border-left: .5em solid lightblue;
-    margin: 1em 0;
-    padding: 0 1em 0 0;
+    margin: 2em;
+    padding: .5em 1em;
+    font-style: italic;
+    background-color: #2b2b2b10;
   }
   [contenteditable]:focus {
       outline: 0px solid transparent;
@@ -217,10 +219,14 @@
             editor.removeUnderline();
             break;
 
-          // case 'makeLInk':
-          //   break;
-          // case 'removeLink':
-          //   break;
+          case 'makeLink':
+            editor.makeLink(data['url'], {target: '_blank'});
+            break;
+
+          case 'removeLink':
+
+            break;
+
           // case 'setFontFace':
           //   break;
           // case 'setFontSize':
@@ -231,7 +237,7 @@
             break;
 
           case 'highlightColor':
-            editor.setHighLightColour(`#${data['argument']}`);
+            editor.setHighlightColour(`#${data['argument']}`);
             break;
 
           case 'justifyLeft':
@@ -272,8 +278,9 @@
           case 'insertOrderedList':
             editor.makeOrderedList();
             break;
-          // case 'removeList':
-          //   break;
+          case 'removeList':
+            editor.removeList();
+            break;
           // case 'increaseListLevel':
           //   break;
           // case 'decreaseListLevel':
@@ -398,6 +405,7 @@
     var isSubscript = false;
     var isUL = false;
     var isOL = false;
+    var isLink = false;
     var isLeft = false;
     var isRight = false;
     var isCenter = false;
@@ -421,6 +429,7 @@
       isSubscript = document.queryCommandState('subscript');
       isUL = document.queryCommandState('insertUnorderedList');
       isOL = document.queryCommandState('insertOrderedList');
+      isLink = editor.hasFormat('a');
       isLeft = document.queryCommandState('justifyLeft');
       isRight = document.queryCommandState('justifyRight');
       isCenter = document.queryCommandState('justifyCenter');
@@ -430,7 +439,7 @@
       parent = document.queryCommandValue('formatBlock');
       fontSize = document.queryCommandValue('fontSize');
       foreColor = document.queryCommandValue('foreColor');
-      backColor = document.queryCommandValue('hiliteColor');
+      backColor = document.queryCommandValue('highlightColor');
       fontName = document.queryCommandValue('fontName');
     }
     var message = {
@@ -443,6 +452,7 @@
       'miscFont': [isStrikethrough, isSuperscript, isSubscript],
       'color': [foreColor, backColor],
       'paragraph': [isUL, isOL],
+      'link': isLink,
       'listStyle': parentListType,
       'align': [isLeft, isCenter, isRight, isFull],
       'lineHeight': lineHeight,
@@ -515,6 +525,16 @@
       document.addEventListener('click', function(e){
         window.parent.postMessage(JSON.stringify({"view": viewId, 
           "type": "toDart: mouseClick"}), "*");
+      });
+
+      // scroll
+      window.onScroll = function(e){
+        console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
+      }
+      window.addEventListener('scroll', function(e){
+        console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
+        window.parent.postMessage(JSON.stringify({"view": viewId, 
+          "type": "toDart: scroll"}), "*");
       });
     
 

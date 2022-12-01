@@ -69,7 +69,7 @@ class HtmlEditorWidget extends StatelessWidget {
         builder: (context, _) {
           //log('controllerInited: ${controller.initialized}');
           return Container(
-            height: _height + 51,
+            height: _height,
             child: Column(
               children: <Widget>[
                 if (htmlToolbarOptions.toolbarPosition ==

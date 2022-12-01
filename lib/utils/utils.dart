@@ -54,6 +54,7 @@ class EditorSettings {
   Color backgroundColor;
   bool isUl;
   bool isOl;
+  bool isLink;
   bool isAlignLeft;
   bool isAlignCenter;
   bool isAlignRight;
@@ -75,6 +76,7 @@ class EditorSettings {
     required this.backgroundColor,
     required this.isUl,
     required this.isOl,
+    required this.isLink,
     required this.isAlignLeft,
     required this.isAlignCenter,
     required this.isAlignRight,
@@ -114,7 +116,7 @@ class ExpandIconDelegate extends SliverPersistentHeaderDelegate {
     return Container(
       height: _size,
       width: _size,
-      color: Theme.of(context).scaffoldBackgroundColor,
+      color: Colors.transparent,
       child: IconButton(
         constraints: BoxConstraints(
           maxHeight: _size!,

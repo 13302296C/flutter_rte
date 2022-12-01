@@ -170,8 +170,6 @@ class HtmlToolbarOptions {
     this.toolbarItemHeight = 36,
     this.gridViewHorizontalSpacing = 5,
     this.gridViewVerticalSpacing = 5,
-    this.customToolbarButtons = const [],
-    this.customToolbarInsertionIndices = const [],
   });
 
   /// Allows you to set the allowed extensions when a user inserts an audio file
@@ -179,26 +177,8 @@ class HtmlToolbarOptions {
   /// By default any audio extension is allowed.
   final List<String>? audioExtensions;
 
-  /// Allows you to create your own buttons that are added to the end of the
-  /// default buttons list
-  @Deprecated('Consider [CustomButtonGroup] object instead')
-  final List<Widget> customToolbarButtons;
-
   /// Adds custom groups of buttons to the toolbar
   final List<CustomButtonGroup> customButtonGroups;
-
-  /// Allows you to set where each custom toolbar button is inserted into the
-  /// toolbar buttons.
-  ///
-  /// Notes: 1) This list should have the same length as the [customToolbarButtons]
-  ///
-  /// 2) If any indices > [defaultToolbarButtons.length] then the plugin will
-  /// automatically account for this and insert the buttons at the end of the
-  /// [defaultToolbarButtons]
-  ///
-  /// 3) If any indices < 0 then the plugin will automatically account for this
-  /// and insert the buttons at the beginning of the [defaultToolbarButtons]
-  final List<int> customToolbarInsertionIndices;
 
   /// Sets which options are visible in the toolbar for the editor.
   final List<Toolbar> defaultToolbarButtons;

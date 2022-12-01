@@ -7,6 +7,10 @@ class Fullscreen extends StatefulWidget {
 
   @override
   State<Fullscreen> createState() => _FullscreenState();
+
+  static const String example = '''
+<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; color: rgb(74, 74, 74); font-family: Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><br></p><p style="text-indent: 3.5em; border: none; text-align: justify;" class=" align-justify">You can build apps with Flutter using any text editor combined with Flutter’s command-line tools. However, we recommend using one of our editor plugins for an even better experience. These plugins provide you with code completion, syntax highlighting, widget editing assists, run &amp; debug support, and more.<br></p><p style="text-indent:3.5em; border: none;"><br></p><div><hr><br></div><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><p style="text-indent:3.5em; border: none;"><br></p><div><hr><br></div><p style="text-indent: 3.5em; border: none; text-align: justify;" class=" align-justify">You can build apps with Flutter using any text editor combined with Flutter’s command-line tools. However, we recommend using one of our editor plugins for an even better experience. These plugins provide you with code completion, syntax highlighting, widget editing assists, run &amp; debug support, and more.<br></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; color: rgb(74, 74, 74); font-family: Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;" class=" align-justify">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></p><p style="text-indent:3.5em; border: none;"><br></p>
+''';
 }
 
 class _FullscreenState extends State<Fullscreen> {
@@ -98,70 +102,66 @@ class _FullscreenState extends State<Fullscreen> {
 
                       const SizedBox(height: 48),
                       const Divider(),
-                      Container(
-                        color: Colors.grey[100],
-                        child: MouseRegion(
-                          // onEnter: (e) {
-                          //   // _withinEquipmentRegion = true;
-                          //   // if (mounted) setState(() {});
-                          //   _e!.enable();
-                          // },
-                          // onExit: (e) {
-                          //   // _withinEquipmentRegion = false;
-                          //   // if (mounted) setState(() {});
-                          //   _e!.disable();
-                          // },
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text('Equipment and Materials Used:',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline6!
-                                            .copyWith(
-                                                decoration:
-                                                    TextDecoration.underline)),
-                                  ],
-                                ),
-                                HtmlEditor(
-                                  controller: _e!,
-                                  minHeight: 200,
-                                  isReadOnly: !_withinEquipmentRegion,
-                                  onChanged: (s) {
-                                    _eqpt = s!;
-                                  },
-                                  // htmlEditorOptions: HtmlEditorOptions(
-                                  //     hint: 'Your text here ...',
-                                  //     initialText: _eqpt),
-                                  htmlToolbarOptions: HtmlToolbarOptions(
-                                      defaultToolbarButtons: [
-                                        const FontButtons(),
-                                        const ListButtons(listStyles: false),
-                                        const ColorButtons(),
-                                        ParagraphButtons(
-                                            caseConverter: false,
-                                            textDirection: false,
-                                            decreaseIndent: kIsWeb,
-                                            lineHeight: false,
-                                            increaseIndent: kIsWeb),
-                                        //const StyleButtons(),
-                                        if (kIsWeb)
-                                          const InsertButtons(
-                                              picture: false,
-                                              audio: false,
-                                              video: false,
-                                              otherFile: false),
-                                        if (kDebugMode && kIsWeb)
-                                          const OtherButtons(fullscreen: false),
-                                      ],
-                                      toolbarType:
-                                          ToolbarType.nativeExpandable),
-                                ),
-                              ],
-                            ),
+                      MouseRegion(
+                        // onEnter: (e) {
+                        //   // _withinEquipmentRegion = true;
+                        //   // if (mounted) setState(() {});
+                        //   _e!.enable();
+                        // },
+                        // onExit: (e) {
+                        //   // _withinEquipmentRegion = false;
+                        //   // if (mounted) setState(() {});
+                        //   _e!.disable();
+                        // },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: Column(
+                            children: [
+                              Row(
+                                children: [
+                                  Text('Equipment and Materials Used:',
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6!
+                                          .copyWith(
+                                              decoration:
+                                                  TextDecoration.underline)),
+                                ],
+                              ),
+                              HtmlEditor(
+                                controller: _e!,
+                                initialValue: Fullscreen.example,
+                                minHeight: 200,
+                                isReadOnly: !_withinEquipmentRegion,
+                                onChanged: (s) {
+                                  _eqpt = s!;
+                                },
+                                // htmlEditorOptions: HtmlEditorOptions(
+                                //     hint: 'Your text here ...',
+                                //     initialText: _eqpt),
+                                htmlToolbarOptions:
+                                    HtmlToolbarOptions(defaultToolbarButtons: [
+                                  const FontButtons(),
+                                  const ListButtons(listStyles: false),
+                                  const ColorButtons(),
+                                  ParagraphButtons(
+                                      caseConverter: false,
+                                      textDirection: false,
+                                      decreaseIndent: kIsWeb,
+                                      lineHeight: false,
+                                      increaseIndent: kIsWeb),
+                                  //const StyleButtons(),
+                                  if (kIsWeb)
+                                    const InsertButtons(
+                                        picture: false,
+                                        audio: false,
+                                        video: false,
+                                        otherFile: false),
+                                  if (kDebugMode && kIsWeb)
+                                    const OtherButtons(fullscreen: false),
+                                ], toolbarType: ToolbarType.nativeExpandable),
+                              ),
+                            ],
                           ),
                         ),
                       ),

@@ -95,16 +95,11 @@ class HtmlEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb) {
-      return HtmlEditorWidget(
-        controller: controller,
-        height: height,
-        minHeight: minHeight,
-        initBC: context,
-      );
-    } else {
-      return Text(
-          'Non-Flutter Web environment detected, please make sure you are importing package:flutter_rich_text_editor/html_editor.dart');
-    }
+    return HtmlEditorWidget(
+      controller: controller,
+      height: height,
+      minHeight: minHeight,
+      initBC: context,
+    );
   }
 }
