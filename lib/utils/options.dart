@@ -12,8 +12,12 @@ class HtmlEditorOptions {
     this.characterLimit,
     this.customOptions = '',
     this.darkMode,
+    this.backgroundColor,
+    this.dictationPreviewDecoration,
+    this.dictationPreviewTextColor,
     this.filePath,
     this.hint,
+    this.hintStyle,
     this.initialText,
     this.inputType = HtmlInputType.text,
     this.mobileContextMenu,
@@ -54,6 +58,11 @@ class HtmlEditorOptions {
   /// The default value is null (switches with system).
   final bool? darkMode;
 
+  final Color? backgroundColor;
+
+  final BoxDecoration? dictationPreviewDecoration;
+  final Color? dictationPreviewTextColor;
+
   /// Specify the file path to your custom html editor code.
   ///
   /// Make sure to set the editor's HTML ID to be 'summernote-2'.
@@ -66,6 +75,8 @@ class HtmlEditorOptions {
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
   final String? hint;
+
+  final TextStyle? hintStyle;
 
   /// The initial text that is be supplied to the Html editor.
   final String? initialText;
@@ -113,6 +124,7 @@ class HtmlToolbarOptions {
     this.audioExtensions,
     this.customButtonGroups = const [],
     this.defaultToolbarButtons = const [
+      VoiceToTextButtons(),
       StyleButtons(),
       FontSettingButtons(fontSizeUnit: false),
       FontButtons(clearAll: false),

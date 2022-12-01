@@ -5,6 +5,14 @@ abstract class Toolbar {
   const Toolbar();
 }
 
+class VoiceToTextButtons extends Toolbar {
+  List<Icon> getIcons() {
+    return <Icon>[Icon(Icons.mic_outlined)];
+  }
+
+  const VoiceToTextButtons();
+}
+
 /// Style group
 class StyleButtons extends Toolbar {
   final bool style;

@@ -17,25 +17,26 @@ import 'package:visibility_detector/visibility_detector.dart';
 class HtmlEditorWidget extends StatefulWidget {
   HtmlEditorWidget({
     Key? key,
-    HtmlEditorController? controller,
-    this.callbacks,
-    required this.plugins,
-    required this.htmlEditorOptions,
-    required this.htmlToolbarOptions,
-    required this.otherOptions,
-  }) : super(key: key) {
-    this.controller = controller ?? HtmlEditorController();
-    this.controller.htmlEditorOptions = htmlEditorOptions;
-    this.controller.htmlToolbarOptions = htmlToolbarOptions;
-    this.controller.otherOptions = otherOptions;
+    required this.controller,
+    this.height,
+    this.minHeight,
+    required this.initBC,
+  })  : _viewId = getRandString(10).substring(0, 14),
+        super(key: key) {
+    controller.viewId = _viewId;
   }
 
-  late final HtmlEditorController controller;
-  final Callbacks? callbacks;
-  final List<Plugins> plugins;
-  final HtmlEditorOptions htmlEditorOptions;
-  final HtmlToolbarOptions htmlToolbarOptions;
-  final OtherOptions otherOptions;
+  final HtmlEditorController controller;
+  Callbacks? get callbacks => controller.callbacks;
+  List<Plugins> get plugins => controller.plugins;
+  HtmlEditorOptions get htmlEditorOptions => controller.htmlEditorOptions;
+  HtmlToolbarOptions get htmlToolbarOptions => controller.htmlToolbarOptions;
+  OtherOptions get otherOptions => controller.otherOptions;
+
+  final double? height;
+  final double? minHeight;
+  final String _viewId;
+  final BuildContext initBC;
 
   @override
   _HtmlEditorWidgetMobileState createState() => _HtmlEditorWidgetMobileState();
@@ -81,11 +82,8 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     key = getRandString(10);
     if (widget.htmlEditorOptions.filePath != null) {
       filePath = widget.htmlEditorOptions.filePath!;
-    } else if (widget.plugins.isEmpty) {
-      filePath =
-          'packages/flutter_rich_text_editor/assets/summernote-no-plugins.html';
     } else {
-      filePath = 'packages/flutter_rich_text_editor/assets/summernote.html';
+      filePath = 'packages/flutter_rich_text_editor/assets/document.html';
     }
     super.initState();
   }
@@ -108,8 +106,35 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
     }
   }
 
+  /// if height if fixed = return fixed height, otherwise return
+  /// greatest of `minHeight` and `contentHeight`.
+  double get _height =>
+      otherOptions.height ??
+      max(
+          widget.minHeight ?? 0,
+          widget.controller.contentHeight.value +
+              (widget.controller.toolbarHeight ?? 0));
+
   @override
   Widget build(BuildContext context) {
+    if (widget.controller.toolbarHeight == null) {
+      if (widget.controller.isReadOnly) {
+        widget.controller.toolbarHeight = 0;
+        if (!widget.controller.initialized) {
+          widget.controller
+              .initEditor(widget.initBC, otherOptions.height ?? _height);
+        }
+        //log('======toolbar height = ${controller.toolbarHeight}');
+      } else {
+        if (!widget.controller.initialized) {
+          widget.controller.initEditor(
+              widget.initBC, _height - widget.controller.toolbarHeight!);
+        }
+        widget.controller.toolbarHeight = widget.controller.isReadOnly ? 0 : 51;
+        //log('======toolbar height = ${controller.toolbarHeight}');
+
+      }
+    }
     return GestureDetector(
       onTap: () {
         SystemChannels.textInput.invokeMethod('TextInput.hide');

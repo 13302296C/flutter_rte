@@ -8,9 +8,10 @@ import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-
+// extensions
 part 'toolbar_extensions/color_buttons.dart';
 part 'toolbar_extensions/custom_buttons.dart';
+part 'toolbar_extensions/dictation_buttons.dart';
 part 'toolbar_extensions/font_buttons.dart';
 part 'toolbar_extensions/font_settings_buttons.dart';
 part 'toolbar_extensions/insert_buttons.dart';
@@ -506,6 +507,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   List<Widget> _buildChildren() {
     var toolbarChildren = <Widget>[];
     for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
+      if (t is VoiceToTextButtons) {
+        toolbarChildren.add(_dictationButtons(t));
+      }
       if (t is StyleButtons && t.style) {
         toolbarChildren.add(_styleButtons(t));
       }
@@ -577,8 +581,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
 
     if (widget.htmlToolbarOptions.customButtonGroups.isNotEmpty) {
-      toolbarChildren
-          .addAll(_customButtons(widget.htmlToolbarOptions.customButtonGroups));
+      toolbarChildren = _customButtons(
+          toolbarChildren, widget.htmlToolbarOptions.customButtonGroups);
     }
 
     if (widget.htmlToolbarOptions.renderSeparatorWidget) {

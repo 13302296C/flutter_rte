@@ -10,6 +10,14 @@ import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/editor_controller_unsupported.dart'
     as unsupported;
 import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
+import 'package:flutter_rich_text_editor/utils/utils.dart';
+
+// speech to text
+import 'dart:developer';
+import 'package:speech_to_text/speech_recognition_error.dart';
+import 'package:speech_to_text/speech_recognition_result.dart';
+import 'package:speech_to_text/speech_to_text.dart';
+
 part 'editor_controller_web_events.dart';
 part 'editor_controller_web_fn.dart';
 
@@ -19,7 +27,19 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
-  });
+  }) : _viewId = getRandString(10).substring(0, 14);
+
+  /// Dictation controller
+  SpeechToText? speechToText;
+
+  /// is dictation available
+  bool _sttAvailable = false;
+
+  /// is dictation running
+  bool isRecording = false;
+
+  /// Dictation result buffer
+  String sttBuffer = '';
 
   ///
   StreamSubscription<html.MessageEvent>? _eventSub;
@@ -72,6 +92,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   set viewId(String? viewId) => _viewId = viewId;
   @override
   String get viewId => _viewId!;
+
+  // ignore: prefer_final_fields
+  String _buffer = '';
+
+  @override
+  bool get isContentEmpty => _buffer == '';
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
   // - - - - - - - - METHODS API - - - - - - - - - - - - - - - - - - - - - //
@@ -341,6 +367,94 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       throw Exception(
           'Non-Flutter Web environment detected, please make sure you are importing package:flutter_rich_text_editor/html_editor.dart');
     }
+  }
+
+  ///
+  Future<bool> _initSpeechToText() async {
+    if (_sttAvailable) return true;
+    speechToText ??= SpeechToText();
+
+    await speechToText!
+        .initialize(
+      onError: (SpeechRecognitionError? error) {
+        if (error == null) {
+          throw Exception('The error was thrown, but no details provided.');
+        }
+        cancelRecording();
+        throw Exception(
+            'Speech-to-Text Error: ${error.errorMsg} - ${error.permanent}');
+      },
+      onStatus: log,
+      debugLogging: true,
+    )
+        .then((value) async {
+      _sttAvailable = value;
+    }).onError((error, stackTrace) {
+      //setState(mounted, this.setState, () {
+      _sttAvailable = false;
+      //});
+      notifyListeners();
+
+      return Future.error(error.toString());
+    });
+    return _sttAvailable;
+  }
+
+  ///
+  @override
+  Future<void> convertSpeechToText(Function(String v) onResult) async {
+    if (!await _initSpeechToText()) return;
+    //setState(mounted, this.setState, () => isRecording = true);
+    isRecording = true;
+    notifyListeners();
+    await speechToText?.listen(
+        onResult: (SpeechRecognitionResult result) {
+          if (!result.finalResult) {
+            sttBuffer = result.recognizedWords;
+            notifyListeners();
+            // setState(mounted, this.setState, () {
+            //   sttBuffer = result.recognizedWords;
+            // });
+            return;
+          } else {
+            onResult(result.recognizedWords);
+            if (isRecording) {
+              isRecording = false;
+              notifyListeners();
+              //setState(mounted, this.setState, () => isRecording = false);
+            }
+          }
+        },
+        listenFor: const Duration(seconds: 300),
+        pauseFor: const Duration(seconds: 300),
+        partialResults: true,
+        cancelOnError: true,
+        listenMode: ListenMode.dictation);
+  }
+
+  /// Triggers result from recognition
+  @override
+  Future<void> stopRecording() async {
+    await speechToText?.stop();
+    isRecording = false;
+    notifyListeners();
+    //setState(mounted, this.setState, () => isRecording = false);
+    // Save dictation.
+    // this delay is needed to let controller inject new text.
+    // Otherwise it won't save.
+    // Future.delayed(Duration(seconds: 1)).then((value) {
+    //   context.read<IRForm>().update(doValidation: false, doUiRefresh: false);
+    //   _sttBuffer = '';
+    // });
+  }
+
+  /// Does not trigger result from recognition
+  @override
+  Future<void> cancelRecording() async {
+    await speechToText?.cancel();
+    isRecording = false;
+    notifyListeners();
+    //setState(mounted, this.setState, () => isRecording = false);
   }
 
   @override

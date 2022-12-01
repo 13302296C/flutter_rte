@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:meta/meta.dart';
+// speech to text
+import 'package:speech_to_text/speech_to_text.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController extends ChangeNotifier {
@@ -109,6 +111,22 @@ class HtmlEditorController extends ChangeNotifier {
   String? _viewId;
   set viewId(String? viewId) => _viewId = viewId;
   String get viewId => _viewId!;
+
+  // ignore: prefer_final_fields
+  String _buffer = '';
+  bool get isContentEmpty => _buffer == '';
+
+  /// Dictation controller
+  SpeechToText? speechToText;
+
+  /// is dictation available
+  bool _sttAvailable = false;
+
+  /// is dictation running
+  bool isRecording = false;
+
+  /// Dictation result buffer
+  String sttBuffer = '';
 
   /// Disposes controller
   @override
@@ -231,4 +249,18 @@ class HtmlEditorController extends ChangeNotifier {
   /// Internal function to insert table on Web
   @internal
   void insertTable(String dimensions) {}
+
+  ///
+  Future<bool> _initSpeechToText() async {
+    return false;
+  }
+
+  ///
+  Future<void> convertSpeechToText(Function(String v) onResult) async {}
+
+  /// Triggers result from recognition
+  Future<void> stopRecording() async {}
+
+  /// Does not trigger result from recognition
+  Future<void> cancelRecording() async {}
 }

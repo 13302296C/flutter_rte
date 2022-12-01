@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
@@ -54,6 +57,82 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   // ignore: unnecessary_getters_setters
   set editorController(dynamic controller) =>
       _editorController = controller as InAppWebViewController?;
+
+  @override
+  Future<void> initEditor(BuildContext initBC, double initHeight) async {
+    if (initialized) throw Exception('Already initialized');
+    log('================== INIT CALLED ======================');
+    log('height: $initHeight');
+
+    var headString = '';
+    var summernoteCallbacks = '''callbacks: {
+        onKeydown: function(e) {
+            var chars = \$(".note-editable").text();
+            var totalChars = chars.length;
+            ${htmlEditorOptions.characterLimit != null ? '''allowedKeys = (
+                e.which === 8 ||  /* BACKSPACE */
+                e.which === 35 || /* END */
+                e.which === 36 || /* HOME */
+                e.which === 37 || /* LEFT */
+                e.which === 38 || /* UP */
+                e.which === 39 || /* RIGHT*/
+                e.which === 40 || /* DOWN */
+                e.which === 46 || /* DEL*/
+                e.ctrlKey === true && e.which === 65 || /* CTRL + A */
+                e.ctrlKey === true && e.which === 88 || /* CTRL + X */
+                e.ctrlKey === true && e.which === 67 || /* CTRL + C */
+                e.ctrlKey === true && e.which === 86 || /* CTRL + V */
+                e.ctrlKey === true && e.which === 90    /* CTRL + Z */
+            );
+            if (!allowedKeys && \$(e.target).text().length >= ${htmlEditorOptions.characterLimit}) {
+                e.preventDefault();
+            }''' : ''}
+            window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
+        },
+    ''';
+    var maximumFileSize = 10485760;
+
+    summernoteCallbacks = summernoteCallbacks + '}';
+    if ((Theme.of(initBC).brightness == Brightness.dark ||
+            htmlEditorOptions.darkMode == true) &&
+        htmlEditorOptions.darkMode != false) {}
+    var userScripts = '';
+    if (htmlEditorOptions.webInitialScripts != null) {
+      htmlEditorOptions.webInitialScripts!.forEach((element) {
+        userScripts = userScripts +
+            '''
+          if (data["type"].includes("${element.name}")) {
+            ${element.script}
+          }
+        ''' +
+            '\n';
+      });
+    }
+    var initScript = 'const viewId = \'$viewId\';';
+    var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
+    if (htmlEditorOptions.filePath != null) {
+      filePath = htmlEditorOptions.filePath!;
+    }
+    var htmlString = await rootBundle.loadString(filePath);
+    htmlString =
+        htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
+
+    /// if no discrete height is provided - hide the scrollbar as the
+    /// container height will always adjust to the document height
+    if (otherOptions.height == null) {
+      var hideScrollbarCss = '''
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+''';
+      htmlString = htmlString.replaceFirst(
+          '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
+    }
+    await execCommand('initEditor');
+    initialized = true;
+    notifyListeners();
+  }
 
   /// A function to quickly call a document.execCommand function in a readable format
   @override
@@ -125,7 +204,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// disables the Html editor
   @override
   Future<void> disable() async {
-    toolbar!.disable();
+    toolbar?.disable();
     await _evaluateJavascript(
         source: "\$('#summernote-2').summernote('disable');");
   }
@@ -133,7 +212,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// enables the Html editor
   @override
   Future<void> enable() async {
-    toolbar!.enable();
+    toolbar?.enable();
     await _evaluateJavascript(
         source: "\$('#summernote-2').summernote('enable');");
   }
@@ -170,12 +249,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Insert a network image at the position of the cursor in the editor
-  @override
-  Future<void> insertNetworkImage(String url, {String filename = ''}) async {
-    await _evaluateJavascript(
-        source:
-            "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
-  }
+  // @override
+  // Future<void> insertNetworkImage(String url, {String filename = ''}) async {
+  //   await _evaluateJavascript(
+  //       source:
+  //           "\$('#summernote-2').summernote('insertImage', '$url', '$filename');");
+  // }
 
   /// Insert a link at the position of the cursor in the editor
   @override
@@ -223,25 +302,25 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
   }
 
-  /// Add a notification to the bottom of the editor. This is styled similar to
-  /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
-  /// and the notificationType determines how the alert is displayed.
-  @override
-  void addNotification(String html, NotificationType notificationType) async {
-    await _evaluateJavascript(source: """
-        \$('.note-status-output').html(
-          '<div class="alert alert-${describeEnum(notificationType)}">$html</div>'
-        );
-        """);
-    await recalculateHeight();
-  }
+  // /// Add a notification to the bottom of the editor. This is styled similar to
+  // /// Bootstrap alerts. You can set the HTML to be displayed in the alert,
+  // /// and the notificationType determines how the alert is displayed.
+  // @override
+  // void addNotification(String html, NotificationType notificationType) async {
+  //   await _evaluateJavascript(source: """
+  //       \$('.note-status-output').html(
+  //         '<div class="alert alert-${describeEnum(notificationType)}">$html</div>'
+  //       );
+  //       """);
+  //   await recalculateHeight();
+  // }
 
-  /// Remove the current notification from the bottom of the editor
-  @override
-  void removeNotification() async {
-    await _evaluateJavascript(source: "\$('.note-status-output').empty();");
-    await recalculateHeight();
-  }
+  // /// Remove the current notification from the bottom of the editor
+  // @override
+  // void removeNotification() async {
+  //   await _evaluateJavascript(source: "\$('.note-status-output').empty();");
+  //   await recalculateHeight();
+  // }
 
   /// Helper function to process input html
   String _processHtml({required html}) {
@@ -262,17 +341,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Helper function to evaluate JS and check the current environment
   Future<dynamic> _evaluateJavascript({required source}) async {
-    if (!kIsWeb) {
-      if (editorController == null || await editorController!.isLoading()) {
-        throw Exception(
-            'HTML editor is still loading, please wait before evaluating this JS: $source!');
-      }
-      var result = await editorController!.evaluateJavascript(source: source);
-      return result;
-    } else {
+    if (editorController == null || await editorController!.isLoading()) {
+      return;
       throw Exception(
-          'Flutter Web environment detected, please make sure you are importing package:flutter_rich_text_editor/html_editor.dart');
+          'HTML editor is still loading, please wait before evaluating this JS: $source!');
     }
+    var result = await editorController!.evaluateJavascript(source: source);
+    return result;
   }
 
   @override

@@ -141,6 +141,7 @@ class _FullscreenState extends State<Fullscreen> {
                                 //     initialText: _eqpt),
                                 htmlToolbarOptions:
                                     HtmlToolbarOptions(defaultToolbarButtons: [
+                                  const VoiceToTextButtons(),
                                   const FontButtons(),
                                   const ListButtons(listStyles: false),
                                   const ColorButtons(),

@@ -38,6 +38,7 @@ extension StreamProcessor on HtmlEditorController {
       case 'getText':
         if (_openRequests.keys.contains(channelMethod)) {
           String text = response['text'];
+          _buffer = text;
           if (processOutputHtml &&
               (text.isEmpty ||
                   text == '<p></p>' ||
