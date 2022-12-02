@@ -101,7 +101,12 @@ extension ToolbarFontButtons on ToolbarWidgetState {
                   ?.call(ButtonType.bold, _fontSelected[index], updateStatus) ??
               true;
           if (proceed) {
-            await widget.controller.execCommand('bold');
+            if (_fontSelected[index]) {
+              await widget.controller.execCommand('removeBold');
+            } else {
+              await widget.controller.execCommand('bold');
+            }
+
             updateStatus();
           }
         }
@@ -110,7 +115,12 @@ extension ToolbarFontButtons on ToolbarWidgetState {
                   ButtonType.italic, _fontSelected[index], updateStatus) ??
               true;
           if (proceed) {
-            await widget.controller.execCommand('italic');
+            if (_fontSelected[index]) {
+              await widget.controller.execCommand('removeItalic');
+            } else {
+              await widget.controller.execCommand('italic');
+            }
+
             updateStatus();
           }
         }
@@ -119,7 +129,11 @@ extension ToolbarFontButtons on ToolbarWidgetState {
                   ButtonType.underline, _fontSelected[index], updateStatus) ??
               true;
           if (proceed) {
-            await widget.controller.execCommand('underline');
+            if (_fontSelected[index]) {
+              await widget.controller.execCommand('removeUnderline');
+            } else {
+              await widget.controller.execCommand('underline');
+            }
             updateStatus();
           }
         }

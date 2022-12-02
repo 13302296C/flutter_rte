@@ -128,7 +128,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
       } else {
         if (!widget.controller.initialized) {
           widget.controller.initEditor(
-              widget.initBC, _height - widget.controller.toolbarHeight!);
+              widget.initBC, _height - (widget.controller.toolbarHeight ?? 0));
         }
         widget.controller.toolbarHeight = widget.controller.isReadOnly ? 0 : 51;
         //log('======toolbar height = ${controller.toolbarHeight}');
@@ -159,10 +159,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
               widget.htmlToolbarOptions.toolbarPosition ==
                       ToolbarPosition.aboveEditor
                   ? ToolbarWidget(
-                      key: toolbarKey,
-                      controller: widget.controller,
-                      htmlToolbarOptions: widget.htmlToolbarOptions,
-                      callbacks: widget.callbacks)
+                      key: toolbarKey, controller: widget.controller)
                   : Container(height: 0, width: 0),
               Expanded(
                 child: InAppWebView(
@@ -175,7 +172,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           var json = e[0] as Map<String, dynamic>;
                           print(json);
                           if (widget.controller.toolbar != null) {
-                            widget.controller.toolbar!.updateToolbar(json);
+                            widget.controller.toolbar?.updateToolbar(json);
                           }
                         });
                   },
@@ -582,10 +579,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
               widget.htmlToolbarOptions.toolbarPosition ==
                       ToolbarPosition.belowEditor
                   ? ToolbarWidget(
-                      key: toolbarKey,
-                      controller: widget.controller,
-                      htmlToolbarOptions: widget.htmlToolbarOptions,
-                      callbacks: widget.callbacks)
+                      key: toolbarKey, controller: widget.controller)
                   : Container(height: 0, width: 0),
             ],
           ),

@@ -2,10 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'embedded.dart';
 import 'fullscreen.dart';
-
-enum Demos { embedded, fullscreen }
 
 void main() => runApp(const HtmlEditorExampleApp());
 
@@ -16,7 +13,8 @@ class HtmlEditorExampleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Rich Text with Dictation',
+      debugShowCheckedModeBanner: false,
       scrollBehavior: MyCustomScrollBehavior(),
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
@@ -37,7 +35,6 @@ class HtmlEditorExample extends StatefulWidget {
 
 class _HtmlEditorExampleState extends State<HtmlEditorExample> {
   String result = '';
-  Demos _demo = Demos.fullscreen;
   final HtmlEditorController controller = HtmlEditorController();
 
   @override
@@ -54,20 +51,6 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
               elevation: 0,
               actions: [
                 IconButton(
-                    icon: const Icon(Icons.fullscreen_exit),
-                    onPressed: () {
-                      setState(() {
-                        _demo = Demos.embedded;
-                      });
-                    }),
-                IconButton(
-                    icon: const Icon(Icons.fullscreen),
-                    onPressed: () {
-                      setState(() {
-                        _demo = Demos.fullscreen;
-                      });
-                    }),
-                IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: () {
                       if (kIsWeb) {
@@ -78,16 +61,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
                     })
               ],
             ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () {
-                controller.toggleCodeView();
-              },
-              child: const Text(r'<\>',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-            ),
-            body: _demo == Demos.embedded
-                ? Embedded(controller: controller)
-                : const Fullscreen()));
+            body: const Fullscreen()));
   }
 }
 

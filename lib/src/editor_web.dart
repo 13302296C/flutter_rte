@@ -26,9 +26,9 @@ class HtmlEditor extends StatelessWidget {
     if (initialValue != null) {
       controller.htmlEditorOptions.initialText = initialValue;
     }
-    if (hint != null) {
-      controller.htmlEditorOptions.hint = hint;
-    }
+
+    controller.htmlEditorOptions.hint = hint ?? 'Your text here...';
+
     if (controller.isReadOnly != isReadOnly) {
       controller.isReadOnly = isReadOnly;
       controller.toolbarHeight = null; // trigger recalc

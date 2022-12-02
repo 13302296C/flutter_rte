@@ -120,24 +120,32 @@ class HtmlEditorOptions {
 
 /// Options that modify the toolbar and its behavior
 class HtmlToolbarOptions {
-  const HtmlToolbarOptions({
+  HtmlToolbarOptions({
     this.audioExtensions,
     this.customButtonGroups = const [],
     this.defaultToolbarButtons = const [
       VoiceToTextButtons(),
-      StyleButtons(),
-      FontSettingButtons(fontSizeUnit: false),
-      FontButtons(clearAll: false),
+      OtherButtons(
+          fullscreen: false,
+          codeview: false,
+          help: false,
+          copy: false,
+          paste: false),
+      //StyleButtons(),
+      //FontSettingButtons(fontSizeUnit: false),
+      FontButtons(strikethrough: false, subscript: false, superscript: false),
+
       ColorButtons(),
-      ListButtons(listStyles: false),
       ParagraphButtons(
           textDirection: false, lineHeight: false, caseConverter: false),
+      ListButtons(listStyles: false),
+
       InsertButtons(
           video: false,
           audio: false,
           table: false,
-          hr: false,
-          otherFile: false),
+          otherFile: false,
+          picture: false),
     ],
     this.otherFileExtensions,
     this.imageExtensions,
@@ -304,7 +312,7 @@ class HtmlToolbarOptions {
   /// Controls where the toolbar is positioned. See [ToolbarPosition] for more details.
   ///
   /// By default the toolbar is above the editor.
-  final ToolbarPosition toolbarPosition;
+  ToolbarPosition toolbarPosition;
 
   /// Allows you to set the allowed extensions when a user inserts a video.
   ///
@@ -387,7 +395,7 @@ class HtmlToolbarOptions {
 
 /// Other options such as the height of the widget and the decoration surrounding it
 class OtherOptions {
-  const OtherOptions({
+  OtherOptions({
     this.decoration = const BoxDecoration(
       borderRadius: BorderRadius.all(Radius.circular(4)),
       border:
@@ -406,7 +414,7 @@ class OtherOptions {
   ///
   /// The default value is 400. If this value is `null` the editor's height is
   /// adjusted automatically
-  final double? height;
+  double? height;
 }
 
 class CustomButtonGroup {

@@ -127,7 +127,7 @@ class HtmlEditorController extends ChangeNotifier {
   SpeechToText? speechToText;
 
   /// is dictation available
-  bool _sttAvailable = false;
+  bool sttAvailable = false;
 
   /// is dictation running
   bool isRecording = false;

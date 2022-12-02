@@ -3,11 +3,21 @@
 part of 'editor_controller_web.dart';
 
 extension StreamProcessor on HtmlEditorController {
+  /// checks if text provided is just an empty paragraph
+  bool textHasNoValue(String text) {
+    // check if the text starts with empty paragraph
+    var pattern1 = r'^<\s*p[^>]*>(<br[ ]?\/?>|&nbsp;|[ ]?)<\s*/\s*p>';
+    // count how many paragraphs we have in that text
+    var pattern2 = r'<\s*p[^>]*>(.*?)<\s*/\s*p>';
+    var regex1 = RegExp(pattern1);
+    var regex2 = RegExp(pattern2);
+    return regex1.hasMatch(text) && regex2.allMatches(text).length == 1;
+  }
+
   /// Process events coming from the iframe
   Future<void> _processEvent(html.MessageEvent event) async {
     // full response
     Map<String, dynamic> response = json.decode(event.data);
-    _log('----- View ID = $viewId');
     if (response['view'] != viewId || response['type'] == null) return;
     if ((response['type'] as String).split(' ')[0] != 'toDart:') return;
 
@@ -16,16 +26,16 @@ extension StreamProcessor on HtmlEditorController {
 
     // channel method called
     var channelMethod = (response['type'] as String).split(' ')[1];
-
+    //_log('----- View[$viewId]: $channelMethod');
     switch (channelMethod) {
       case 'initEditor':
         if (response['result'] == 'Ok') {
-          _log('======= $viewId INIT SUCCESSFUL ==========');
+          //_log('======= $viewId INIT SUCCESSFUL ==========');
           if (htmlEditorOptions.initialText != null) {
             setText(htmlEditorOptions.initialText!);
           }
         } else {
-          _log('======= $viewId INIT FAILED ==========');
+          //_log('======= $viewId INIT FAILED ==========');
         }
         break;
       case 'getSelectedText':
@@ -38,12 +48,8 @@ extension StreamProcessor on HtmlEditorController {
       case 'getText':
         if (_openRequests.keys.contains(channelMethod)) {
           String text = response['text'];
+          if (processOutputHtml && textHasNoValue(text)) text = '';
           _buffer = text;
-          if (processOutputHtml &&
-              (text.isEmpty ||
-                  text == '<p></p>' ||
-                  text == '<p><br></p>' ||
-                  text == '<p><br/></p>')) text = '';
           _openRequests[channelMethod]?.complete(text);
         }
 
@@ -59,14 +65,14 @@ extension StreamProcessor on HtmlEditorController {
         contentHeight.value = response['height'];
 
         if (refresh) {
-          _log("------ Height: ${response['height']}");
+          //_log("------ Height: ${response['height']}");
           notifyListeners();
         }
 
         break;
 
       case 'updateToolbar':
-        toolbar!.updateToolbar(response);
+        toolbar?.updateToolbar(response);
         break;
 
       // Callbacks = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -76,6 +82,7 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onChangeContent':
         if (autoAdjustHeight) unawaited(recalculateHeight());
+        _buffer = response['contents'];
         callbacks?.onChangeContent?.call(response['contents']);
         break;
 
@@ -99,6 +106,7 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onBlur':
         hasFocus = false;
+        if (textHasNoValue(_buffer)) _buffer = '';
         callbacks?.onBlur?.call();
         break;
 

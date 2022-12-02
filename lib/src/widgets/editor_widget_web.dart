@@ -1,5 +1,6 @@
 export 'dart:html';
 
+import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
@@ -49,7 +50,10 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
       math.max(
           widget.minHeight ?? 0,
           widget.controller.contentHeight.value +
-              (widget.controller.toolbarHeight ?? 0));
+              (widget.controller.htmlToolbarOptions.toolbarPosition ==
+                      ToolbarPosition.custom
+                  ? 0
+                  : (widget.controller.toolbarHeight ?? 0)));
 
   @override
   Widget build(BuildContext context) {
@@ -60,26 +64,33 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
           widget.controller
               .initEditor(widget.initBC, otherOptions.height ?? _height);
         }
-        //log('======toolbar height = ${controller.toolbarHeight}');
       } else {
         if (!widget.controller.initialized) {
           widget.controller.initEditor(
-              widget.initBC, _height - widget.controller.toolbarHeight!);
+              widget.initBC, _height - (widget.controller.toolbarHeight ?? 0));
         }
-        widget.controller.toolbarHeight = widget.controller.isReadOnly ? 0 : 51;
-        //log('======toolbar height = ${controller.toolbarHeight}');
-
+        widget.controller.toolbarHeight = widget.controller.isReadOnly ||
+                widget.controller.htmlToolbarOptions.toolbarPosition ==
+                    ToolbarPosition.custom
+            ? 0
+            : 51;
       }
     }
     return AnimatedBuilder(
         animation: widget.controller,
         builder: (context, _) {
+          // log('======toolbar height = ${widget.controller.toolbarHeight}');
+          // log('======content height = ${widget.controller.contentHeight.value}');
           return Container(
             height: _height,
             child: Column(
+              verticalDirection: htmlToolbarOptions.toolbarPosition ==
+                      ToolbarPosition.aboveEditor
+                  ? VerticalDirection.down
+                  : VerticalDirection.up,
               children: <Widget>[
-                if (htmlToolbarOptions.toolbarPosition ==
-                    ToolbarPosition.aboveEditor)
+                if (htmlToolbarOptions.toolbarPosition !=
+                    ToolbarPosition.custom)
                   _toolbar(),
                 Expanded(
                     child: Directionality(
@@ -99,9 +110,6 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
                     ],
                   ),
                 )),
-                if (htmlToolbarOptions.toolbarPosition ==
-                    ToolbarPosition.belowEditor)
-                  _toolbar(),
               ],
             ),
           );
@@ -111,10 +119,9 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
   ///
   Widget _toolbar() {
     return ToolbarWidget(
-        key: widget.controller.toolbarKey,
-        controller: widget.controller,
-        htmlToolbarOptions: htmlToolbarOptions,
-        callbacks: callbacks);
+      key: widget.controller.toolbarKey,
+      controller: widget.controller,
+    );
   }
 
   ///STT popup
@@ -207,10 +214,10 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
 
   ///
   Widget _hintTextWidget(BuildContext context) {
-    if (widget.controller.isContentEmpty) {
+    if (widget.controller.isContentEmpty && !widget.controller.hasFocus) {
       return Positioned.fill(
           child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(top: 32.0, left: 56),
         child: Text(widget.controller.htmlEditorOptions.hint ?? '',
             style: widget.controller.htmlEditorOptions.hintStyle ??
                 TextStyle(
@@ -220,7 +227,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
                         .textTheme
                         .bodyText1
                         ?.color
-                        ?.withOpacity(.5))),
+                        ?.withOpacity(.3))),
       ));
     } else {
       return SizedBox();

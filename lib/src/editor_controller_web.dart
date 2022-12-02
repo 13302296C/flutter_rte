@@ -39,18 +39,18 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             otherOptions: otherOptions ?? OtherOptions());
 
   /// Dictation controller
-  SpeechToText? speechToText;
+  // SpeechToText? speechToText;
 
   /// is dictation available
-  bool _sttAvailable = false;
+  bool sttAvailable = false;
 
-  /// is dictation running
-  bool isRecording = false;
+  // /// is dictation running
+  // bool isRecording = false;
 
-  /// Dictation result buffer
-  String sttBuffer = '';
+  // /// Dictation result buffer
+  // String sttBuffer = '';
 
-  bool hasFocus = false;
+  // bool hasFocus = false;
 
   ///
   StreamSubscription<html.MessageEvent>? _eventSub;
@@ -384,7 +384,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   ///
   Future<bool> _initSpeechToText() async {
-    if (_sttAvailable) return true;
+    if (sttAvailable) return true;
     speechToText ??= SpeechToText();
 
     await speechToText!
@@ -401,16 +401,16 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       debugLogging: true,
     )
         .then((value) async {
-      _sttAvailable = value;
+      sttAvailable = value;
     }).onError((error, stackTrace) {
       //setState(mounted, this.setState, () {
-      _sttAvailable = false;
+      sttAvailable = false;
       //});
       notifyListeners();
 
       return Future.error(error.toString());
     });
-    return _sttAvailable;
+    return sttAvailable;
   }
 
   ///
@@ -583,7 +583,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     final iframe = html.IFrameElement()
       ..width = MediaQuery.of(initBC).size.width.toString() //'800'
-      ..height = initHeight.toString()
+      ..height = '100%'
       // ignore: unsafe_html, necessary to load HTML string
       ..srcdoc = htmlString
       ..style.border = 'none'

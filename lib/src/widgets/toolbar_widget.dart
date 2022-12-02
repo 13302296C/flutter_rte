@@ -24,14 +24,12 @@ part 'toolbar_extensions/style_buttons.dart';
 class ToolbarWidget extends StatefulWidget {
   /// The [HtmlEditorController] is mainly used to call the [execCommand] method
   final HtmlEditorController controller;
-  final HtmlToolbarOptions htmlToolbarOptions;
-  final Callbacks? callbacks;
+  HtmlToolbarOptions get htmlToolbarOptions => controller.htmlToolbarOptions;
+  Callbacks? get callbacks => controller.callbacks;
 
   const ToolbarWidget({
     Key? key,
     required this.controller,
-    required this.htmlToolbarOptions,
-    required this.callbacks,
   }) : super(key: key);
 
   @override
@@ -87,6 +85,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   /// Sets the selected item for the foreground color dialog
   Color _foreColorSelected = Colors.black;
+
+  /// to #2b2b2b on JS side
+  final Color _preferredBodyColor =
+      Colors.black; // Color.fromRGBO(0x2b, 0x2b, 0x2b, 1);
 
   /// Sets the selected item for the background color dialog
   Color _backColorSelected = Colors.yellow;
@@ -202,16 +204,55 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         var rgbList = rgb.split(', ');
         _foreColorSelected = Color.fromRGBO(int.parse(rgbList[0]),
             int.parse(rgbList[1]), int.parse(rgbList[2]), 1);
+        if (_foreColorSelected != _preferredBodyColor) {
+          _colorSelected[0] = true;
+        } else {
+          _colorSelected[0] = false;
+        }
       });
     } else {
       setState(mounted, this.setState, () {
-        _foreColorSelected = Colors.black;
+        _foreColorSelected = _preferredBodyColor;
       });
     }
     if (colorList[1] != null && colorList[1]!.isNotEmpty) {
       setState(mounted, this.setState, () {
-        _backColorSelected =
-            Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
+        if (colorList[1]!.contains('rgba(')) {
+          if (colorList[1]! == 'rgba(0, 0, 0, 0)') {
+            _colorSelected[1] = false;
+          } else {
+            _colorSelected[1] = true;
+          }
+          var rgba = colorList[1]!
+              .replaceAll('rgba(', '')
+              .replaceAll(' ', '')
+              .replaceAll(')', '');
+          var rgbaList = rgba.split(',');
+          try {
+            _backColorSelected = Color.fromARGB(
+                double.parse(rgbaList[3] * 255).round(),
+                int.parse(rgbaList[0]),
+                int.parse(rgbaList[1]),
+                int.parse(rgbaList[2]));
+          } catch (e) {
+            _backColorSelected = Color.fromARGB(0, 0, 0, 0);
+          }
+
+          _backColorSelected = Color.fromARGB(
+              double.parse(rgbaList[3] * 255).round(),
+              int.parse(rgbaList[0]),
+              int.parse(rgbaList[1]),
+              int.parse(rgbaList[2]));
+        } else if (colorList[1]!.contains('rgb(')) {
+          _colorSelected[1] = true;
+          var rgb = colorList[1]!.replaceAll('rgb(', '').replaceAll(')', '');
+          var rgbList = rgb.split(', ');
+          _foreColorSelected = Color.fromRGBO(int.parse(rgbList[1]),
+              int.parse(rgbList[1]), int.parse(rgbList[2]), 1);
+        } else {
+          _backColorSelected =
+              Color(int.parse(colorList[1]!, radix: 16) + 0xFF000000);
+        }
       });
     } else {
       setState(mounted, this.setState, () {
