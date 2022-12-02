@@ -15,14 +15,19 @@ class HtmlEditor extends StatelessWidget {
     this.isReadOnly = false,
     required this.controller,
     this.callbacks,
-    this.htmlEditorOptions,
-    this.htmlToolbarOptions,
-    this.otherOptions,
-    this.plugins = const [],
+    //this.plugins = const [],
   }) : super(key: key) {
-    if (initialValue != null && htmlEditorOptions != null) {
+    if (initialValue != null &&
+        controller.htmlEditorOptions.initialText != null &&
+        !controller.initialized) {
       throw Exception(
-          'Cannot have both initialValue and htmlEditorOptions. Please use initialText in editor options.');
+          'Cannot have both [initialValue] and [htmlEditorOptions.initialText]. Please choose one.');
+    }
+    if (initialValue != null) {
+      controller.htmlEditorOptions.initialText = initialValue;
+    }
+    if (hint != null) {
+      controller.htmlEditorOptions.hint = hint;
     }
     if (controller.isReadOnly != isReadOnly) {
       controller.isReadOnly = isReadOnly;
@@ -33,17 +38,9 @@ class HtmlEditor extends StatelessWidget {
         controller.enable();
       }
     }
-    controller.htmlEditorOptions = htmlEditorOptions ??
-        HtmlEditorOptions(
-            initialText: initialValue, hint: hint ?? 'Enter text here ...');
-    controller.htmlToolbarOptions =
-        htmlToolbarOptions ?? HtmlToolbarOptions(buttonColor: Colors.grey);
-    controller.otherOptions = otherOptions ??
-        OtherOptions(
-          height: height,
-        );
+
     controller.callbacks = callbacks;
-    controller.plugins = plugins;
+    //controller.plugins = plugins;
     if (callbacks == null) {
       controller.callbacks = Callbacks(onChangeContent: onChanged);
     } else {
@@ -81,17 +78,8 @@ class HtmlEditor extends StatelessWidget {
   /// [Callbacks] for more details.
   final Callbacks? callbacks;
 
-  /// Defines options for the html editor
-  final HtmlEditorOptions? htmlEditorOptions;
-
-  /// Defines options for the editor toolbar
-  final HtmlToolbarOptions? htmlToolbarOptions;
-
-  /// Defines other options
-  final OtherOptions? otherOptions;
-
   /// Sets the list of Summernote plugins enabled in the editor.
-  final List<Plugins> plugins;
+  //final List<Plugins> plugins;
 
   @override
   Widget build(BuildContext context) {

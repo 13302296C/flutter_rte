@@ -22,6 +22,8 @@ class Callbacks {
     this.onKeyDown,
     this.onMouseUp,
     this.onMouseDown,
+    this.onMouseIn,
+    this.onMouseOut,
     this.onNavigationRequestMobile,
     this.onPaste,
     this.onScroll,
@@ -159,6 +161,8 @@ class Callbacks {
 
   /// Called whenever the mouse/finger is downed and the editor is in rich text view.
   void Function()? onMouseDown;
+  void Function()? onMouseIn;
+  void Function()? onMouseOut;
 
   /// Called right before the URL of the webview is changed on mobile. This allows
   /// you to prevent URLs from loading, or launch them externally, for example.

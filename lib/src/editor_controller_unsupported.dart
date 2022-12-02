@@ -6,11 +6,16 @@ import 'package:speech_to_text/speech_to_text.dart';
 
 /// Fallback controller (should never be used)
 class HtmlEditorController extends ChangeNotifier {
-  HtmlEditorController({
-    this.processInputHtml = true,
-    this.processNewLineAsBr = false,
-    this.processOutputHtml = true,
-  });
+  HtmlEditorController(
+      {this.processInputHtml = true,
+      this.processNewLineAsBr = false,
+      this.processOutputHtml = true,
+      HtmlEditorOptions? htmlEditorOptions,
+      HtmlToolbarOptions? htmlToolbarOptions,
+      OtherOptions? otherOptions})
+      : htmlEditorOptions = htmlEditorOptions ?? HtmlEditorOptions(),
+        htmlToolbarOptions = htmlToolbarOptions ?? HtmlToolbarOptions(),
+        otherOptions = otherOptions ?? OtherOptions();
 
   /// Defines options for the html editor
   late HtmlEditorOptions htmlEditorOptions;
@@ -21,7 +26,7 @@ class HtmlEditorController extends ChangeNotifier {
   /// Defines other options
   late OtherOptions otherOptions;
 
-  late List<Plugins> plugins;
+  //late List<Plugins> plugins;
 
   /// Puts editor in read-only mode, hiding its toollbar
   bool isReadOnly = false;
@@ -30,6 +35,8 @@ class HtmlEditorController extends ChangeNotifier {
   bool initialized = false;
 
   bool alreadyDisabled = false;
+
+  bool hasFocus = false;
 
   /// Toolbar widget state to call various methods. For internal use only.
   @internal

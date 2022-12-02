@@ -93,10 +93,12 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'onFocus':
+        hasFocus = true;
         callbacks?.onFocus?.call();
         break;
 
       case 'onBlur':
+        hasFocus = false;
         callbacks?.onBlur?.call();
         break;
 
@@ -168,6 +170,14 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onMouseUp':
         callbacks?.onMouseUp?.call();
+        break;
+
+      case 'mouseIn':
+        callbacks?.onMouseIn?.call();
+        break;
+
+      case 'mouseOut':
+        callbacks?.onMouseOut?.call();
         break;
 
       case 'onPaste':

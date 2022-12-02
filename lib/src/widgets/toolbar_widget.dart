@@ -14,7 +14,7 @@ part 'toolbar_extensions/custom_buttons.dart';
 part 'toolbar_extensions/dictation_buttons.dart';
 part 'toolbar_extensions/font_buttons.dart';
 part 'toolbar_extensions/font_settings_buttons.dart';
-part 'toolbar_extensions/insert_buttons.dart';
+part 'toolbar_extensions/media_buttons.dart';
 part 'toolbar_extensions/list_buttons.dart';
 part 'toolbar_extensions/other_buttons.dart';
 part 'toolbar_extensions/paragraph_buttons.dart';

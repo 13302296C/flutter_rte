@@ -28,7 +28,7 @@ class HtmlEditorWidget extends StatefulWidget {
 
   final HtmlEditorController controller;
   Callbacks? get callbacks => controller.callbacks;
-  List<Plugins> get plugins => controller.plugins;
+  //List<Plugins> get plugins => controller.plugins;
   HtmlEditorOptions get htmlEditorOptions => controller.htmlEditorOptions;
   HtmlToolbarOptions get htmlToolbarOptions => controller.htmlToolbarOptions;
   OtherOptions get otherOptions => controller.otherOptions;
@@ -295,51 +295,51 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               window.flutter_inappwebview.callHandler('totalChars', totalChars);
                           },
                       ''';
-                      if (widget.plugins.isNotEmpty) {
-                        summernoteToolbar = summernoteToolbar + "['plugins', [";
-                        for (var p in widget.plugins) {
-                          summernoteToolbar = summernoteToolbar +
-                              (p.getToolbarString().isNotEmpty
-                                  ? "'${p.getToolbarString()}'"
-                                  : '') +
-                              (p == widget.plugins.last
-                                  ? ']]\n'
-                                  : p.getToolbarString().isNotEmpty
-                                      ? ', '
-                                      : '');
-                          if (p is SummernoteAtMention) {
-                            summernoteCallbacks = summernoteCallbacks +
-                                """
-                              \nsummernoteAtMention: {
-                                getSuggestions: async function(value) {
-                                  var result = await window.flutter_inappwebview.callHandler('getSuggestions', value);
-                                  var resultList = result.split(',');
-                                  return resultList;
-                                },
-                                onSelect: (value) => {
-                                  window.flutter_inappwebview.callHandler('onSelectMention', value);
-                                },
-                              },
-                            """;
-                            controller.addJavaScriptHandler(
-                                handlerName: 'getSuggestions',
-                                callback: (value) {
-                                  return p.getSuggestionsMobile!
-                                      .call(value.first.toString())
-                                      .toString()
-                                      .replaceAll('[', '')
-                                      .replaceAll(']', '');
-                                });
-                            if (p.onSelect != null) {
-                              controller.addJavaScriptHandler(
-                                  handlerName: 'onSelectMention',
-                                  callback: (value) {
-                                    p.onSelect!.call(value.first.toString());
-                                  });
-                            }
-                          }
-                        }
-                      }
+                      // if (widget.plugins.isNotEmpty) {
+                      //   summernoteToolbar = summernoteToolbar + "['plugins', [";
+                      //   for (var p in widget.plugins) {
+                      //     summernoteToolbar = summernoteToolbar +
+                      //         (p.getToolbarString().isNotEmpty
+                      //             ? "'${p.getToolbarString()}'"
+                      //             : '') +
+                      //         (p == widget.plugins.last
+                      //             ? ']]\n'
+                      //             : p.getToolbarString().isNotEmpty
+                      //                 ? ', '
+                      //                 : '');
+                      //     if (p is SummernoteAtMention) {
+                      //       summernoteCallbacks = summernoteCallbacks +
+                      //           """
+                      //         \nsummernoteAtMention: {
+                      //           getSuggestions: async function(value) {
+                      //             var result = await window.flutter_inappwebview.callHandler('getSuggestions', value);
+                      //             var resultList = result.split(',');
+                      //             return resultList;
+                      //           },
+                      //           onSelect: (value) => {
+                      //             window.flutter_inappwebview.callHandler('onSelectMention', value);
+                      //           },
+                      //         },
+                      //       """;
+                      //       controller.addJavaScriptHandler(
+                      //           handlerName: 'getSuggestions',
+                      //           callback: (value) {
+                      //             return p.getSuggestionsMobile!
+                      //                 .call(value.first.toString())
+                      //                 .toString()
+                      //                 .replaceAll('[', '')
+                      //                 .replaceAll(']', '');
+                      //           });
+                      //       if (p.onSelect != null) {
+                      //         controller.addJavaScriptHandler(
+                      //             handlerName: 'onSelectMention',
+                      //             callback: (value) {
+                      //               p.onSelect!.call(value.first.toString());
+                      //             });
+                      //       }
+                      //     }
+                      //   }
+                      // }
                       if (widget.callbacks != null) {
                         if (widget.callbacks!.onImageLinkInsert != null) {
                           summernoteCallbacks = summernoteCallbacks +

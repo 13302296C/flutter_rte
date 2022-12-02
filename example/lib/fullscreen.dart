@@ -16,20 +16,38 @@ class Fullscreen extends StatefulWidget {
 class _FullscreenState extends State<Fullscreen> {
   bool _withinHypothesisRegion = false;
   bool _withinEquipmentRegion = false;
-  HtmlEditorController? _c;
-  HtmlEditorController? _e;
+  final HtmlEditorController _c = HtmlEditorController();
+  final HtmlEditorController _e = HtmlEditorController(
+    htmlToolbarOptions: const HtmlToolbarOptions(
+        toolbarType: ToolbarType.nativeScrollable,
+        toolbarPosition: ToolbarPosition.custom),
+  );
   String _hypo = '<p></p>';
   String _eqpt = '<p></p>';
   @override
   void initState() {
-    _c ??= HtmlEditorController();
-    _e ??= HtmlEditorController();
+    // _c ??
+    // _e ??= HtmlEditorController();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        flexibleSpace: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: AnimatedBuilder(
+              animation: _e,
+              builder: (context, _) {
+                return ToolbarWidget(
+                    controller: _e,
+                    htmlToolbarOptions: _e.htmlToolbarOptions,
+                    callbacks: _e.callbacks);
+              }),
+        ),
+      ),
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -129,38 +147,13 @@ class _FullscreenState extends State<Fullscreen> {
                                 ],
                               ),
                               HtmlEditor(
-                                controller: _e!,
+                                controller: _e,
                                 initialValue: Fullscreen.example,
                                 minHeight: 200,
                                 isReadOnly: !_withinEquipmentRegion,
                                 onChanged: (s) {
                                   _eqpt = s!;
                                 },
-                                // htmlEditorOptions: HtmlEditorOptions(
-                                //     hint: 'Your text here ...',
-                                //     initialText: _eqpt),
-                                htmlToolbarOptions:
-                                    HtmlToolbarOptions(defaultToolbarButtons: [
-                                  const VoiceToTextButtons(),
-                                  const FontButtons(),
-                                  const ListButtons(listStyles: false),
-                                  const ColorButtons(),
-                                  ParagraphButtons(
-                                      caseConverter: false,
-                                      textDirection: false,
-                                      decreaseIndent: kIsWeb,
-                                      lineHeight: false,
-                                      increaseIndent: kIsWeb),
-                                  //const StyleButtons(),
-                                  if (kIsWeb)
-                                    const InsertButtons(
-                                        picture: false,
-                                        audio: false,
-                                        video: false,
-                                        otherFile: false),
-                                  if (kDebugMode && kIsWeb)
-                                    const OtherButtons(fullscreen: false),
-                                ], toolbarType: ToolbarType.nativeExpandable),
                               ),
                             ],
                           ),

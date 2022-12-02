@@ -6,7 +6,7 @@ import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 
 /// Options that modify the editor and its behavior
 class HtmlEditorOptions {
-  const HtmlEditorOptions({
+  HtmlEditorOptions({
     this.androidUseHybridComposition = true,
     this.adjustHeightForKeyboard = true,
     this.characterLimit,
@@ -74,12 +74,12 @@ class HtmlEditorOptions {
 
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
-  final String? hint;
+  String? hint;
 
   final TextStyle? hintStyle;
 
   /// The initial text that is be supplied to the Html editor.
-  final String? initialText;
+  String? initialText;
 
   /// Changes the display of the virtual keyboard on mobile devices.
   ///

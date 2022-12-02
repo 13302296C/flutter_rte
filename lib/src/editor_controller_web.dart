@@ -27,7 +27,16 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
-  }) : _viewId = getRandString(10).substring(0, 14);
+    HtmlEditorOptions? htmlEditorOptions,
+    HtmlToolbarOptions? htmlToolbarOptions,
+    OtherOptions? otherOptions,
+  })  : _viewId = getRandString(10).substring(0, 14),
+        super(
+            htmlEditorOptions: htmlEditorOptions ??
+                HtmlEditorOptions(hint: 'Enter text here ...'),
+            htmlToolbarOptions: htmlToolbarOptions ??
+                HtmlToolbarOptions(buttonColor: Colors.grey),
+            otherOptions: otherOptions ?? OtherOptions());
 
   /// Dictation controller
   SpeechToText? speechToText;
@@ -41,6 +50,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Dictation result buffer
   String sttBuffer = '';
 
+  bool hasFocus = false;
+
   ///
   StreamSubscription<html.MessageEvent>? _eventSub;
 
@@ -50,7 +61,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   ///
   @override
   void dispose() {
-    // _eventSub?.cancel();
+    _eventSub?.cancel();
     // initialized = false;
     // _evaluateJavascriptWeb(data: {'type': 'toIframe: dispose'});
     // log('=================== CONTROLLER DISPOSED ===================');
@@ -106,7 +117,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Sets the focus to the editor.
   @override
   void setFocus() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: setFocus'});
+    if (!alreadyDisabled) {
+      _evaluateJavascriptWeb(data: {'type': 'toIframe: setFocus'});
+    }
   }
 
   /// Clears the focus from the webview
@@ -499,36 +512,36 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         },
     ''';
     var maximumFileSize = 10485760;
-    for (var p in plugins) {
-      headString = headString + p.getHeadString() + '\n';
-      if (p is SummernoteAtMention) {
-        summernoteCallbacks = summernoteCallbacks +
-            '''
-            \nsummernoteAtMention: {
-              getSuggestions: (value) => {
-                const mentions = ${p.getMentionsWeb()};
-                return mentions.filter((mention) => {
-                  return mention.includes(value);
-                });
-              },
-              onSelect: (value) => {
-                window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onSelectMention", "value": value}), "*");
-              },
-            },
-          ''';
-        if (p.onSelect != null) {
-          html.window.onMessage.listen((event) {
-            var data = json.decode(event.data);
-            if (data['type'] != null &&
-                data['type'].contains('toDart:') &&
-                data['view'] == viewId &&
-                data['type'].contains('onSelectMention')) {
-              p.onSelect!.call(data['value']);
-            }
-          });
-        }
-      }
-    }
+    // for (var p in plugins) {
+    //   headString = headString + p.getHeadString() + '\n';
+    //   if (p is SummernoteAtMention) {
+    //     summernoteCallbacks = summernoteCallbacks +
+    //         '''
+    //         \nsummernoteAtMention: {
+    //           getSuggestions: (value) => {
+    //             const mentions = ${p.getMentionsWeb()};
+    //             return mentions.filter((mention) => {
+    //               return mention.includes(value);
+    //             });
+    //           },
+    //           onSelect: (value) => {
+    //             window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onSelectMention", "value": value}), "*");
+    //           },
+    //         },
+    //       ''';
+    //     if (p.onSelect != null) {
+    //       html.window.onMessage.listen((event) {
+    //         var data = json.decode(event.data);
+    //         if (data['type'] != null &&
+    //             data['type'].contains('toDart:') &&
+    //             data['view'] == viewId &&
+    //             data['type'].contains('onSelectMention')) {
+    //           p.onSelect!.call(data['value']);
+    //         }
+    //       });
+    //     }
+    //   }
+    // }
 
     summernoteCallbacks = summernoteCallbacks + '}';
     if ((Theme.of(initBC).brightness == Brightness.dark ||

@@ -12,31 +12,19 @@ class HtmlEditor extends StatelessWidget {
     this.onChanged,
     this.isReadOnly = false,
     required this.controller,
-    Callbacks? callbacks,
-    this.htmlEditorOptions,
-    this.htmlToolbarOptions,
-    this.otherOptions,
-    this.plugins = const [],
+    this.callbacks,
+    //this.plugins = const [],
   }) : super(key: key);
 
   /// Shortcut for onChanged callback
   final void Function(String?)? onChanged;
-
-  /// Defines options for the html editor
-  final HtmlEditorOptions? htmlEditorOptions;
-
-  /// Defines options for the editor toolbar
-  final HtmlToolbarOptions? htmlToolbarOptions;
-
-  /// Defines other options
-  final OtherOptions? otherOptions;
 
   /// The controller that is passed to the widget, which allows multiple [HtmlEditor]
   /// widgets to be used on the same page independently.
   final HtmlEditorController controller;
 
   /// Sets the list of Summernote plugins enabled in the editor.
-  final List<Plugins> plugins;
+  //final List<Plugins> plugins;
 
   /// Puts editor in read-only mode, hiding its toollbar
   final bool isReadOnly;
@@ -51,6 +39,10 @@ class HtmlEditor extends StatelessWidget {
   final String? initialValue;
 
   final String? hint;
+
+  /// Sets & activates Summernote's callbacks. See the functions available in
+  /// [Callbacks] for more details.
+  final Callbacks? callbacks;
 
   @override
   Widget build(BuildContext context) {

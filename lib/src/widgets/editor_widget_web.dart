@@ -32,7 +32,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
 
   Callbacks? get callbacks => widget.controller.callbacks;
 
-  List<Plugins> get plugins => widget.controller.plugins;
+  //List<Plugins> get plugins => widget.controller.plugins;
 
   HtmlEditorOptions get htmlEditorOptions =>
       widget.controller.htmlEditorOptions;
@@ -195,7 +195,14 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
 
   ///
   Widget _scrollPatch(BuildContext context) {
+    // if (widget.controller.hasFocus && !widget.controller.alreadyDisabled) {
     return SizedBox();
+    // }
+    // return GestureDetector(
+    //     onTap: () {
+    //       widget.controller.setFocus();
+    //     },
+    //     child: PointerInterceptor(child: Positioned.fill(child: SizedBox())));
   }
 
   ///

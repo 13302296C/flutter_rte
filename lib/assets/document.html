@@ -528,14 +528,14 @@
       });
 
       // scroll
-      window.onScroll = function(e){
-        console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
-      }
-      window.addEventListener('scroll', function(e){
-        console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
-        window.parent.postMessage(JSON.stringify({"view": viewId, 
-          "type": "toDart: scroll"}), "*");
-      });
+      // window.onScroll = function(e){
+      //   console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
+      // }
+      // window.addEventListener('scroll', function(e){
+      //   console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
+      //   window.parent.postMessage(JSON.stringify({"view": viewId, 
+      //     "type": "toDart: scroll"}), "*");
+      // });
     
 
     //   if (c.onBeforeCommand != null) {

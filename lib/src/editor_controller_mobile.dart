@@ -14,7 +14,15 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
-  });
+    HtmlEditorOptions? htmlEditorOptions,
+    HtmlToolbarOptions? htmlToolbarOptions,
+    OtherOptions? otherOptions,
+  }) : super(
+            htmlEditorOptions: htmlEditorOptions ??
+                HtmlEditorOptions(hint: 'Enter text here ...'),
+            htmlToolbarOptions: htmlToolbarOptions ??
+                HtmlToolbarOptions(buttonColor: Colors.grey),
+            otherOptions: otherOptions ?? OtherOptions());
 
   /// Toolbar widget state to call various methods. For internal use only.
   @override
