@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
 
 enum DemoType { boxed, autoHideToolbar, floatingToolbar }
 
@@ -14,7 +13,7 @@ class Fullscreen extends StatefulWidget {
   State<Fullscreen> createState() => _FullscreenState();
 
   static const String example = '''
-<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; color: rgb(74, 74, 74); font-family: Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><br></p><p style="text-indent: 3.5em; border: none; text-align: justify;" class=" align-justify">You can build apps with Flutter using any text editor combined with Flutter’s command-line tools. However, we recommend using one of our editor plugins for an even better experience. These plugins provide you with code completion, syntax highlighting, widget editing assists, run &amp; debug support, and more.<br></p><p style="text-indent:3.5em; border: none;"><br></p><div><hr><br></div><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><p style="text-indent:3.5em; border: none;"><br></p><div><hr><br></div><p style="text-indent: 3.5em; border: none; text-align: justify;" class=" align-justify">You can build apps with Flutter using any text editor combined with Flutter’s command-line tools. However, we recommend using one of our editor plugins for an even better experience. These plugins provide you with code completion, syntax highlighting, widget editing assists, run &amp; debug support, and more.<br></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; color: rgb(74, 74, 74); font-family: Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;" class=" align-justify">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></p><p style="text-indent:3.5em; border: none;"><br></p>
+<p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; color74, 74, 74); font-family: Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;"><br></p><p style="text-indent: 3.5em; border: none; text-align: justify;" class=" align-justify">You can build apps with Flutter using any text editor combined with Flutter’s command-line tools. However, we recommend using one of our editor plugins for an even better experience. These plugins provide you with code completion, syntax highlighting, widget editing assists, run &amp; debug support, and more.<br></p><p style="text-indent:3.5em; border: none;"><br></p><div><hr><br></div><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul><blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><ul><li class=" align-left" style="text-align: left;">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></li></ul></blockquote><p style="text-indent:3.5em; border: none;"><br></p><div><hr><br></div><p style="text-indent: 3.5em; border: none; text-align: justify;" class=" align-justify">You can build apps with Flutter using any text editor combined with Flutter’s command-line tools. However, we recommend using one of our editor plugins for an even better experience. These plugins provide you with code completion, syntax highlighting, widget editing assists, run &amp; debug support, and more.<br></p><p style="box-sizing: border-box; margin-top: 0px; margin-bottom: 1rem; color: rgb(74, 74, 74); font-family: Roboto, sans-serif; font-size: 16px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); text-decoration-thickness: initial; text-decoration-style: initial; text-decoration-color: initial;" class=" align-justify">Use the following steps to add an editor plugin for VS Code, Android Studio, IntelliJ, or Emacs. If you want to use a different editor, that’s OK, skip ahead to the<span>&nbsp;</span><a href="https://docs.flutter.dev/get-started/test-drive" style="box-sizing: border-box; color: rgb(19, 137, 253); text-decoration: none; background-color: transparent;">next step: Test drive</a>.<br></p><p style="text-indent:3.5em; border: none;"><br></p>
 ''';
 }
 
@@ -38,8 +37,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
     curve: Curves.fastOutSlowIn,
   );
   final Color? _tbBgd = Colors.blueGrey[50];
-  List<HtmlEditorController> _controllers = [];
-  List<String> _strings = [];
+  final List<HtmlEditorController> _controllers = [];
+  final List<String> _strings = List.filled(5, '');
   HtmlEditorController? _currentController;
 
   @override
@@ -112,10 +111,13 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
       Widget? editor;
       if (_demoType == DemoType.floatingToolbar) {
         editor = HtmlEditor(
+          initialValue: _strings[_sections.indexOf(e)],
+          onChanged: (s) {
+            _strings[_sections.indexOf(e)] = s ?? '';
+          },
           controller: _controllers[_sections.indexOf(e)]
-            ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.custom,
-          minHeight: 70,
-          isReadOnly: false,
+            ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.custom
+            ..htmlEditorOptions.decoration = null,
           callbacks: Callbacks(onFocus: () {
             setState(() {
               resetTimeout();
@@ -127,10 +129,13 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
         );
       } else if (_demoType == DemoType.autoHideToolbar) {
         editor = HtmlEditor(
+          initialValue: _strings[_sections.indexOf(e)],
+          onChanged: (s) {
+            _strings[_sections.indexOf(e)] = s ?? '';
+          },
           controller: _controllers[_sections.indexOf(e)]
-            ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor,
-          minHeight: 70,
-          isReadOnly: false,
+            ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
+            ..htmlEditorOptions.decoration = null,
           callbacks: Callbacks(onFocus: () {
             setState(() {
               resetTimeout();
@@ -141,19 +146,19 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           }),
         );
       } else if (_demoType == DemoType.boxed) {
-        editor = Container(
-          height: 250,
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              border: Border.all(color: _tbBgd!, width: 2)),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(7)),
-            child: HtmlEditor(
-              controller: _controllers[_sections.indexOf(e)]
-                ..htmlToolbarOptions.toolbarPosition =
-                    ToolbarPosition.aboveEditor,
-              height: 250,
-            ),
+        editor = ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(7)),
+          child: HtmlEditor(
+            initialValue: _strings[_sections.indexOf(e)],
+            onChanged: (s) {
+              _strings[_sections.indexOf(e)] = s ?? '';
+            },
+            controller: _controllers[_sections.indexOf(e)]
+              ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
+              ..htmlEditorOptions.decoration = BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  border: Border.all(color: _tbBgd!, width: 2)),
+            height: 250,
           ),
         );
       }
@@ -277,19 +282,16 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
   }
 
   Timer? timer;
-  bool _toolbarVisible = false;
 
   ///
   void resetTimeout() {
     timer?.cancel();
-    _toolbarVisible = true;
     timer = null;
   }
 
   void setTimeout() {
     timer = Timer(const Duration(seconds: 2), () {
       _controller.reverse(from: 1).then((_) {
-        _toolbarVisible = false;
         _currentController = null;
         setState(() {});
       });
@@ -311,7 +313,7 @@ class ExpandableFabClass extends StatefulWidget {
   final List<Widget> subChildren;
 
   @override
-  _ExpandableFabClassState createState() => _ExpandableFabClassState();
+  State<ExpandableFabClass> createState() => _ExpandableFabClassState();
 }
 
 class _ExpandableFabClassState extends State<ExpandableFabClass>
@@ -439,7 +441,7 @@ class _ExpandableFabClassState extends State<ExpandableFabClass>
 
 @immutable
 class _ExpandingActionButton extends StatelessWidget {
-  _ExpandingActionButton({
+  const _ExpandingActionButton({
     Key? key,
     required this.directionInDegrees,
     required this.maxDistance,

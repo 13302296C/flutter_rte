@@ -164,6 +164,7 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'onKeyDown':
+      case 'onKeyPress':
         callbacks?.onKeyDown?.call(response['keyCode']);
         break;
 
@@ -173,6 +174,7 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'onMouseDown':
+      case 'mouseClick':
         callbacks?.onMouseDown?.call();
         break;
 

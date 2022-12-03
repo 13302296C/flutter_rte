@@ -4,7 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'fullscreen.dart';
 
-void main() => runApp(const HtmlEditorExampleApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const HtmlEditorExampleApp());
+}
 
 class HtmlEditorExampleApp extends StatelessWidget {
   const HtmlEditorExampleApp({Key? key}) : super(key: key);

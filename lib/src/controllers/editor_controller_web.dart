@@ -7,10 +7,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/editor_controller_unsupported.dart'
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller_unsupported.dart'
     as unsupported;
-import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
-import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 
@@ -31,14 +29,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processOutputHtml = true,
     HtmlEditorOptions? htmlEditorOptions,
     HtmlToolbarOptions? htmlToolbarOptions,
-    OtherOptions? otherOptions,
   })  : _viewId = getRandString(10).substring(0, 14),
         super(
             htmlEditorOptions: htmlEditorOptions ??
                 HtmlEditorOptions(hint: 'Enter text here ...'),
             htmlToolbarOptions: htmlToolbarOptions ??
-                HtmlToolbarOptions(buttonColor: Colors.grey),
-            otherOptions: otherOptions ?? OtherOptions());
+                HtmlToolbarOptions(buttonColor: Colors.grey));
 
   /// Dictation controller
   // SpeechToText? speechToText;
@@ -119,7 +115,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Sets the focus to the editor.
   @override
   void setFocus() {
-    if (!alreadyDisabled) {
+    if (!isDisabled) {
       _evaluateJavascriptWeb(data: {'type': 'toIframe: setFocus'});
     }
   }
@@ -133,12 +129,12 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// disables the Html editor
   @override
   Future<void> disable() async {
-    if (alreadyDisabled) return;
+    if (isDisabled) return;
     toolbar?.disable();
     await _evaluateJavascriptWeb(data: {'type': 'toIframe: disable'});
     await recalculateHeight();
     notifyListeners();
-    alreadyDisabled = true;
+    isDisabled = true;
   }
 
   /// enables the Html editor
@@ -149,7 +145,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     await recalculateHeight();
     notifyListeners();
     setFocus();
-    alreadyDisabled = false;
+    isDisabled = false;
   }
 
   /// Undoes the last action
@@ -506,8 +502,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   Future<void> initEditor(BuildContext initBC, double initHeight) async {
     if (initialized) throw Exception('Already initialized');
-    log('================== INIT CALLED ======================');
-    log('height: $initHeight');
+    //log('================== INIT CALLED ======================');
+    //log('height: $initHeight');
     await _eventSub?.cancel();
     _eventSub = html.window.onMessage.listen((event) {
       _processEvent(event);
@@ -601,9 +597,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     htmlString =
         htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
 
-    /// if no discrete height is provided - hide the scrollbar as the
-    /// container height will always adjust to the document height
-    if (otherOptions.height == null) {
+    // if no explicit `height` is provided - hide the scrollbar as the
+    // container height will always adjust to the document height
+    if (htmlEditorOptions.height == null) {
       var hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;
@@ -623,7 +619,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       ..style.overflow = 'hidden'
       ..id = viewId
       ..onLoad.listen((event) async {
-        if (isReadOnly && !alreadyDisabled) {
+        if (isReadOnly && !isDisabled) {
           await disable();
         }
         if (callbacks != null && callbacks!.onInit != null) {

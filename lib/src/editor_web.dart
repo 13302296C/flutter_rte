@@ -1,6 +1,5 @@
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/widgets/editor_widget_web.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// HtmlEditor class for web

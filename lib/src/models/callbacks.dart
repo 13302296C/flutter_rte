@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/src/models/editor_settings.dart';
 
 /// Manages all the callback functions the library provides
 class Callbacks {

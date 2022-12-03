@@ -10,8 +10,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart'
     hide NavigationActionPolicy, UserScript, ContextMenu;
-import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
-import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -33,7 +31,6 @@ class HtmlEditorWidget extends StatefulWidget {
   //List<Plugins> get plugins => controller.plugins;
   HtmlEditorOptions get htmlEditorOptions => controller.htmlEditorOptions;
   HtmlToolbarOptions get htmlToolbarOptions => controller.htmlToolbarOptions;
-  OtherOptions get otherOptions => controller.otherOptions;
 
   final double? height;
   final double? minHeight;
@@ -74,13 +71,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
 
   HtmlEditorOptions get htmlEditorOptions =>
       widget.controller.htmlEditorOptions;
-  OtherOptions get otherOptions => widget.controller.otherOptions;
+
   HtmlToolbarOptions get htmlToolbarOptions =>
       widget.controller.htmlToolbarOptions;
 
   @override
   void initState() {
-    docHeight = otherOptions.height ?? 32;
+    docHeight = htmlEditorOptions.height ?? 64;
     key = getRandString(10);
     if (widget.htmlEditorOptions.filePath != null) {
       filePath = widget.htmlEditorOptions.filePath!;
@@ -100,18 +97,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   void resetHeight() async {
     if (mounted) {
       this.setState(() {
-        docHeight = otherOptions.height ?? 32;
+        docHeight = htmlEditorOptions.height ?? 64;
       });
       await widget.controller.editorController!.evaluateJavascript(
           source:
-              "\$('div.note-editable').outerHeight(${(widget.otherOptions.height ?? 32) - (toolbarKey.currentContext?.size?.height ?? 0)});");
+              "\$('div.note-editable').outerHeight(${(widget.htmlEditorOptions.height ?? 32) - (toolbarKey.currentContext?.size?.height ?? 0)});");
     }
   }
 
   /// if height if fixed = return fixed height, otherwise return
   /// greatest of `minHeight` and `contentHeight`.
   double get _height =>
-      otherOptions.height ??
+      htmlEditorOptions.height ??
       max(
           widget.minHeight ?? 0,
           widget.controller.contentHeight.value +
@@ -124,7 +121,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
         widget.controller.toolbarHeight = 0;
         if (!widget.controller.initialized) {
           widget.controller
-              .initEditor(widget.initBC, otherOptions.height ?? _height);
+              .initEditor(widget.initBC, htmlEditorOptions.height ?? _height);
         }
         //log('======toolbar height = ${controller.toolbarHeight}');
       } else {
@@ -146,16 +143,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
         onVisibilityChanged: (VisibilityInfo info) async {
           if (!visibleStream.isClosed) {
             cachedVisibleDecimal = info.visibleFraction == 1
-                ? (info.size.height / (otherOptions.height ?? 32)).clamp(0, 1)
+                ? (info.size.height / (htmlEditorOptions.height ?? 32))
+                    .clamp(0, 1)
                 : info.visibleFraction;
             visibleStream.add(info.visibleFraction == 1
-                ? (info.size.height / (otherOptions.height ?? 32)).clamp(0, 1)
+                ? (info.size.height / (htmlEditorOptions.height ?? 32))
+                    .clamp(0, 1)
                 : info.visibleFraction);
           }
         },
         child: Container(
           height: docHeight + 10,
-          decoration: otherOptions.decoration,
+          decoration: htmlEditorOptions.decoration,
           child: Column(
             children: [
               widget.htmlToolbarOptions.toolbarPosition ==
@@ -247,13 +246,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       /// editable elements still resizes the editor
                       if ((cachedVisibleDecimal ?? 0) > 0.1) {
                         this.setState(() {
-                          docHeight =
-                              otherOptions.height ?? 32 * cachedVisibleDecimal!;
+                          docHeight = htmlEditorOptions.height ??
+                              32 * cachedVisibleDecimal!;
                         });
                         await setHeightJS();
                       }
                       var visibleDecimal = await visibleStream.stream.first;
-                      var newHeight = widget.otherOptions.height ?? 32;
+                      var newHeight = widget.htmlEditorOptions.height ?? 32;
                       if (visibleDecimal > 0.1) {
                         this.setState(() {
                           docHeight = newHeight * visibleDecimal;
@@ -407,7 +406,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           \$('#summernote-2').summernote({
                               placeholder: "${widget.htmlEditorOptions.hint ?? ""}",
                               tabsize: 2,
-                              height: ${otherOptions.height ?? 32 - (toolbarKey.currentContext?.size?.height ?? 0)},
+                              height: ${htmlEditorOptions.height ?? 32 - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
                               disableGrammar: false,
                               spellCheck: ${widget.htmlEditorOptions.spellCheck},
@@ -512,7 +511,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 setState(mounted, this.setState, () {
                                   docHeight = (double.tryParse(
                                               height.first.toString()) ??
-                                          widget.otherOptions.height ??
+                                          widget.htmlEditorOptions.height ??
                                           32) +
                                       (toolbarKey
                                               .currentContext?.size?.height ??

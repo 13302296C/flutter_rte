@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/utils/custom_toolbar_buttons.dart';
+import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
 
 /// Options that modify the toolbar and its behavior
 class HtmlToolbarOptions {
@@ -202,7 +202,7 @@ class HtmlToolbarOptions {
   /// Controls how the toolbar displays. See [ToolbarType] for more details.
   ///
   /// By default the toolbar is rendered as a scrollable one-line list.
-  final ToolbarType toolbarType;
+  ToolbarType toolbarType;
 
   /// Controls where the toolbar is positioned. See [ToolbarPosition] for more details.
   ///

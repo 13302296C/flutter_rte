@@ -5,11 +5,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/utils/custom_toolbar_buttons.dart';
-import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
+import 'package:flutter_rich_text_editor/src/models/editor_settings.dart';
+import 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/src/widgets/custom_dropdown_button.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+
+import 'toolbar_expand_icon.dart';
 // extensions
 part 'toolbar_extensions/color_buttons.dart';
 part 'toolbar_extensions/custom_buttons.dart';
@@ -240,12 +244,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           } catch (e) {
             _backColorSelected = Color.fromARGB(0, 0, 0, 0);
           }
-
-          _backColorSelected = Color.fromARGB(
-              double.parse(rgbaList[3] * 255).round(),
-              int.parse(rgbaList[0]),
-              int.parse(rgbaList[1]),
-              int.parse(rgbaList[2]));
         } else if (colorList[1]!.contains('rgb(')) {
           _colorSelected[1] = true;
           var rgb = colorList[1]!.replaceAll('rgb(', '').replaceAll(')', '');

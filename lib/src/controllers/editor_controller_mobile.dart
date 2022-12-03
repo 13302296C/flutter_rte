@@ -1,14 +1,10 @@
 import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/editor_controller_unsupported.dart'
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller_unsupported.dart'
     as unsupported;
-import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
-import 'package:flutter_rich_text_editor/utils/other_options.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -18,13 +14,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processOutputHtml = true,
     HtmlEditorOptions? htmlEditorOptions,
     HtmlToolbarOptions? htmlToolbarOptions,
-    OtherOptions? otherOptions,
   }) : super(
             htmlEditorOptions: htmlEditorOptions ??
                 HtmlEditorOptions(hint: 'Enter text here ...'),
             htmlToolbarOptions: htmlToolbarOptions ??
-                HtmlToolbarOptions(buttonColor: Colors.grey),
-            otherOptions: otherOptions ?? OtherOptions());
+                HtmlToolbarOptions(buttonColor: Colors.grey));
 
   /// Toolbar widget state to call various methods. For internal use only.
   @override
@@ -129,7 +123,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     /// if no discrete height is provided - hide the scrollbar as the
     /// container height will always adjust to the document height
-    if (otherOptions.height == null) {
+    if (htmlEditorOptions.height == null) {
       var hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;

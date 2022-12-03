@@ -60,7 +60,24 @@ class HtmlEditorOptions {
 
   final Color? backgroundColor;
 
+  // The BoxDecoration to use around the Html editor.
+  BoxDecoration? decoration;
+
+  /// Sets the height of the Html editor widget. This takes the toolbar into
+  /// account when to toolbar is set to above or below editor and is always shown.
+  ///
+  /// If this value is `null` the editor's height is adjusted automatically.
+  double? height;
+
+  /// If `height` attribute is not provided - the container will auto-adjust its
+  /// height, but would not be less than `minHeight`, which defaults to 64
+  /// if the value is not provided.
+  double? minHeight;
+
+  /// Box decoration of voice-to-text popover widget
   final BoxDecoration? dictationPreviewDecoration;
+
+  ///
   final Color? dictationPreviewTextColor;
 
   /// Specify the file path to your custom html editor code.

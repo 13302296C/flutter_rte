@@ -1,11 +1,7 @@
 export 'dart:html';
-
-import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
-import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
@@ -40,15 +36,14 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
   HtmlEditorOptions get htmlEditorOptions =>
       widget.controller.htmlEditorOptions;
 
-  OtherOptions get otherOptions => widget.controller.otherOptions;
-
   HtmlToolbarOptions get htmlToolbarOptions =>
       widget.controller.htmlToolbarOptions;
 
   /// if height if fixed = return fixed height, otherwise return
   /// greatest of `minHeight` and `contentHeight`.
   double get _height =>
-      otherOptions.height ??
+      htmlEditorOptions.height ??
+      widget.height ??
       math.max(
           widget.minHeight ?? 0,
           widget.controller.contentHeight.value +
@@ -64,7 +59,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
         widget.controller.toolbarHeight = 0;
         if (!widget.controller.initialized) {
           widget.controller
-              .initEditor(widget.initBC, otherOptions.height ?? _height);
+              .initEditor(widget.initBC, htmlEditorOptions.height ?? _height);
         }
       } else {
         if (!widget.controller.initialized) {
@@ -84,6 +79,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
           // log('======toolbar height = ${widget.controller.toolbarHeight}');
           // log('======content height = ${widget.controller.contentHeight.value}');
           return Container(
+            decoration: widget.controller.htmlEditorOptions.decoration,
             height: _height,
             child: Column(
               verticalDirection: htmlToolbarOptions.toolbarPosition ==
@@ -143,7 +139,9 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
                     borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
-                          blurRadius: 5, spreadRadius: 1, color: Colors.black38)
+                          blurRadius: 10,
+                          spreadRadius: 0,
+                          color: Colors.black38)
                     ]),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -168,33 +166,28 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
                       ),
                     ],
                   ),
-                  ...widget.controller.sttBuffer.isNotEmpty
-                      ? [
-                          Divider(
-                              color: Theme.of(context).brightness ==
-                                      Brightness.light
-                                  ? Colors.black26
-                                  : Colors.white24),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              TextButton(
-                                  onPressed: widget.controller.cancelRecording,
-                                  child: Text('Discard',
-                                      style: TextStyle(
-                                        color: textColor,
-                                      ))),
-                              SizedBox(width: 24),
-                              TextButton(
-                                  onPressed: widget.controller.stopRecording,
-                                  child: Text('Insert',
-                                      style: TextStyle(
-                                        color: textColor,
-                                      ))),
-                            ],
-                          )
-                        ]
-                      : []
+                  Divider(
+                      color: Theme.of(context).brightness == Brightness.light
+                          ? Colors.black26
+                          : Colors.white24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                          onPressed: widget.controller.cancelRecording,
+                          child: Text('Discard',
+                              style: TextStyle(
+                                color: textColor,
+                              ))),
+                      SizedBox(width: 24),
+                      TextButton(
+                          onPressed: widget.controller.stopRecording,
+                          child: Text('Insert',
+                              style: TextStyle(
+                                color: textColor,
+                              ))),
+                    ],
+                  )
                 ],
               ),
             ),
@@ -219,7 +212,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
     if (widget.controller.isContentEmpty && !widget.controller.hasFocus) {
       return Positioned.fill(
           child: Padding(
-        padding: const EdgeInsets.only(top: 32.0, left: 56),
+        padding: const EdgeInsets.only(top: 24.0, left: 56),
         child: Text(widget.controller.htmlEditorOptions.hint ?? '',
             style: widget.controller.htmlEditorOptions.hintStyle ??
                 TextStyle(

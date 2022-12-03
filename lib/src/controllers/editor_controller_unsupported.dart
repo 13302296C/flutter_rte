@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
-import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:meta/meta.dart';
 // speech to text
 import 'package:speech_to_text/speech_to_text.dart';
@@ -13,20 +11,15 @@ class HtmlEditorController extends ChangeNotifier {
       this.processNewLineAsBr = false,
       this.processOutputHtml = true,
       HtmlEditorOptions? htmlEditorOptions,
-      HtmlToolbarOptions? htmlToolbarOptions,
-      OtherOptions? otherOptions})
+      HtmlToolbarOptions? htmlToolbarOptions})
       : htmlEditorOptions = htmlEditorOptions ?? HtmlEditorOptions(),
-        htmlToolbarOptions = htmlToolbarOptions ?? HtmlToolbarOptions(),
-        otherOptions = otherOptions ?? OtherOptions();
+        htmlToolbarOptions = htmlToolbarOptions ?? HtmlToolbarOptions();
 
   /// Defines options for the html editor
   late HtmlEditorOptions htmlEditorOptions;
 
   /// Defines options for the editor toolbar
   late HtmlToolbarOptions htmlToolbarOptions;
-
-  /// Defines other options
-  late OtherOptions otherOptions;
 
   //late List<Plugins> plugins;
 
@@ -36,8 +29,10 @@ class HtmlEditorController extends ChangeNotifier {
   ///
   bool initialized = false;
 
-  bool alreadyDisabled = false;
+  ///
+  bool isDisabled = false;
 
+  ///
   bool hasFocus = false;
 
   /// Toolbar widget state to call various methods. For internal use only.
@@ -52,7 +47,7 @@ class HtmlEditorController extends ChangeNotifier {
   GlobalKey toolbarKey = GlobalKey();
 
   ///
-  ValueNotifier<double> contentHeight = ValueNotifier(0);
+  ValueNotifier<double> contentHeight = ValueNotifier(64);
   double get actualHeight => contentHeight.value;
 
   double? _toolbarHeight;
@@ -72,7 +67,7 @@ class HtmlEditorController extends ChangeNotifier {
   ///
   /// The default value is true. It is recommended to leave this as true because
   /// it significantly improves the UX.
-  bool get autoAdjustHeight => otherOptions.height == null;
+  bool get autoAdjustHeight => htmlEditorOptions.height == null;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.

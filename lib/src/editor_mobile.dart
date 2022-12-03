@@ -1,6 +1,6 @@
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart'
     hide HtmlEditorController;
-import 'package:flutter_rich_text_editor/src/editor_controller_mobile.dart';
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller_mobile.dart';
 import 'package:flutter_rich_text_editor/src/widgets/editor_widget_mobile.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
