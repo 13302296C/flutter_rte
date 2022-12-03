@@ -52,7 +52,7 @@ To take advantage of the entire API you'll need to create and configure an insta
 
 By default widget is trying to occupy all available width and sizes its height based on the height of its content, but not less than the value of `minHeight` attribute of [HtmlEditor] widget.
 <br /><br />
-If explicit `height` is provided - the widget will size it's height precisely to the value of `height`. In this case, if content height is lagrer than the widget height - the content becomes scrollable.
+If explicit `height` is provided - the widget will size it's height precisely to the value of `height` attribute. In this case, if content height is greater than the widget height - the content becomes scrollable.
 
 ### Toolbar Position
 
@@ -68,12 +68,14 @@ All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditor
 Toolbar button groups could be enabled/disabled via `defaultToolbarButtons` attribute of [HtmlToolbarOptions] class within the controller. You can customize the toolbar by overriding the default value of this attribute.
 <br /><br />
 Adding your own button groups to the toolbar is very simple - just provide a list of [CustomButtonGroup] objects to the `customButtonGroups` attribute. Each button group will consist of a list of [CustomToolbarButton] objects, each with its own icon, tap callback and an `isSelected` flag to let the toolbar know if the icon button should be highlighted.
+![Toolbar button groups](./media/toolbar_groups.jpg)
+
 
 ## Special Considerations for the Web Platform
 
-To get the toolbar to scroll on Web, you will need to make sure you override the default scroll behaviour:
+To get the toolbar to scroll horizontally on Web, you will need to make sure you override the default scroll behavior:
 
-1. Add the following override class to your app:
+1. Add the following class override to your app:
     ```Dart
     class MyCustomScrollBehavior extends MaterialScrollBehavior {
     @override
@@ -96,5 +98,6 @@ To get the toolbar to scroll on Web, you will need to make sure you override the
 
     ```
 
+Done. Now you should be able to drag the toolbar left and right on web.
 
 
