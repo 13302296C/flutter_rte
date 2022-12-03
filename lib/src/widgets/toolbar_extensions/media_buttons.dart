@@ -33,6 +33,11 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
                   ?.call(ButtonType.link, null, null) ??
               true;
           if (proceed) {
+            if (_insertSelected[index]) {
+              await widget.controller.removeLink();
+              return;
+            }
+
             final text = TextEditingController();
             final url = TextEditingController();
             final textFocus = FocusNode();

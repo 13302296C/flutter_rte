@@ -4,6 +4,8 @@ import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)

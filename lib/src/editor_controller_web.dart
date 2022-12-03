@@ -9,6 +9,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/editor_controller_unsupported.dart'
     as unsupported;
+import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 
@@ -192,8 +194,10 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   Future<String> getText() async {
     if (_openRequests.keys.contains('toDart: getText')) {
-      _openRequests['toDart: getText']?.completeError('Duplicate request');
-      _openRequests.remove('toDart: getText');
+      return _openRequests['toDart: getText']?.future as Future<String>;
+      ;
+      // _openRequests['toDart: getText']?.completeError('Duplicate request');
+      // _openRequests.remove('toDart: getText');
     }
     _openRequests.addEntries({'toDart: getText': Completer<String>()}.entries);
     unawaited(_evaluateJavascriptWeb(data: {'type': 'toIframe: getText'}));
@@ -210,6 +214,46 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   @override
   void toggleCodeView() {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: toggleCode'});
+  }
+
+  @override
+  Future<String> getSelectedText() async {
+    //if (withHtmlTags) {
+    _openRequests.addEntries(
+        {'toIframe: getSelectedTextHtml': Completer<String>()}.entries);
+    unawaited(_evaluateJavascriptWeb(
+        data: {'type': 'toIframe: getSelectedTextHtml'}));
+    return _openRequests['toIframe: getSelectedTextHtml']!.future
+        as Future<String>;
+    // } else {
+    //   _openRequests
+    //       .addEntries({'toDart: getSelectedText': Completer<String>()}.entries);
+    //   unawaited(
+    //       _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedText'}));
+    //   return _openRequests['toDart: getSelectedText']!.future as Future<String>;
+    // }
+
+    // var e = await html.window.onMessage.firstWhere((element) =>
+    //     json.decode(element.data)['type'] == 'toDart: getSelectedText');
+    // return _openRequests['toDart: getSelectedText']
+    //     .future; // json.decode(e.data)['text'];
+  }
+
+  /// Insert a link at the position of the cursor in the editor
+  @override
+  Future<void> insertLink(String text, String url, bool isNewWindow) async {
+    await _evaluateJavascriptWeb(data: {
+      'type': 'toIframe: makeLink',
+      'text': text,
+      'url': url,
+      'isNewWindow': isNewWindow
+    });
+  }
+
+  ///
+  @override
+  Future<void> removeLink() async {
+    await _evaluateJavascriptWeb(data: {'type': 'toIframe: removeLink'});
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -250,17 +294,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   //   text = _processHtml(html: text);
   //   _evaluateJavascriptWeb(data: {'type': 'toIframe: setHint', 'text': text});
   // }
-
-  /// Insert a link at the position of the cursor in the editor
-  @override
-  Future<void> insertLink(String text, String url, bool isNewWindow) async {
-    await _evaluateJavascriptWeb(data: {
-      'type': 'toIframe: makeLink',
-      'text': text,
-      'url': url,
-      'isNewWindow': isNewWindow
-    });
-  }
 
   /// Resets the height of the editor back to the original if it was changed to
   /// accommodate the keyboard. This should only be used on mobile, and only

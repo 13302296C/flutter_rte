@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:meta/meta.dart';
 // speech to text
 import 'package:speech_to_text/speech_to_text.dart';
@@ -175,6 +177,9 @@ class HtmlEditorController extends ChangeNotifier {
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() => Future.value('');
 
+  /// Gets selection and returns it as a [String].
+  Future<String> getSelectedText() => Future.value('');
+
   /// Gets the selected HTML from the editor. You should use
   /// [controller.editorController.getSelectedText()] on mobile.
   ///
@@ -190,6 +195,9 @@ class HtmlEditorController extends ChangeNotifier {
 
   /// Insert a link at the position of the cursor in the editor
   Future<void> insertLink(String text, String url, bool isNewWindow) async {}
+
+  /// Remove a link at the position of the cursor in the editor
+  Future<void> removeLink() async {}
 
   /// Insert a network image at the position of the cursor in the editor
   void insertNetworkImage(String url, {String filename = ''}) {}

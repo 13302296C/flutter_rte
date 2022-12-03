@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/utils/custom_toolbar_buttons.dart';
+import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
@@ -61,7 +63,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// List that controls which [ToggleButtons] are selected for
   /// fullscreen, codeview, undo, redo, and help. Fullscreen and codeview
   /// are the only buttons that will ever be selected.
-  List<bool> _miscSelected = List<bool>.filled(5, false);
+  List<bool> _miscSelected = List<bool>.filled(7, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// justify left/right/center/full.
@@ -124,7 +126,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         _insertSelected = List<bool>.filled(t.getIcons().length, false);
       }
       if (t is OtherButtons) {
-        _miscSelected = List<bool>.filled(t.getIcons1().length, false);
+        _miscSelected = List<bool>.filled(
+            t.getIcons1().length + t.getIcons2().length, false);
       }
       if (t is ParagraphButtons) {
         _alignSelected = List<bool>.filled(t.getIcons1().length, false);

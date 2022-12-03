@@ -5,7 +5,7 @@ export 'package:flutter_rich_text_editor/utils/callbacks.dart';
 export 'package:flutter_rich_text_editor/utils/toolbar.dart';
 export 'package:flutter_rich_text_editor/utils/plugins.dart';
 export 'package:flutter_rich_text_editor/utils/file_upload_model.dart';
-export 'package:flutter_rich_text_editor/utils/options.dart';
+export 'package:flutter_rich_text_editor/utils/html_editor_options.dart';
 export 'package:flutter_rich_text_editor/utils/utils.dart'
     hide setState, intersperse, getRandString;
 

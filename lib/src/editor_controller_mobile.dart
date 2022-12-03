@@ -7,6 +7,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/editor_controller_unsupported.dart'
     as unsupported;
+import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/utils/other_options.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {

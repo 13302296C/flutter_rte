@@ -10,6 +10,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart'
     hide NavigationActionPolicy, UserScript, ContextMenu;
+import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/utils/other_options.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 

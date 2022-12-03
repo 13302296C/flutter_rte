@@ -235,7 +235,7 @@
             break;
 
           case 'removeLink':
-
+            editor.removeLink();
             break;
 
           // case 'setFontFace':
@@ -249,10 +249,10 @@
 
           case 'highlightColor':
             if(document.queryCommandValue('backColor') === 'rgba(0, 0, 0, 0)'){
-              console.log('------------NO HIGHLIGHT');
+              //console.log('------------NO HIGHLIGHT');
               editor.setHighlightColour(`#${data['argument']}`);
             } else {
-              console.log('------------HIGHLIGHT');
+              //console.log('------------HIGHLIGHT');
               editor.setHighlightColour('rgba(0, 0, 0, 0)');
             }
             
@@ -469,7 +469,7 @@
       // console.log(`queryCommandValue:formatBlock ${parent}`);
       // console.log(`queryCommandValue:fontSize ${fontSize}`);
       // console.log(`queryCommandValue:foreColor ${foreColor}`);
-      console.log(`queryCommandValue:highlightColor ${backColor}`);
+      // console.log(`queryCommandValue:highlightColor ${backColor}`);
       // console.log(`queryCommandValue:fontName ${fontName}`);
     }
     var message = {

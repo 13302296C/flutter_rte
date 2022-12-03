@@ -29,7 +29,7 @@ extension ToolbarOtherButtons on ToolbarWidgetState {
                   ?.call(ButtonType.copy, null, null) ??
               true;
           if (proceed) {
-            var data = await widget.controller.getText();
+            var data = await widget.controller.getSelectedText();
             await Clipboard.setData(ClipboardData(text: data));
           }
         }
@@ -46,7 +46,7 @@ extension ToolbarOtherButtons on ToolbarWidgetState {
           }
         }
       },
-      isSelected: List<bool>.filled(t.getIcons2().length, false),
+      isSelected: List<bool>.filled(2, false),
       children: t.getIcons2(),
     );
   }

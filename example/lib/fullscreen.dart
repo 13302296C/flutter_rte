@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/utils/html_toolbar_options.dart';
 
 enum DemoType { boxed, autoHideToolbar, floatingToolbar }
 
