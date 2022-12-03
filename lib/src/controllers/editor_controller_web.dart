@@ -13,7 +13,6 @@ import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 
 // speech to text
-import 'dart:developer';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
@@ -40,6 +39,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   // SpeechToText? speechToText;
 
   /// is dictation available
+  @override
   bool sttAvailable = false;
 
   // /// is dictation running
@@ -191,7 +191,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   Future<String> getText() async {
     if (_openRequests.keys.contains('toDart: getText')) {
       return _openRequests['toDart: getText']?.future as Future<String>;
-      ;
+
       // _openRequests['toDart: getText']?.completeError('Duplicate request');
       // _openRequests.remove('toDart: getText');
     }
@@ -514,7 +514,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
       _log('Event stream done.');
     });
 
-    var headString = '';
+    //var headString = '';
     var summernoteCallbacks = '''callbacks: {
         onKeydown: function(e) {
             var chars = \$(".note-editable").text();
@@ -540,7 +540,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
         },
     ''';
-    var maximumFileSize = 10485760;
+    //var maximumFileSize = 10485760;
     // for (var p in plugins) {
     //   headString = headString + p.getHeadString() + '\n';
     //   if (p is SummernoteAtMention) {

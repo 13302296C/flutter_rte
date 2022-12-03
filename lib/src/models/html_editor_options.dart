@@ -1,6 +1,4 @@
-import 'dart:async';
 import 'dart:collection';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 

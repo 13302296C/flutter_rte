@@ -43,6 +43,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    // ignore: unused_local_variable
     for (var s in _sections) {
       _controllers.add(HtmlEditorController(
         htmlToolbarOptions: HtmlToolbarOptions(

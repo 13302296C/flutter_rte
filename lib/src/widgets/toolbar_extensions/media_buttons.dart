@@ -40,7 +40,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
 
             final text = TextEditingController();
             final url = TextEditingController();
-            final textFocus = FocusNode();
+            //final textFocus = FocusNode();
             final urlFocus = FocusNode();
             final formKey = GlobalKey<FormState>();
             var openNewTab = false;

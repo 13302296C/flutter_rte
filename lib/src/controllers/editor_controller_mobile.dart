@@ -68,7 +68,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     log('================== INIT CALLED ======================');
     log('height: $initHeight');
 
-    var headString = '';
+    //var headString = '';
     var summernoteCallbacks = '''callbacks: {
         onKeydown: function(e) {
             var chars = \$(".note-editable").text();
@@ -94,7 +94,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
         },
     ''';
-    var maximumFileSize = 10485760;
+    //var maximumFileSize = 10485760;
 
     summernoteCallbacks = summernoteCallbacks + '}';
     if ((Theme.of(initBC).brightness == Brightness.dark ||
@@ -347,8 +347,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   Future<dynamic> _evaluateJavascript({required source}) async {
     if (editorController == null || await editorController!.isLoading()) {
       return;
-      throw Exception(
-          'HTML editor is still loading, please wait before evaluating this JS: $source!');
+      // throw Exception(
+      //     'HTML editor is still loading, please wait before evaluating this JS: $source!');
     }
     var result = await editorController!.evaluateJavascript(source: source);
     return result;

@@ -7,13 +7,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
 import 'package:flutter_rich_text_editor/src/models/editor_settings.dart';
-import 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
 import 'package:flutter_rich_text_editor/src/widgets/custom_dropdown_button.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-
 import 'toolbar_expand_icon.dart';
+
 // extensions
 part 'toolbar_extensions/color_buttons.dart';
 part 'toolbar_extensions/custom_buttons.dart';
@@ -84,9 +83,11 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   double _fontSizeSelectedItem = 3;
 
   /// Keeps track of the current font size in px
+  // ignore: prefer_final_fields
   double _actualFontSizeSelectedItem = 16;
 
   /// Sets the selected item for the font units dropdown
+  // ignore: prefer_final_fields
   String _fontSizeUnitSelectedItem = 'pt';
 
   /// Sets the selected item for the foreground color dialog

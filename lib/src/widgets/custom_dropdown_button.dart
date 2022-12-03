@@ -755,7 +755,7 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>>
 
   void _handleFocusChanged() {
     if (_hasPrimaryFocus != focusNode!.hasPrimaryFocus) {
-      this.setState(() {
+      setState(() {
         _hasPrimaryFocus = focusNode!.hasPrimaryFocus;
       });
     }
@@ -765,7 +765,7 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>>
     if (!mounted) {
       return;
     }
-    this.setState(() {
+    setState(() {
       _focusHighlightMode = mode;
     });
   }
