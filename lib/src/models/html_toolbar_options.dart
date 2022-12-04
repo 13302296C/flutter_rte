@@ -1,7 +1,7 @@
 import 'dart:async';
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
 
 /// Options that modify the toolbar and its behavior
 class HtmlToolbarOptions {
@@ -86,7 +86,7 @@ class HtmlToolbarOptions {
   // final List<String>? audioExtensions;
 
   /// Adds custom groups of buttons to the toolbar
-  final List<CustomButtonGroup> customButtonGroups;
+  List<CustomButtonGroup> customButtonGroups;
 
   /// Sets which options are visible in the toolbar for the editor.
   final List<Toolbar> defaultToolbarButtons;
@@ -207,7 +207,7 @@ class HtmlToolbarOptions {
   bool fixedToolbar = true;
 
   /// Delay before the toolbar becomes hidden.
-  final Duration collapseDelay = Duration(seconds: 1);
+  final Duration collapseDelay = Duration(seconds: 2);
 
   /// Allows you to set the allowed extensions when a user inserts a video.
   ///

@@ -86,7 +86,7 @@ extension ToolbarListButtons on ToolbarWidgetState {
                   true;
               if (proceed) {
                 if (kIsWeb) {
-                  widget.controller.changeListStyle(changed);
+                  //widget.controller.changeListStyle(changed);
                 } else {
                   await widget.controller.editorController!
                       .evaluateJavascript(source: '''

@@ -1,3 +1,3 @@
 class HtmlEditorInterface {
-  const HtmlEditorInterface();
+  const HtmlEditorInterface(String viewId);
 }

@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
 
 class CustomButtonGroup {
+  /// index in the toolbar at which to place the group
   int? index;
-  List<CustomToolbarButton> buttons = [];
+
+  /// list of buttons for this group
+  List<CustomToolbarButton> buttons;
+
+  CustomButtonGroup({
+    this.index,
+    required this.buttons,
+  });
 }
 
 class CustomToolbarButton {

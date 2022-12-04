@@ -13,10 +13,10 @@ and the Flutter guide for
 
 # Flutter Rich Text Editor
 
-Rich text editor for Flutter with built-in Voice-to-Text. 
+Rich text editor for Flutter with built-in voice-to-text. 
 
 ## Under the Hood
-This WYCIWYG HTML (not MD) editor is based on [Squire](https://github.com/neilj/Squire) library and offers great flexibility and control over the generated HTML.
+This WYCIWYG HTML editor is based on [Squire](https://github.com/neilj/Squire) library and offers great flexibility and control over the generated HTML.
 <br /><br />
 Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
 To disable voice-to-text feature - set the corresponding top-level attribute within [HtmlEditor] constructor.
@@ -26,13 +26,13 @@ To disable voice-to-text feature - set the corresponding top-level attribute wit
 ```Dart
 
 // 1. Define a var to store changes within parent class or a provider etc...
-String result = '';
+String result = 'Hello world!';
 
 // ...
 
 // 2. Add HtmlEditor to your build method
 HtmlEditor(
-    initalValue: 'Hello world!'
+    initalValue: result,
     onChanged:(s){
         result = s ?? '';
     }
@@ -41,7 +41,7 @@ HtmlEditor(
 
 ## Advanced Implementation
 
-To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the following groups of features:
+To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the two main groups of features:
 
  * Editor options group (all things editor)
  * Toolbar options group (all things toolbar)
@@ -59,7 +59,6 @@ If explicit `height` is provided - the widget will size it's height precisely to
 All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditorController] class. Toolbar could be positionned:
 
  * _above_ or _below_ the editor container, by setting the `toolbarPosition` attribute;
- * _locked_ or _collapsing_ on blur by setting the TODO. 
  * _scrollable_, _grid_ or _expandeble_ by setting the `toolbarType` attribute
  * Completely detached from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of inplementation please refer to the example. 
 
@@ -68,7 +67,22 @@ All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditor
 Toolbar button groups could be enabled/disabled via `defaultToolbarButtons` attribute of [HtmlToolbarOptions] class within the controller. You can customize the toolbar by overriding the default value of this attribute.
 <br /><br />
 Adding your own button groups to the toolbar is very simple - just provide a list of [CustomButtonGroup] objects to the `customButtonGroups` attribute. Each button group will consist of a list of [CustomToolbarButton] objects, each with its own icon, tap callback and an `isSelected` flag to let the toolbar know if the icon button should be highlighted.
-![Toolbar button groups](./media/toolbar_groups.jpg)
+
+    ```Dart
+    HtmlEditor(
+        controller: HtmlEditorController()
+            ..toolbarOptions!.customButtonGroups = [
+            CustomButtonGroup(
+                index: 0, // place first
+                buttons: [
+                CustomToolbarButton(
+                    icon: Icons.refresh,
+                    action: () => setState(() {}),
+                    isSelected: false)
+            ])
+            ],
+        ),
+    ```
 
 
 ## Special Considerations for the Web Platform

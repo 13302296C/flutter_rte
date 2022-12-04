@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 
@@ -25,7 +26,7 @@ class HtmlEditorOptions {
     this.mobileContextMenu,
     this.mobileLongPressDuration,
     this.mobileInitialScripts,
-    this.webInitialScripts,
+    // this.webInitialScripts,
     this.shouldEnsureVisible = false,
     this.spellCheck = false,
   }) {
@@ -33,6 +34,7 @@ class HtmlEditorOptions {
       throw Exception(
           'Can\'t have both backgroundColor and backgroundDecoration. Please choose one.');
     }
+    hint ??= 'Your text here...';
   }
 
   /// The editor will automatically adjust its height when the keyboard is active
@@ -75,7 +77,7 @@ class HtmlEditorOptions {
   /// account when to toolbar is set to above or below editor and is always shown.
   ///
   /// If this value is `null` the editor's height is adjusted automatically.
-  final double? height;
+  double? height;
 
   /// If `height` attribute is not provided - the container will auto-adjust its
   /// height, but would not be less than `minHeight`, which defaults to 64
@@ -89,18 +91,19 @@ class HtmlEditorOptions {
   final Color? dictationPreviewTextColor;
 
   /// Specify the file path to your custom html editor code.
-  ///
-  /// Make sure to set the editor's HTML ID to be 'summernote-2'.
+
   ///
   /// If you plan to use this on Web, you must add comments in your HTML so the
   /// package can insert the relevant JS code to communicate between Dart and JS.
   /// See the README for more details on this.
+  @internal
   final String? filePath;
 
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
   String? hint;
 
+  /// Text decoration of empty editor hint
   final TextStyle? hintStyle;
 
   /// The initial text that is be supplied to the Html editor.
@@ -122,11 +125,12 @@ class HtmlEditorOptions {
   final Duration? mobileLongPressDuration;
 
   /// Initial JS to inject into the editor.
+  @internal
   final UnmodifiableListView<UserScript>? mobileInitialScripts;
 
   /// Initial JS to add to the editor. These can be called at any time using
   /// [controller.evaluateJavascriptWeb]
-  final UnmodifiableListView<WebScript>? webInitialScripts;
+  //itialScripts;
 
   /// Specifies whether the widget should scroll to reveal the HTML editor when
   /// it is focused or the text content is changed.

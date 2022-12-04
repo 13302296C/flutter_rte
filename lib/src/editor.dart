@@ -19,16 +19,14 @@ class HtmlEditor extends StatelessWidget {
     this.callbacks,
     //this.plugins = const [],
   }) : super(key: key) {
-    if (controller != null) {
-      initializeController();
-    }
+    initializeController();
   }
 
   /// Shortcut for onChanged callback
   final void Function(String?)? onChanged;
 
   /// Provides access to all options and features
-  final HtmlEditorController? controller;
+  HtmlEditorController? controller;
 
   /// Sets the list of Summernote plugins enabled in the editor.
   //final List<Plugins> plugins;
@@ -62,7 +60,7 @@ class HtmlEditor extends StatelessWidget {
         height: height,
         minHeight: minHeight,
         initBC: context,
-        controller: controller ?? HtmlEditorController(),
+        controller: controller!,
       );
     } else if (io.Platform.isWindows ||
         io.Platform.isAndroid ||
@@ -71,7 +69,7 @@ class HtmlEditor extends StatelessWidget {
         height: height,
         minHeight: minHeight,
         initBC: context,
-        controller: controller ?? HtmlEditorController(),
+        controller: controller!,
       );
     } else {
       return Text('Unsupported platform');
@@ -80,6 +78,7 @@ class HtmlEditor extends StatelessWidget {
 
   /// If controller is provided to the editor - initialize its values
   void initializeController() {
+    controller ??= HtmlEditorController();
     if (initialValue != null &&
         controller!.editorOptions!.initialText != null &&
         !controller!.initialized) {
@@ -87,10 +86,15 @@ class HtmlEditor extends StatelessWidget {
           'Cannot have both [initialValue] and [editorOptions.initialText]. Please choose one.');
     }
     if (initialValue != null) {
-      controller!.editorOptions!.initialText = initialValue;
+      controller!.setInitialText(initialValue!);
+    }
+    if (hint != null) {
+      controller!.editorOptions!.hint = hint;
     }
 
-    controller!.editorOptions!.hint = hint ?? 'Your text here...';
+    if (height != null) {
+      controller!.editorOptions!.height = height;
+    }
 
     if (controller!.isReadOnly != isReadOnly) {
       controller!.isReadOnly = isReadOnly;

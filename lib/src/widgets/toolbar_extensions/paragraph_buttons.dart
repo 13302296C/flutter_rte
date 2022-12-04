@@ -62,7 +62,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
                   true;
               if (proceed) {
                 if (kIsWeb) {
-                  widget.controller.changeCase(changed);
+                  //widget.controller.changeCase(changed);
                 } else {
                   await widget.controller.editorController!
                       .evaluateJavascript(source: """
@@ -137,7 +137,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
             true;
         if (proceed) {
           if (kIsWeb) {
-            widget.controller.changeTextDirection(index == 0 ? 'ltr' : 'rtl');
+            //widget.controller.changeTextDirection(index == 0 ? 'ltr' : 'rtl');
           } else {
             await widget.controller.editorController!
                 .evaluateJavascript(source: """
@@ -238,7 +238,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
                   true;
               if (proceed) {
                 if (kIsWeb) {
-                  widget.controller.changeLineHeight(changed.toString());
+                  //widget.controller.changeLineHeight(changed.toString());
                 } else {
                   await widget.controller.editorController!.evaluateJavascript(
                       source:

@@ -52,17 +52,6 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
             appBar: AppBar(
               title: Text(widget.title),
               elevation: 0,
-              actions: [
-                IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: () {
-                      if (kIsWeb) {
-                        controller.reloadWeb();
-                      } else {
-                        controller.editorController!.reload();
-                      }
-                    })
-              ],
             ),
             body: const Fullscreen()));
   }

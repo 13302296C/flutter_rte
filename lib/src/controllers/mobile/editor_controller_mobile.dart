@@ -101,17 +101,17 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
             editorOptions.darkMode == true) &&
         editorOptions.darkMode != false) {}
     var userScripts = '';
-    if (editorOptions.webInitialScripts != null) {
-      editorOptions.webInitialScripts!.forEach((element) {
-        userScripts = userScripts +
-            '''
-          if (data["type"].includes("${element.name}")) {
-            ${element.script}
-          }
-        ''' +
-            '\n';
-      });
-    }
+    // if (editorOptions.webInitialScripts != null) {
+    //   editorOptions.webInitialScripts!.forEach((element) {
+    //     userScripts = userScripts +
+    //         '''
+    //       if (data["type"].includes("${element.name}")) {
+    //         ${element.script}
+    //       }
+    //     ''' +
+    //         '\n';
+    //   });
+    // }
     var initScript = 'const viewId = \'$viewId\';';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
     if (editorOptions.filePath != null) {

@@ -6,20 +6,13 @@ export 'package:flutter_rich_text_editor/src/models/toolbar.dart';
 export 'package:flutter_rich_text_editor/src/models/file_upload_model.dart';
 export 'package:flutter_rich_text_editor/src/models/html_editor_options.dart';
 export 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
+export 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
 export 'package:flutter_rich_text_editor/utils/plugins.dart';
 export 'package:flutter_rich_text_editor/utils/utils.dart'
     hide setState, intersperse, getRandString;
 
-// export 'package:flutter_rich_text_editor/src/editor_unsupported.dart'
-//     if (dart.library.html) 'package:flutter_rich_text_editor/src/editor_web.dart'
-//     if (dart.library.io) 'package:flutter_rich_text_editor/src/editor_mobile.dart';
-
 export 'package:flutter_rich_text_editor/src/editor.dart';
 export 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
-
-// export 'package:flutter_rich_text_editor/src/controllers/editor_controller_unsupported.dart'
-//     if (dart.library.html) 'package:flutter_rich_text_editor/src/controllers/editor_controller_web.dart'
-//     if (dart.library.io) 'package:flutter_rich_text_editor/src/controllers/editor_controller_mobile.dart';
 
 export 'package:flutter_rich_text_editor/utils/shims/flutter_inappwebview_fake.dart'
     if (dart.library.io) 'package:flutter_inappwebview/flutter_inappwebview.dart';

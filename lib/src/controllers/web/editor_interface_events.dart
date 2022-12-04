@@ -15,7 +15,7 @@ extension StreamProcessor on HtmlEditorController {
   }
 
   /// Process events coming from the iframe
-  Future<void> _processEvent(html.MessageEvent event) async {
+  Future<void> processEvent(html.MessageEvent event) async {
     // full response
     Map<String, dynamic> response = json.decode(event.data);
     if (response['view'] != viewId || response['type'] == null) return;

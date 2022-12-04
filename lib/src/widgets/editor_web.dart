@@ -142,7 +142,7 @@ class _HtmlEditorWebState extends State<HtmlEditorWeb>
           } else if (!widget.controller.hasFocus &&
               _controller.value != 0 &&
               showToolbar) {
-            timer = Timer(const Duration(seconds: 2), () {
+            timer = Timer(toolbarOptions.collapseDelay, () {
               _controller.reverse().then((_) {
                 setState(() {
                   showToolbar = false;
