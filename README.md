@@ -59,7 +59,7 @@ If explicit `height` is provided - the widget will size it's height precisely to
 All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditorController] class. Toolbar could be positionned:
 
  * _above_ or _below_ the editor container, by setting the `toolbarPosition` attribute;
- * _scrollable_, _grid_ or _expandeble_ by setting the `toolbarType` attribute
+ * _scrollable_, _grid_ or _expandable_ by setting the `toolbarType` attribute
  * Completely detached from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of inplementation please refer to the example. 
 
 ### Toolbar Contents and Custom Button Groups
@@ -68,22 +68,23 @@ Toolbar button groups could be enabled/disabled via `defaultToolbarButtons` attr
 <br /><br />
 Adding your own button groups to the toolbar is very simple - just provide a list of [CustomButtonGroup] objects to the `customButtonGroups` attribute. Each button group will consist of a list of [CustomToolbarButton] objects, each with its own icon, tap callback and an `isSelected` flag to let the toolbar know if the icon button should be highlighted.
 
-    ```Dart
-    HtmlEditor(
-        controller: HtmlEditorController()
-            ..toolbarOptions!.customButtonGroups = [
-            CustomButtonGroup(
-                index: 0, // place first
-                buttons: [
-                CustomToolbarButton(
-                    icon: Icons.refresh,
-                    action: () => setState(() {}),
-                    isSelected: false)
-            ])
-            ],
-        ),
-    ```
-
+```Dart
+HtmlEditor(
+    controller: HtmlEditorController()
+        ..toolbarOptions!.customButtonGroups = [
+        CustomButtonGroup(
+            index: 0, // place first
+            buttons: [
+            CustomToolbarButton(
+                icon: Icons.save_outlined,
+                action: () => /* ... */,
+                isSelected: false)
+        ])
+        ],
+    ),
+```
+=
+![Custom button](./media/custom_toolbar_button.jpg)
 
 ## Special Considerations for the Web Platform
 

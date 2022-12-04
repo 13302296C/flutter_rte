@@ -270,17 +270,17 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
                             ],
                           ),
                           const SizedBox(height: 32),
-                          HtmlEditor(
-                            controller: HtmlEditorController()
-                              ..toolbarOptions!.customButtonGroups = [
-                                CustomButtonGroup(index: 0, buttons: [
-                                  CustomToolbarButton(
-                                      icon: Icons.refresh,
-                                      action: () => setState(() {}),
-                                      isSelected: false)
-                                ])
-                              ],
-                          ),
+                          // HtmlEditor(
+                          //   controller: HtmlEditorController()
+                          //     ..toolbarOptions!.customButtonGroups = [
+                          //       CustomButtonGroup(index: 0, buttons: [
+                          //         CustomToolbarButton(
+                          //             icon: Icons.save_outlined,
+                          //             action: () => setState(() {}),
+                          //             isSelected: false)
+                          //       ])
+                          //     ],
+                          // ),
                           const SizedBox(height: 32),
                           const Divider(height: 2, thickness: 2),
                           ...sections,
