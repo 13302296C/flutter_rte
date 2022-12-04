@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:file_picker/file_picker.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +7,6 @@ import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart'
 import 'package:flutter_rich_text_editor/src/models/editor_settings.dart';
 import 'package:flutter_rich_text_editor/src/widgets/custom_dropdown_button.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
-import 'package:numberpicker/numberpicker.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'toolbar_expand_icon.dart';
 
@@ -415,7 +412,6 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       (widget.controller.htmlToolbarOptions.toolbarPosition !=
                           ToolbarPosition.custom)) ||
                   (_enabled &&
-                      widget.controller.hasFocus &&
                       widget.controller.htmlToolbarOptions.toolbarPosition !=
                           ToolbarPosition.custom &&
                       !widget.controller.htmlToolbarOptions.fixedToolbar)
@@ -445,7 +441,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         child: Container(
           height: widget.htmlToolbarOptions.toolbarItemHeight + 15,
           child: Padding(
-            padding: const EdgeInsets.all(5.0),
+            padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
             child: CustomScrollView(
               scrollDirection: Axis.horizontal,
               slivers: [
@@ -472,7 +468,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           ),
           child: _isExpanded
               ? Padding(
-                  padding: const EdgeInsets.all(5.0),
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 5.0, horizontal: 8.0),
                   child: Wrap(
                     runSpacing:
                         widget.htmlToolbarOptions.gridViewVerticalSpacing,

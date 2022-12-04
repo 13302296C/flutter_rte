@@ -11,6 +11,7 @@ class HtmlEditorOptions {
     this.customOptions = '',
     this.darkMode,
     this.backgroundColor,
+    this.backgroundDecoration,
     this.dictationPreviewDecoration,
     this.dictationPreviewTextColor,
     this.filePath,
@@ -57,6 +58,7 @@ class HtmlEditorOptions {
   final bool? darkMode;
 
   final Color? backgroundColor;
+  final BoxDecoration? backgroundDecoration;
 
   // The BoxDecoration to use around the Html editor.
   BoxDecoration? decoration;

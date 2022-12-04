@@ -119,6 +119,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           controller: _controllers[_sections.indexOf(e)]
             ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.custom
             ..htmlToolbarOptions.fixedToolbar = true
+            ..htmlToolbarOptions.toolbarDecoration = null
+            ..htmlToolbarOptions.backgroundColor = null
             ..htmlEditorOptions.decoration = null,
           callbacks: Callbacks(onFocus: () {
             setState(() {
@@ -137,6 +139,11 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           },
           controller: _controllers[_sections.indexOf(e)]
             ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
+            ..htmlToolbarOptions.backgroundColor = null
+            ..htmlToolbarOptions.toolbarDecoration = BoxDecoration(
+              color: _tbBgd,
+              borderRadius: const BorderRadius.all(Radius.circular(32)),
+            )
             ..htmlEditorOptions.decoration = null
             ..htmlToolbarOptions.fixedToolbar = false,
         );
@@ -150,6 +157,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
             },
             controller: _controllers[_sections.indexOf(e)]
               ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
+              ..htmlToolbarOptions.toolbarDecoration = null
+              ..htmlToolbarOptions.backgroundColor = _tbBgd
               ..htmlEditorOptions.decoration = BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   border: Border.all(color: _tbBgd!, width: 2))

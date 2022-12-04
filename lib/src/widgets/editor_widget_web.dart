@@ -1,4 +1,5 @@
 export 'dart:html';
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
@@ -25,7 +26,8 @@ class HtmlEditorWidget extends StatefulWidget {
   State<HtmlEditorWidget> createState() => _HtmlEditorWidgetState();
 }
 
-class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
+class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
+    with TickerProviderStateMixin {
   /// Tracks whether the editor was disabled onInit (to avoid re-disabling on reload)
   //bool alreadyDisabled = false;
 
@@ -49,10 +51,27 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
           widget.controller.contentHeight.value +
               (widget.controller.htmlToolbarOptions.toolbarPosition ==
                           ToolbarPosition.custom ||
-                      widget.controller.htmlToolbarOptions.fixedToolbar
+                      !widget.controller.htmlToolbarOptions.fixedToolbar
                   ? 0
                   : (widget.controller.toolbarHeight ?? 0)));
+
+  ///
   bool showToolbar = false;
+
+  ///
+  Timer? timer;
+
+  ///
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 350),
+    vsync: this,
+  );
+
+  ///
+  late final Animation<double> _animation = CurvedAnimation(
+    parent: _controller,
+    curve: Curves.fastOutSlowIn,
+  );
   @override
   Widget build(BuildContext context) {
     if (widget.controller.toolbarHeight == null) {
@@ -79,7 +98,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
         builder: (context, _) {
           // log('======toolbar height = ${widget.controller.toolbarHeight}');
           // log('======content height = ${widget.controller.contentHeight.value}');
-          if (widget.controller.hasFocus) showToolbar = true;
+
           if (widget.controller.htmlToolbarOptions.fixedToolbar ||
               htmlToolbarOptions.toolbarPosition == ToolbarPosition.custom) {
             return Container(
@@ -117,6 +136,25 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
             );
           }
           // auto hide
+          if (widget.controller.hasFocus && _controller.value == 0) {
+            timer?.cancel();
+            timer = null;
+            _controller
+                .animateTo(1, duration: const Duration(seconds: 1))
+                .then((value) {
+              showToolbar = true;
+            });
+          } else if (!widget.controller.hasFocus &&
+              _controller.value != 0 &&
+              showToolbar) {
+            timer = Timer(const Duration(seconds: 2), () {
+              _controller.reverse().then((_) {
+                setState(() {
+                  showToolbar = false;
+                });
+              });
+            });
+          }
           return Container(
             height: _height,
             decoration: widget.controller.htmlEditorOptions.decoration,
@@ -134,8 +172,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
                             ToolbarPosition.aboveEditor
                         ? null
                         : -51,
-                    child: SizedBox(
-                        height: showToolbar ? 51 : 0, child: _toolbar())),
+                    child:
+                        FadeTransition(opacity: _animation, child: _toolbar())),
                 _backgroundWidget(context),
                 _hintTextWidget(context),
                 widget.controller.initialized &&
@@ -271,6 +309,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
   Widget _backgroundWidget(BuildContext context) {
     return Positioned.fill(
         child: Container(
+            decoration:
+                widget.controller.htmlEditorOptions.backgroundDecoration,
             color: widget.controller.htmlEditorOptions.backgroundColor));
   }
 }

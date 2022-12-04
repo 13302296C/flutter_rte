@@ -263,7 +263,7 @@ class HtmlToolbarOptions {
   final double dropdownItemHeight;
   final Color? dropdownFocusColor;
   final Color? dropdownBackgroundColor;
-  final Color? backgroundColor;
+  Color? backgroundColor;
 
   /// Set the menu opening direction for the dropdown. Only useful when using
   /// [ToolbarPosition.custom] since the toolbar otherwise automatically
@@ -273,7 +273,7 @@ class HtmlToolbarOptions {
   final BoxDecoration? dropdownBoxDecoration;
 
   /// Defines decoration of toolbar container
-  final BoxDecoration? toolbarDecoration;
+  BoxDecoration? toolbarDecoration;
 
   /// Styling options that only apply to the buttons:
   /// (See the [ToggleButtons] class for more information)
