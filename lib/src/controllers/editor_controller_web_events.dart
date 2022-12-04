@@ -101,12 +101,14 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onFocus':
         hasFocus = true;
+        notifyListeners();
         callbacks?.onFocus?.call();
         break;
 
       case 'onBlur':
         hasFocus = false;
         if (textHasNoValue(_buffer)) _buffer = '';
+        notifyListeners();
         callbacks?.onBlur?.call();
         break;
 

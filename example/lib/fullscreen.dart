@@ -118,6 +118,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           },
           controller: _controllers[_sections.indexOf(e)]
             ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.custom
+            ..htmlToolbarOptions.fixedToolbar = true
             ..htmlEditorOptions.decoration = null,
           callbacks: Callbacks(onFocus: () {
             setState(() {
@@ -136,15 +137,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           },
           controller: _controllers[_sections.indexOf(e)]
             ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
-            ..htmlEditorOptions.decoration = null,
-          callbacks: Callbacks(onFocus: () {
-            setState(() {
-              resetTimeout();
-              _currentController = _controllers[_sections.indexOf(e)];
-            });
-          }, onBlur: () {
-            setTimeout();
-          }),
+            ..htmlEditorOptions.decoration = null
+            ..htmlToolbarOptions.fixedToolbar = false,
         );
       } else if (_demoType == DemoType.boxed) {
         editor = ClipRRect(
@@ -158,7 +152,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
               ..htmlToolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
               ..htmlEditorOptions.decoration = BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(color: _tbBgd!, width: 2)),
+                  border: Border.all(color: _tbBgd!, width: 2))
+              ..htmlToolbarOptions.fixedToolbar = true,
             height: 250,
           ),
         );

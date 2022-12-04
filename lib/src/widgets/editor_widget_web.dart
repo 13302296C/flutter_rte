@@ -48,10 +48,11 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
           widget.minHeight ?? 0,
           widget.controller.contentHeight.value +
               (widget.controller.htmlToolbarOptions.toolbarPosition ==
-                      ToolbarPosition.custom
+                          ToolbarPosition.custom ||
+                      widget.controller.htmlToolbarOptions.fixedToolbar
                   ? 0
                   : (widget.controller.toolbarHeight ?? 0)));
-
+  bool showToolbar = false;
   @override
   Widget build(BuildContext context) {
     if (widget.controller.toolbarHeight == null) {
@@ -78,36 +79,73 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget> {
         builder: (context, _) {
           // log('======toolbar height = ${widget.controller.toolbarHeight}');
           // log('======content height = ${widget.controller.contentHeight.value}');
+          if (widget.controller.hasFocus) showToolbar = true;
+          if (widget.controller.htmlToolbarOptions.fixedToolbar ||
+              htmlToolbarOptions.toolbarPosition == ToolbarPosition.custom) {
+            return Container(
+              decoration: widget.controller.htmlEditorOptions.decoration,
+              height: _height,
+              child: Column(
+                verticalDirection: htmlToolbarOptions.toolbarPosition ==
+                        ToolbarPosition.aboveEditor
+                    ? VerticalDirection.down
+                    : VerticalDirection.up,
+                children: <Widget>[
+                  if (htmlToolbarOptions.toolbarPosition !=
+                      ToolbarPosition.custom)
+                    _toolbar(),
+                  Expanded(
+                      child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Stack(
+                      children: [
+                        _backgroundWidget(context),
+                        _hintTextWidget(context),
+                        widget.controller.initialized &&
+                                widget.controller.toolbarHeight != null
+                            ? HtmlElementView(
+                                viewType: widget._viewId,
+                              )
+                            : SizedBox(),
+                        _scrollPatch(context),
+                        _sttDictationPreview(),
+                      ],
+                    ),
+                  )),
+                ],
+              ),
+            );
+          }
+          // auto hide
           return Container(
-            decoration: widget.controller.htmlEditorOptions.decoration,
             height: _height,
-            child: Column(
-              verticalDirection: htmlToolbarOptions.toolbarPosition ==
-                      ToolbarPosition.aboveEditor
-                  ? VerticalDirection.down
-                  : VerticalDirection.up,
-              children: <Widget>[
-                if (htmlToolbarOptions.toolbarPosition !=
-                    ToolbarPosition.custom)
-                  _toolbar(),
-                Expanded(
-                    child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Stack(
-                    children: [
-                      _backgroundWidget(context),
-                      _hintTextWidget(context),
-                      widget.controller.initialized &&
-                              widget.controller.toolbarHeight != null
-                          ? HtmlElementView(
-                              viewType: widget._viewId,
-                            )
-                          : SizedBox(),
-                      _scrollPatch(context),
-                      _sttDictationPreview(),
-                    ],
-                  ),
-                )),
+            decoration: widget.controller.htmlEditorOptions.decoration,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned(
+                    top: htmlToolbarOptions.toolbarPosition ==
+                            ToolbarPosition.aboveEditor
+                        ? -51
+                        : null,
+                    left: 0,
+                    right: 0,
+                    bottom: htmlToolbarOptions.toolbarPosition ==
+                            ToolbarPosition.aboveEditor
+                        ? null
+                        : -51,
+                    child: SizedBox(
+                        height: showToolbar ? 51 : 0, child: _toolbar())),
+                _backgroundWidget(context),
+                _hintTextWidget(context),
+                widget.controller.initialized &&
+                        widget.controller.toolbarHeight != null
+                    ? HtmlElementView(
+                        viewType: widget._viewId,
+                      )
+                    : SizedBox(),
+                _scrollPatch(context),
+                _sttDictationPreview(),
               ],
             ),
           );

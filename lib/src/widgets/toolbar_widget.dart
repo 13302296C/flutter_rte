@@ -403,10 +403,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   Widget _toolbarWrapper({required Widget child}) {
     return Container(
       color: widget.htmlToolbarOptions.backgroundColor,
+      decoration: widget.htmlToolbarOptions.toolbarDecoration,
       child: PointerInterceptor(
         child: AbsorbPointer(
           absorbing: !_enabled,
-          child: _enabled ? child : SizedBox(),
+          child: _enabled &&
+                      widget.controller.htmlToolbarOptions.toolbarPosition ==
+                          ToolbarPosition.custom ||
+                  (_enabled &&
+                      widget.controller.htmlToolbarOptions.fixedToolbar &&
+                      (widget.controller.htmlToolbarOptions.toolbarPosition !=
+                          ToolbarPosition.custom)) ||
+                  (_enabled &&
+                      widget.controller.hasFocus &&
+                      widget.controller.htmlToolbarOptions.toolbarPosition !=
+                          ToolbarPosition.custom &&
+                      !widget.controller.htmlToolbarOptions.fixedToolbar)
+              ? child
+              : SizedBox(),
         ),
       ),
     );

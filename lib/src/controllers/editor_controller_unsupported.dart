@@ -261,6 +261,7 @@ class HtmlEditorController extends ChangeNotifier {
   void insertTable(String dimensions) {}
 
   ///
+  // ignore: unused_element
   Future<bool> _initSpeechToText() async {
     return false;
   }

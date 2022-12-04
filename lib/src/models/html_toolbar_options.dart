@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
@@ -8,7 +6,7 @@ import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart'
 /// Options that modify the toolbar and its behavior
 class HtmlToolbarOptions {
   HtmlToolbarOptions({
-    this.audioExtensions,
+    // this.audioExtensions,
     this.customButtonGroups = const [],
     this.defaultToolbarButtons = const [
       VoiceToTextButtons(),
@@ -18,43 +16,37 @@ class HtmlToolbarOptions {
           help: false,
           copy: false,
           paste: false),
-      //StyleButtons(),
-      //FontSettingButtons(fontSizeUnit: false),
       FontButtons(strikethrough: false, subscript: false, superscript: false),
-
       ColorButtons(),
       ParagraphButtons(
           textDirection: false, lineHeight: false, caseConverter: false),
       ListButtons(listStyles: false),
-
       InsertButtons(
           video: false,
           audio: false,
           table: false,
           otherFile: false,
           picture: false),
-
       OtherButtons(
-        undo: false,
-        redo: false,
-        fullscreen: false,
-        codeview: false,
-        help: false,
-      ),
+          undo: false,
+          redo: false,
+          fullscreen: false,
+          codeview: false,
+          help: false),
     ],
-    this.otherFileExtensions,
-    this.imageExtensions,
+    // this.otherFileExtensions,
+    // this.imageExtensions,
     this.initiallyExpanded = false,
     this.linkInsertInterceptor,
-    this.mediaLinkInsertInterceptor,
-    this.mediaUploadInterceptor,
+    // this.mediaLinkInsertInterceptor,
+    // this.mediaUploadInterceptor,
     this.onButtonPressed,
     this.onDropdownChanged,
-    this.onOtherFileLinkInsert,
-    this.onOtherFileUpload,
+    // this.onOtherFileLinkInsert,
+    // this.onOtherFileUpload,
     this.toolbarType = ToolbarType.nativeScrollable,
     this.toolbarPosition = ToolbarPosition.aboveEditor,
-    this.videoExtensions,
+    // this.videoExtensions,
     this.dropdownElevation = 8,
     this.dropdownIcon,
     this.dropdownIconColor,
@@ -65,6 +57,7 @@ class HtmlToolbarOptions {
     this.dropdownMenuDirection,
     this.dropdownMenuMaxHeight,
     this.dropdownBoxDecoration,
+    this.toolbarDecoration,
     this.backgroundColor,
     this.buttonColor,
     this.buttonSelectedColor,
@@ -90,7 +83,7 @@ class HtmlToolbarOptions {
   /// Allows you to set the allowed extensions when a user inserts an audio file
   ///
   /// By default any audio extension is allowed.
-  final List<String>? audioExtensions;
+  // final List<String>? audioExtensions;
 
   /// Adds custom groups of buttons to the toolbar
   final List<CustomButtonGroup> customButtonGroups;
@@ -101,7 +94,7 @@ class HtmlToolbarOptions {
   /// Allows you to set the allowed extensions when a user inserts an image
   ///
   /// By default any image extension is allowed.
-  final List<String>? imageExtensions;
+  // final List<String>? imageExtensions;
 
   /// Allows you to set whether the toolbar starts out expanded (in gridview)
   /// or contracted (in scrollview).
@@ -131,8 +124,8 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(String, InsertFileType)?
-      mediaLinkInsertInterceptor;
+  // final FutureOr<bool> Function(String, InsertFileType)?
+  //     mediaLinkInsertInterceptor;
 
   /// Allows you to intercept any image/video/audio files being inserted into the editor.
   /// The function passes the PlatformFile class, which contains all the file data
@@ -143,8 +136,8 @@ class HtmlToolbarOptions {
   /// (true = continue with internal handler, false = do not use internal handler)
   ///
   /// If no interceptor is set, the plugin uses the internal handler.
-  final FutureOr<bool> Function(PlatformFile, InsertFileType)?
-      mediaUploadInterceptor;
+  //final FutureOr<bool> Function(PlatformFile, InsertFileType)?
+  //    mediaUploadInterceptor;
 
   /// Allows you to intercept any button press. The function passes the ButtonType
   /// enum, which tells you which button was pressed, the current selected status of
@@ -182,7 +175,7 @@ class HtmlToolbarOptions {
   /// provide this callback when using the button.
   ///
   /// The function passes the URL of the file inserted.
-  final void Function(String)? onOtherFileLinkInsert;
+  //final void Function(String)? onOtherFileLinkInsert;
 
   /// Called when a file is uploaded using the "other file" button.
   ///
@@ -191,13 +184,13 @@ class HtmlToolbarOptions {
   ///
   /// The function passes the PlatformFile class, which contains all the file data
   /// including name, size, type, Uint8List bytes, etc.
-  final void Function(PlatformFile)? onOtherFileUpload;
+  //final void Function(PlatformFile)? onOtherFileUpload;
 
   /// Allows you to set the allowed extensions when a user inserts a file other
   /// than image/audio/video
   ///
   /// By default any other extension is allowed.
-  final List<String>? otherFileExtensions;
+  //final List<String>? otherFileExtensions;
 
   /// Controls how the toolbar displays. See [ToolbarType] for more details.
   ///
@@ -209,10 +202,17 @@ class HtmlToolbarOptions {
   /// By default the toolbar is above the editor.
   ToolbarPosition toolbarPosition;
 
+  /// If `true`, the toolbar will always be visible when the toolbar is set to
+  /// above or below editor. If `false` it will collapse on blur.
+  bool fixedToolbar = true;
+
+  /// Delay before the toolbar becomes hidden.
+  final Duration collapseDelay = Duration(seconds: 1);
+
   /// Allows you to set the allowed extensions when a user inserts a video.
   ///
   /// By default any video extension is allowed.
-  final List<String>? videoExtensions;
+  //final List<String>? videoExtensions;
 
   /// Styling options for the toolbar:
 
@@ -271,6 +271,9 @@ class HtmlToolbarOptions {
   final DropdownMenuDirection? dropdownMenuDirection;
   final double? dropdownMenuMaxHeight;
   final BoxDecoration? dropdownBoxDecoration;
+
+  /// Defines decoration of toolbar container
+  final BoxDecoration? toolbarDecoration;
 
   /// Styling options that only apply to the buttons:
   /// (See the [ToggleButtons] class for more information)
