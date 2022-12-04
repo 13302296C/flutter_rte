@@ -6,8 +6,8 @@ import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
-class HtmlEditorWidget extends StatefulWidget {
-  HtmlEditorWidget({
+class HtmlEditorWeb extends StatefulWidget {
+  HtmlEditorWeb({
     Key? key,
     required this.controller,
     this.height,
@@ -23,10 +23,10 @@ class HtmlEditorWidget extends StatefulWidget {
   final BuildContext initBC;
 
   @override
-  State<HtmlEditorWidget> createState() => _HtmlEditorWidgetState();
+  State<HtmlEditorWeb> createState() => _HtmlEditorWebState();
 }
 
-class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
+class _HtmlEditorWebState extends State<HtmlEditorWeb>
     with TickerProviderStateMixin {
   /// Tracks whether the editor was disabled onInit (to avoid re-disabling on reload)
   //bool alreadyDisabled = false;
@@ -35,9 +35,9 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
 
   //List<Plugins> get plugins => widget.controller.plugins;
 
-  HtmlEditorOptions get editorOptions => widget.controller.editorOptions;
+  HtmlEditorOptions get editorOptions => widget.controller.editorOptions!;
 
-  HtmlToolbarOptions get toolbarOptions => widget.controller.toolbarOptions;
+  HtmlToolbarOptions get toolbarOptions => widget.controller.toolbarOptions!;
 
   /// if height if fixed = return fixed height, otherwise return
   /// greatest of `minHeight` and `contentHeight`.
@@ -47,9 +47,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
       math.max(
           widget.minHeight ?? 0,
           widget.controller.contentHeight.value +
-              (widget.controller.toolbarOptions.toolbarPosition ==
-                          ToolbarPosition.custom ||
-                      !widget.controller.toolbarOptions.fixedToolbar
+              (toolbarOptions.toolbarPosition == ToolbarPosition.custom ||
+                      !toolbarOptions.fixedToolbar
                   ? 0
                   : (widget.controller.toolbarHeight ?? 0)));
 
@@ -85,8 +84,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
               widget.initBC, _height - (widget.controller.toolbarHeight ?? 0));
         }
         widget.controller.toolbarHeight = widget.controller.isReadOnly ||
-                widget.controller.toolbarOptions.toolbarPosition ==
-                    ToolbarPosition.custom
+                toolbarOptions.toolbarPosition == ToolbarPosition.custom
             ? 0
             : 51;
       }
@@ -97,10 +95,10 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
           // log('======toolbar height = ${widget.controller.toolbarHeight}');
           // log('======content height = ${widget.controller.contentHeight.value}');
 
-          if (widget.controller.toolbarOptions.fixedToolbar ||
+          if (toolbarOptions.fixedToolbar ||
               toolbarOptions.toolbarPosition == ToolbarPosition.custom) {
             return Container(
-              decoration: widget.controller.editorOptions.decoration,
+              decoration: editorOptions.decoration,
               height: _height,
               child: Column(
                 verticalDirection: toolbarOptions.toolbarPosition ==
@@ -154,7 +152,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
           }
           return Container(
             height: _height,
-            decoration: widget.controller.editorOptions.decoration,
+            decoration: editorOptions.decoration,
             child: Stack(
               clipBehavior: Clip.none,
               children: [
@@ -286,8 +284,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
       return Positioned.fill(
           child: Padding(
         padding: const EdgeInsets.only(top: 24.0, left: 56),
-        child: Text(widget.controller.editorOptions.hint ?? '',
-            style: widget.controller.editorOptions.hintStyle ??
+        child: Text(editorOptions.hint ?? '',
+            style: editorOptions.hintStyle ??
                 TextStyle(
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
@@ -306,7 +304,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
   Widget _backgroundWidget(BuildContext context) {
     return Positioned.fill(
         child: Container(
-            decoration: widget.controller.editorOptions.backgroundDecoration,
-            color: widget.controller.editorOptions.backgroundColor));
+            decoration: editorOptions.backgroundDecoration,
+            color: editorOptions.backgroundColor));
   }
 }

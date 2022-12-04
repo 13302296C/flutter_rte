@@ -1,0 +1,3 @@
+class HtmlEditorInterface {
+  const HtmlEditorInterface();
+}

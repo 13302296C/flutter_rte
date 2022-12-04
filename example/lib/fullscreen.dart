@@ -117,11 +117,11 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
             _strings[_sections.indexOf(e)] = s ?? '';
           },
           controller: _controllers[_sections.indexOf(e)]
-            ..toolbarOptions.toolbarPosition = ToolbarPosition.custom
-            ..toolbarOptions.fixedToolbar = true
-            ..toolbarOptions.toolbarDecoration = null
-            ..toolbarOptions.backgroundColor = null
-            ..editorOptions.decoration = null,
+            ..toolbarOptions?.toolbarPosition = ToolbarPosition.custom
+            ..toolbarOptions?.fixedToolbar = true
+            ..toolbarOptions?.toolbarDecoration = null
+            ..toolbarOptions?.backgroundColor = null
+            ..editorOptions?.decoration = null,
           callbacks: Callbacks(onFocus: () {
             setState(() {
               resetTimeout();
@@ -138,14 +138,14 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
             _strings[_sections.indexOf(e)] = s ?? '';
           },
           controller: _controllers[_sections.indexOf(e)]
-            ..toolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
-            ..toolbarOptions.backgroundColor = null
-            ..toolbarOptions.toolbarDecoration = BoxDecoration(
+            ..toolbarOptions?.toolbarPosition = ToolbarPosition.aboveEditor
+            ..toolbarOptions?.backgroundColor = null
+            ..toolbarOptions?.toolbarDecoration = BoxDecoration(
               color: _tbBgd,
               borderRadius: const BorderRadius.all(Radius.circular(32)),
             )
-            ..editorOptions.decoration = null
-            ..toolbarOptions.fixedToolbar = false,
+            ..editorOptions?.decoration = null
+            ..toolbarOptions?.fixedToolbar = false,
         );
       } else if (_demoType == DemoType.boxed) {
         editor = ClipRRect(
@@ -156,13 +156,13 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
               _strings[_sections.indexOf(e)] = s ?? '';
             },
             controller: _controllers[_sections.indexOf(e)]
-              ..toolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
-              ..toolbarOptions.toolbarDecoration = null
-              ..toolbarOptions.backgroundColor = _tbBgd
-              ..editorOptions.decoration = BoxDecoration(
+              ..toolbarOptions?.toolbarPosition = ToolbarPosition.aboveEditor
+              ..toolbarOptions?.toolbarDecoration = null
+              ..toolbarOptions?.backgroundColor = _tbBgd
+              ..editorOptions?.decoration = BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   border: Border.all(color: _tbBgd!, width: 2))
-              ..toolbarOptions.fixedToolbar = true,
+              ..toolbarOptions?.fixedToolbar = true,
             height: 250,
           ),
         );

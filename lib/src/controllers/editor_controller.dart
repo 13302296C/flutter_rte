@@ -7,8 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller_unsupported.dart'
-    as unsupported;
 import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 
@@ -17,38 +15,133 @@ import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-part 'editor_controller_web_events.dart';
-part 'editor_controller_web_fn.dart';
+import 'editor_interface.dart';
+
+part 'web/editor_interface_events.dart';
 
 /// Controller for web
-class HtmlEditorController extends unsupported.HtmlEditorController {
+class HtmlEditorController extends ChangeNotifier {
   HtmlEditorController({
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
-    HtmlEditorOptions? editorOptions,
-    HtmlToolbarOptions? toolbarOptions,
+    this.editorOptions,
+    this.toolbarOptions,
   })  : _viewId = getRandString(10).substring(0, 14),
-        super(
-            editorOptions:
-                editorOptions ?? HtmlEditorOptions(hint: 'Enter text here ...'),
-            toolbarOptions:
-                toolbarOptions ?? HtmlToolbarOptions(buttonColor: Colors.grey));
+        _interface = HtmlEditorInterface() {
+    editorOptions ??= HtmlEditorOptions();
+    toolbarOptions ??=
+        HtmlToolbarOptions(buttonColor: Colors.grey); //TODO: remove color
+  }
+
+  HtmlEditorInterface _interface;
+
+  /// Defines options for the html editor
+  HtmlEditorOptions? editorOptions;
+
+  /// Defines options for the editor toolbar
+  HtmlToolbarOptions? toolbarOptions;
+
+  //late List<Plugins> plugins;
+
+  /// Puts editor in read-only mode, hiding its toollbar
+  bool isReadOnly = false;
+
+  ///
+  bool initialized = false;
+
+  ///
+  bool isDisabled = false;
+
+  ///
+  bool hasFocus = false;
+
+  /// Toolbar widget state to call various methods. For internal use only.
+  ToolbarWidgetState? toolbar;
+
+  /// Sets & activates Summernote's callbacks. See the functions available in
+  /// [Callbacks] for more details.
+  Callbacks? callbacks;
+
+  ///
+  GlobalKey toolbarKey = GlobalKey();
+
+  ///
+  ValueNotifier<double> contentHeight = ValueNotifier(64);
+  double get actualHeight => contentHeight.value;
+
+  double? _toolbarHeight;
+  double? get toolbarHeight => _toolbarHeight;
+  set toolbarHeight(double? height) {
+    _toolbarHeight = height;
+    notifyListeners();
+  }
+
+  /// The editor will automatically adjust its height once the page is loaded to
+  /// ensure there is no vertical scrolling or empty space. It will only perform
+  /// the adjustment when the editor is the loaded page.
+  ///
+  /// It will also disable vertical scrolling on the webview, so scrolling on
+  /// the webview will actually scroll the rest of the page rather than doing
+  /// nothing because it is trying to scroll the webview container.
+  ///
+  /// The default value is true. It is recommended to leave this as true because
+  /// it significantly improves the UX.
+  bool get autoAdjustHeight => editorOptions!.height == null;
+
+  /// Determines whether text processing should happen on input HTML, e.g.
+  /// whether a new line should be converted to a <br>.
+  ///
+  /// The default value is true.
+  final bool processInputHtml;
+
+  /// Determines whether newlines (\n) should be written as <br>. This is not
+  /// recommended for HTML documents.
+  ///
+  /// The default value is false.
+  final bool processNewLineAsBr;
+
+  /// Determines whether text processing should happen on output HTML, e.g.
+  /// whether <p><br></p> is returned as "". For reference, Summernote uses
+  /// that HTML as the default HTML (when no text is in the editor).
+  ///
+  /// The default value is true.
+  final bool processOutputHtml;
+
+  /// Internally tracks the character count in the editor
+  int _characterCount = 0;
+
+  /// Gets the current character count
+  // ignore: unnecessary_getters_setters
+  int get characterCount => _characterCount;
+
+  /// Sets the current character count. Marked as internal method - this should
+  /// not be used outside of the package itself.
+  // ignore: unnecessary_getters_setters
+  set characterCount(int count) => _characterCount = count;
+
+  /// Allows the [InAppWebViewController] for the Html editor to be accessed
+  /// outside of the package itself for endless control and customization.
+  dynamic get editorController => null;
+
+  /// Internal method to set the [InAppWebViewController] when webview initialization
+  /// is complete
+  set editorController(dynamic controller) => {};
+
+  /// Internal method to set the view ID when iframe initialization
+  /// is complete
 
   /// Dictation controller
-  // SpeechToText? speechToText;
+  SpeechToText? speechToText;
 
   /// is dictation available
-  @override
   bool sttAvailable = false;
 
   // /// is dictation running
-  // bool isRecording = false;
+  bool isRecording = false;
 
   // /// Dictation result buffer
-  // String sttBuffer = '';
-
-  // bool hasFocus = false;
+  String sttBuffer = '';
 
   ///
   StreamSubscription<html.MessageEvent>? _eventSub;
@@ -57,55 +150,26 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   final Map<String, Completer> _openRequests = {};
 
   ///
+
   @override
   void dispose() {
     _eventSub?.cancel();
-    // initialized = false;
-    // _evaluateJavascriptWeb(data: {'type': 'toIframe: dispose'});
-    // log('=================== CONTROLLER DISPOSED ===================');
     super.dispose();
   }
-
-  /// Toolbar widget state to call various methods. For internal use only.
-  @override
-  ToolbarWidgetState? toolbar;
-
-  /// Determines whether text processing should happen on input HTML, e.g.
-  /// whether a new line should be converted to a <br>.
-  ///
-  /// The default value is true.
-  @override
-  final bool processInputHtml;
-
-  /// Determines whether newlines (\n) should be written as <br>. This is not
-  /// recommended for HTML documents.
-  ///
-  /// The default value is false.
-  @override
-  final bool processNewLineAsBr;
-
-  /// Determines whether text processing should happen on output HTML, e.g.
-  /// whether <p><br></p> is returned as "". For reference, Summernote uses
-  /// that HTML as the default HTML (when no text is in the editor).
-  ///
-  /// The default value is true.
-  @override
-  final bool processOutputHtml;
 
   /// Manages the view ID for the [HtmlEditorController] on web
   String? _viewId;
 
   /// Internal method to set the view ID when iframe initialization
   /// is complete
-  @override
+
   set viewId(String? viewId) => _viewId = viewId;
-  @override
+
   String get viewId => _viewId!;
 
   // ignore: prefer_final_fields
   String _buffer = '';
 
-  @override
   bool get isContentEmpty => _buffer == '';
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -113,7 +177,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
   /// Sets the focus to the editor.
-  @override
+
   void setFocus() {
     if (!isDisabled) {
       _evaluateJavascriptWeb(data: {'type': 'toIframe: setFocus'});
@@ -121,13 +185,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Clears the focus from the webview
-  @override
+
   void clearFocus() {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: clearFocus'});
   }
 
   /// disables the Html editor
-  @override
+
   Future<void> disable() async {
     if (isDisabled) return;
     toolbar?.disable();
@@ -138,7 +202,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// enables the Html editor
-  @override
+
   Future<void> enable() async {
     toolbar?.enable();
     await _evaluateJavascriptWeb(data: {'type': 'toIframe: enable'});
@@ -149,20 +213,20 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Undoes the last action
-  @override
+
   void undo() {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: undo'});
   }
 
   /// Redoes the last action
-  @override
+
   void redo() {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: redo'});
   }
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
-  @override
+
   void setText(String text) {
     text = _processHtml(html: text);
     _evaluateJavascriptWeb(data: {'type': 'toIframe: setText', 'text': text});
@@ -171,7 +235,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Insert text at the end of the current HTML content in the editor
   /// Note: This method should only be used for plaintext strings
-  @override
+
   Future<void> insertText(String text) async {
     await _evaluateJavascriptWeb(
         data: {'type': 'toIframe: insertText', 'text': text});
@@ -179,7 +243,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
-  @override
+
   Future<void> insertHtml(String html) async {
     html = _processHtml(html: html);
     await _evaluateJavascriptWeb(
@@ -187,7 +251,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Gets the text from the editor and returns it as a [String].
-  @override
+
   Future<String> getText() async {
     if (_openRequests.keys.contains('toDart: getText')) {
       return _openRequests['toDart: getText']?.future as Future<String>;
@@ -201,18 +265,17 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Clears the editor of any text.
-  @override
+
   Future<void> clear() async {
     await _evaluateJavascriptWeb(data: {'type': 'toIframe: clear'});
   }
 
   /// toggles the codeview in the Html editor
-  @override
+
   void toggleCodeView() {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: toggleCode'});
   }
 
-  @override
   Future<String> getSelectedText() async {
     //if (withHtmlTags) {
     _openRequests.addEntries(
@@ -236,7 +299,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Insert a link at the position of the cursor in the editor
-  @override
+
   Future<void> insertLink(String text, String url, bool isNewWindow) async {
     await _evaluateJavascriptWeb(data: {
       'type': 'toIframe: makeLink',
@@ -247,7 +310,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   ///
-  @override
+
   Future<void> removeLink() async {
     await _evaluateJavascriptWeb(data: {'type': 'toIframe: removeLink'});
   }
@@ -255,7 +318,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-  @override
   Future<String> getSelectedTextWeb({bool withHtmlTags = false}) async {
     if (withHtmlTags) {
       _openRequests.addEntries(
@@ -294,7 +356,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Resets the height of the editor back to the original if it was changed to
   /// accommodate the keyboard. This should only be used on mobile, and only
   /// when [adjustHeightForKeyboard] is enabled.
-  @override
+
   void resetHeight() {
     throw Exception(
         'Flutter Web environment detected, please make sure you are importing package:flutter_rich_text_editor/html_editor.dart and check kIsWeb before calling this method.');
@@ -303,14 +365,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   /// Refresh the page
   ///
   /// Note: This should only be used in Flutter Web!!!
-  @override
+
   void reloadWeb() {
     _evaluateJavascriptWeb(data: {'type': 'toIframe: reload'});
   }
 
   /// Recalculates the height of the editor to remove any vertical scrolling.
   /// This method will not do anything if [autoAdjustHeight] is turned off.
-  @override
+
   Future<void> recalculateHeight() async {
     await _evaluateJavascriptWeb(data: {
       'type': 'toIframe: getHeight',
@@ -318,7 +380,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// A function to quickly call a document.execCommand function in a readable format
-  @override
+
   Future<void> execCommand(String command, {String? argument}) async {
     await _evaluateJavascriptWeb(data: {
       'type': 'toIframe: execCommand',
@@ -329,7 +391,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// A function to execute JS passed as a [WebScript] to the editor. This should
   /// only be used on Flutter Web.
-  @override
+
   Future<dynamic> evaluateJavascriptWeb(String name,
       {bool hasReturnValue = false}) async {
     if (hasReturnValue) {
@@ -348,21 +410,21 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Internal function to change list style on Web
-  @override
+
   void changeListStyle(String changed) {
     _evaluateJavascriptWeb(
         data: {'type': 'toIframe: changeListStyle', 'changed': changed});
   }
 
   /// Internal function to change line height on Web
-  @override
+
   void changeLineHeight(String changed) {
     _evaluateJavascriptWeb(
         data: {'type': 'toIframe: changeLineHeight', 'changed': changed});
   }
 
   /// Internal function to change text direction on Web
-  @override
+
   void changeTextDirection(String direction) {
     _evaluateJavascriptWeb(data: {
       'type': 'toIframe: changeTextDirection',
@@ -371,14 +433,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Internal function to change case on Web
-  @override
+
   void changeCase(String changed) {
     _evaluateJavascriptWeb(
         data: {'type': 'toIframe: changeCase', 'case': changed});
   }
 
   /// Internal function to insert table on Web
-  @override
+
   void insertTable(String dimensions) {
     _evaluateJavascriptWeb(
         data: {'type': 'toIframe: insertTable', 'dimensions': dimensions});
@@ -443,7 +505,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   ///
-  @override
+
   Future<void> convertSpeechToText(Function(String v) onResult) async {
     if (!await _initSpeechToText()) return;
     //setState(mounted, this.setState, () => isRecording = true);
@@ -475,7 +537,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Triggers result from recognition
-  @override
+
   Future<void> stopRecording() async {
     await speechToText?.stop();
     isRecording = false;
@@ -491,7 +553,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   }
 
   /// Does not trigger result from recognition
-  @override
+
   Future<void> cancelRecording() async {
     await speechToText?.cancel();
     isRecording = false;
@@ -499,7 +561,6 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     //setState(mounted, this.setState, () => isRecording = false);
   }
 
-  @override
   Future<void> initEditor(BuildContext initBC, double initHeight) async {
     if (initialized) throw Exception('Already initialized');
     //log('================== INIT CALLED ======================');
@@ -519,7 +580,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         onKeydown: function(e) {
             var chars = \$(".note-editable").text();
             var totalChars = chars.length;
-            ${editorOptions.characterLimit != null ? '''allowedKeys = (
+            ${editorOptions!.characterLimit != null ? '''allowedKeys = (
                 e.which === 8 ||  /* BACKSPACE */
                 e.which === 35 || /* END */
                 e.which === 36 || /* HOME */
@@ -534,7 +595,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
                 e.ctrlKey === true && e.which === 86 || /* CTRL + V */
                 e.ctrlKey === true && e.which === 90    /* CTRL + Z */
             );
-            if (!allowedKeys && \$(e.target).text().length >= ${editorOptions.characterLimit}) {
+            if (!allowedKeys && \$(e.target).text().length >= ${editorOptions!.characterLimit}) {
                 e.preventDefault();
             }''' : ''}
             window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
@@ -574,11 +635,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     summernoteCallbacks = summernoteCallbacks + '}';
     if ((Theme.of(initBC).brightness == Brightness.dark ||
-            editorOptions.darkMode == true) &&
-        editorOptions.darkMode != false) {}
+            editorOptions!.darkMode == true) &&
+        editorOptions!.darkMode != false) {}
     var userScripts = '';
-    if (editorOptions.webInitialScripts != null) {
-      editorOptions.webInitialScripts!.forEach((element) {
+    if (editorOptions!.webInitialScripts != null) {
+      editorOptions!.webInitialScripts!.forEach((element) {
         userScripts = userScripts +
             '''
           if (data["type"].includes("${element.name}")) {
@@ -590,8 +651,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     }
     var initScript = 'const viewId = \'$viewId\';';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
-    if (editorOptions.filePath != null) {
-      filePath = editorOptions.filePath!;
+    if (editorOptions!.filePath != null) {
+      filePath = editorOptions!.filePath!;
     }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
@@ -599,7 +660,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     // if no explicit `height` is provided - hide the scrollbar as the
     // container height will always adjust to the document height
-    if (editorOptions.height == null) {
+    if (editorOptions!.height == null) {
       var hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;
@@ -632,7 +693,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         //   if (data['type'] != null &&
         //       data['type'].contains('toDart: onChangeContent') &&
         //       data['view'] == viewId) {
-        //     if (editorOptions.shouldEnsureVisible &&
+        //     if (editorOptions!.shouldEnsureVisible &&
         //         Scrollable.of(context) != null) {
         //       Scrollable.of(context)!.position.ensureVisible(
         //           context.findRenderObject()!,

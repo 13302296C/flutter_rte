@@ -59,7 +59,7 @@ class HtmlEditorController extends ChangeNotifier {
 
   /// The editor will automatically adjust its height once the page is loaded to
   /// ensure there is no vertical scrolling or empty space. It will only perform
-  /// the adjustment when the summernote editor is the loaded page.
+  /// the adjustment when the editor is the loaded page.
   ///
   /// It will also disable vertical scrolling on the webview, so scrolling on
   /// the webview will actually scroll the rest of the page rather than doing

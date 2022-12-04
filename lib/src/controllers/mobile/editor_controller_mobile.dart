@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller_unsupported.dart'
+import 'package:flutter_rich_text_editor/src/controllers/stub/editor_controller_unsupported.dart'
     as unsupported;
 
 /// Controller for mobile

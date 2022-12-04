@@ -8,8 +8,11 @@ class HtmlEditorOptions {
     this.androidUseHybridComposition = true,
     this.adjustHeightForKeyboard = true,
     this.characterLimit,
-    this.customOptions = '',
+//    this.customOptions = '',
     this.darkMode,
+    this.height,
+    this.minHeight,
+    this.decoration,
     this.backgroundColor,
     this.backgroundDecoration,
     this.dictationPreviewDecoration,
@@ -25,7 +28,12 @@ class HtmlEditorOptions {
     this.webInitialScripts,
     this.shouldEnsureVisible = false,
     this.spellCheck = false,
-  });
+  }) {
+    if (backgroundColor != null && backgroundDecoration != null) {
+      throw Exception(
+          'Can\'t have both backgroundColor and backgroundDecoration. Please choose one.');
+    }
+  }
 
   /// The editor will automatically adjust its height when the keyboard is active
   /// to prevent the keyboard overlapping the editor.
@@ -49,7 +57,7 @@ class HtmlEditorOptions {
   ///
   /// Please ensure your syntax is correct (and add a comma at the end of your
   /// string!) otherwise the editor may not load.
-  final String customOptions;
+  //final String customOptions;
 
   /// Sets the editor to dark mode. `null` - switches with system, `false` -
   /// always light, `true` - always dark.
@@ -67,12 +75,12 @@ class HtmlEditorOptions {
   /// account when to toolbar is set to above or below editor and is always shown.
   ///
   /// If this value is `null` the editor's height is adjusted automatically.
-  double? height;
+  final double? height;
 
   /// If `height` attribute is not provided - the container will auto-adjust its
   /// height, but would not be less than `minHeight`, which defaults to 64
   /// if the value is not provided.
-  double? minHeight;
+  final double? minHeight;
 
   /// Box decoration of voice-to-text popover widget
   final BoxDecoration? dictationPreviewDecoration;

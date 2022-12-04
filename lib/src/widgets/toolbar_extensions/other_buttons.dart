@@ -83,7 +83,7 @@ extension ToolbarOtherButtons on ToolbarWidgetState {
                   ButtonType.fullscreen, _miscSelected[index], updateStatus) ??
               true;
           if (proceed) {
-            widget.controller.setFullScreen();
+            //widget.controller.setFullScreen();
             updateStatus();
           }
         }
