@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_rich_text_editor/src/widgets/editor_mobile.dart';
-import 'package:flutter_rich_text_editor/src/widgets/editor_web.dart';
-import 'dart:io' as io;
 
 /// HTML rich text editor
 class HtmlEditor extends StatelessWidget {
@@ -55,25 +51,12 @@ class HtmlEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (kIsWeb || io.Platform.isLinux || io.Platform.isMacOS) {
-      return HtmlEditorWeb(
-        height: height,
-        minHeight: minHeight,
-        initBC: context,
-        controller: controller!,
-      );
-    } else if (io.Platform.isWindows ||
-        io.Platform.isAndroid ||
-        io.Platform.isIOS) {
-      return HtmlEditorMobile(
-        height: height,
-        minHeight: minHeight,
-        initBC: context,
-        controller: controller!,
-      );
-    } else {
-      return Text('Unsupported platform');
-    }
+    return HtmlEditorWidget(
+      height: height,
+      minHeight: minHeight,
+      initBC: context,
+      controller: controller!,
+    );
   }
 
   /// If controller is provided to the editor - initialize its values

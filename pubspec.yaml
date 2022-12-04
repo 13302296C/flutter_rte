@@ -44,6 +44,7 @@ dependencies:
   pointer_interceptor: 0.9.0+1
   pedantic: ^1.11.1
   speech_to_text: ^6.1.1
+  webview_flutter: ^3.0.4
 
 dev_dependencies:
   flutter_test:

@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
-import 'dart:html' as html;
+//import 'dart:html' as html;
 // speech to text
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -28,7 +28,11 @@ class HtmlEditorController extends ChangeNotifier {
     toolbarOptions ??= HtmlToolbarOptions(); //TODO: remove color
   }
 
+  ///
   late final HtmlEditorInterface _interface;
+
+  ///
+  Widget get view => _interface.platformView(_viewId);
 
   /// Defines options for the html editor
   HtmlEditorOptions? editorOptions;

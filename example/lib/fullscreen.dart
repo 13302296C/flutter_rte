@@ -216,7 +216,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-              image: Image.asset('bgd.png').image, fit: BoxFit.fill),
+              image: Image.asset('${kIsWeb ? '' : 'assets/'}bgd.png').image,
+              fit: BoxFit.fill),
         ),
         child: Stack(
           children: [

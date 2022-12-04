@@ -7,6 +7,8 @@ class HtmlEditorInterface {
     throw Exception('Platform not supported');
   }
 
+  Widget platformView(String id) => throw Exception('Unimplemented');
+
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
   // - - - - - - - - METHODS API - - - - - - - - - - - - - - - - - - - - - //
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //

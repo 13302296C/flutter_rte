@@ -18,14 +18,14 @@ class HtmlEditorOptions {
     this.backgroundDecoration,
     this.dictationPreviewDecoration,
     this.dictationPreviewTextColor,
-    this.filePath,
+    //this.filePath,
     this.hint,
     this.hintStyle,
     this.initialText,
     this.inputType = HtmlInputType.text,
     this.mobileContextMenu,
-    this.mobileLongPressDuration,
-    this.mobileInitialScripts,
+    // this.mobileLongPressDuration,
+    // this.mobileInitialScripts,
     // this.webInitialScripts,
     this.shouldEnsureVisible = false,
     this.spellCheck = false,
@@ -96,8 +96,8 @@ class HtmlEditorOptions {
   /// If you plan to use this on Web, you must add comments in your HTML so the
   /// package can insert the relevant JS code to communicate between Dart and JS.
   /// See the README for more details on this.
-  @internal
-  final String? filePath;
+  // @internal
+  // final String? filePath;
 
   /// Sets the Html editor's hint (text displayed when there is no text in the
   /// editor).
@@ -122,11 +122,11 @@ class HtmlEditorOptions {
   /// Set the duration until a long-press is recognized.
   ///
   /// The default value is 500ms.
-  final Duration? mobileLongPressDuration;
+  // final Duration? mobileLongPressDuration;
 
   /// Initial JS to inject into the editor.
-  @internal
-  final UnmodifiableListView<UserScript>? mobileInitialScripts;
+  // @internal
+  // final UnmodifiableListView<UserScript>? mobileInitialScripts;
 
   /// Initial JS to add to the editor. These can be called at any time using
   /// [controller.evaluateJavascriptWeb]

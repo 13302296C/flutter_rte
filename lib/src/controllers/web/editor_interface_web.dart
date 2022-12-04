@@ -13,6 +13,9 @@ class HtmlEditorInterface {
   HtmlEditorInterface(String viewId) : _viewId = viewId;
 
   ///
+  Widget platformView(String id) => HtmlElementView(viewType: id);
+
+  ///
   final String _viewId;
 
   ///
@@ -157,7 +160,7 @@ class HtmlEditorInterface {
       BuildContext initBC, double initHeight, HtmlEditorController c) async {
     await _eventSub?.cancel();
     _eventSub = html.window.onMessage.listen((event) {
-      c.processEvent(event);
+      c.processEvent(event.data);
     }, onError: (e, s) {
       log('Event stream error: ${e.toString()}');
       log('Stack trace: ${s.toString()}');
@@ -241,9 +244,9 @@ class HtmlEditorInterface {
     // }
     var initScript = 'const viewId = \'$_viewId\';';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
-    if (c.editorOptions!.filePath != null) {
-      filePath = c.editorOptions!.filePath!;
-    }
+    // if (c.editorOptions!.filePath != null) {
+    //   filePath = c.editorOptions!.filePath!;
+    // }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
         htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);

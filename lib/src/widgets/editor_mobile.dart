@@ -74,11 +74,11 @@ class _HtmlEditorMobileState extends State<HtmlEditorMobile> {
   void initState() {
     docHeight = editorOptions.height ?? 64;
     key = getRandString(10);
-    if (editorOptions.filePath != null) {
-      filePath = editorOptions.filePath!;
-    } else {
-      filePath = 'packages/flutter_rich_text_editor/assets/document.html';
-    }
+    // if (editorOptions.filePath != null) {
+    //   filePath = editorOptions.filePath!;
+    // } else {
+    //   filePath = 'packages/flutter_rich_text_editor/assets/document.html';
+    // }
     super.initState();
   }
 
@@ -180,16 +180,16 @@ class _HtmlEditorMobileState extends State<HtmlEditorMobile> {
                             editorOptions.androidUseHybridComposition,
                         loadWithOverviewMode: true,
                       )),
-                  initialUserScripts: editorOptions.mobileInitialScripts
-                      as UnmodifiableListView<UserScript>?,
+                  //initialUserScripts: editorOptions.mobileInitialScripts
+                  // as UnmodifiableListView<UserScript>?,
                   contextMenu: editorOptions.mobileContextMenu as ContextMenu?,
-                  gestureRecognizers: {
-                    Factory<VerticalDragGestureRecognizer>(
-                        () => VerticalDragGestureRecognizer()),
-                    Factory<LongPressGestureRecognizer>(() =>
-                        LongPressGestureRecognizer(
-                            duration: editorOptions.mobileLongPressDuration)),
-                  },
+                  // gestureRecognizers: {
+                  //   Factory<VerticalDragGestureRecognizer>(
+                  //       () => VerticalDragGestureRecognizer()),
+                  //   Factory<LongPressGestureRecognizer>(() =>
+                  //       LongPressGestureRecognizer(
+                  //           duration: editorOptions.mobileLongPressDuration)),
+                  // },
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
                       return (await widget.callbacks?.onNavigationRequestMobile
@@ -479,10 +479,10 @@ class _HtmlEditorMobileState extends State<HtmlEditorMobile> {
                               editorOptions.darkMode == true) &&
                           editorOptions.darkMode != false) {
                         //todo fix for iOS (https://github.com/pichillilorenzo/flutter_inappwebview/issues/695)
-                        var darkCSS =
-                            '<link href=\"${(editorOptions.filePath != null ? "file:///android_asset/flutter_assets/packages/flutter_rich_text_editor/assets/" : "") + "summernote-lite-dark.css"}\" rel=\"stylesheet\">';
-                        await controller.evaluateJavascript(
-                            source: "\$('head').append('$darkCSS');");
+                        // var darkCSS =
+                        //     '<link href=\"${(editorOptions.filePath != null ? "file:///android_asset/flutter_assets/packages/flutter_rich_text_editor/assets/" : "") + "summernote-lite-dark.css"}\" rel=\"stylesheet\">';
+                        // await controller.evaluateJavascript(
+                        //     source: "\$('head').append('$darkCSS');");
                       }
                       //set the text once the editor is loaded
                       if (editorOptions.initialText != null) {

@@ -589,9 +589,9 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     // }
     var initScript = 'const viewId = \'$viewId\';';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
-    if (editorOptions.filePath != null) {
-      filePath = editorOptions.filePath!;
-    }
+    // if (editorOptions.filePath != null) {
+    //   filePath = editorOptions.filePath!;
+    // }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
         htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
