@@ -4,22 +4,22 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
   ToggleButtons _mediaButtons(InsertButtons t) {
     return ToggleButtons(
       constraints: BoxConstraints.tightFor(
-        width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-        height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+        width: widget.toolbarOptions.toolbarItemHeight - 2,
+        height: widget.toolbarOptions.toolbarItemHeight - 2,
       ),
-      color: widget.htmlToolbarOptions.buttonColor,
-      selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-      fillColor: widget.htmlToolbarOptions.buttonFillColor,
-      focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-      highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-      hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-      splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-      selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
-      borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-      borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-      borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-      renderBorder: widget.htmlToolbarOptions.renderBorder,
-      textStyle: widget.htmlToolbarOptions.textStyle,
+      color: widget.toolbarOptions.buttonColor,
+      selectedColor: widget.toolbarOptions.buttonSelectedColor,
+      fillColor: widget.toolbarOptions.buttonFillColor,
+      focusColor: widget.toolbarOptions.buttonFocusColor,
+      highlightColor: widget.toolbarOptions.buttonHighlightColor,
+      hoverColor: widget.toolbarOptions.buttonHoverColor,
+      splashColor: widget.toolbarOptions.buttonSplashColor,
+      selectedBorderColor: widget.toolbarOptions.buttonSelectedBorderColor,
+      borderColor: widget.toolbarOptions.buttonBorderColor,
+      borderRadius: widget.toolbarOptions.buttonBorderRadius,
+      borderWidth: widget.toolbarOptions.buttonBorderWidth,
+      renderBorder: widget.toolbarOptions.renderBorder,
+      textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
         // void updateStatus() {
         //   _insertSelected = List<bool>.filled(t.getIcons().length, false);
@@ -29,7 +29,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         // }
 
         if (t.getIcons()[index].icon == Icons.link) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed
+          var proceed = await widget.toolbarOptions.onButtonPressed
                   ?.call(ButtonType.link, null, null) ??
               true;
           if (proceed) {
@@ -143,8 +143,8 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
                           TextButton(
                             onPressed: () async {
                               if (formKey.currentState!.validate()) {
-                                var proceed = await widget.htmlToolbarOptions
-                                        .linkInsertInterceptor
+                                var proceed = await widget
+                                        .toolbarOptions.linkInsertInterceptor
                                         ?.call(
                                             text.text.isEmpty
                                                 ? url.text
@@ -172,7 +172,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
           }
         }
         // if (t.getIcons()[index].icon == Icons.image_outlined) {
-        //   var proceed = await widget.htmlToolbarOptions.onButtonPressed
+        //   var proceed = await widget.toolbarOptions.onButtonPressed
         //           ?.call(ButtonType.picture, null, null) ??
         //       true;
         //   if (proceed) {
@@ -215,7 +215,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                                   type: FileType.image,
         //                                   withData: true,
         //                                   allowedExtensions: widget
-        //                                       .htmlToolbarOptions
+        //                                       .toolbarOptions
         //                                       .imageExtensions,
         //                                 );
         //                                 if (result?.files.single.name != null) {
@@ -287,7 +287,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                           result?.files.single.bytes != null) {
         //                         var base64Data =
         //                             base64.encode(result!.files.single.bytes!);
-        //                         var proceed = await widget.htmlToolbarOptions
+        //                         var proceed = await widget.toolbarOptions
         //                                 .mediaUploadInterceptor
         //                                 ?.call(result!.files.single,
         //                                     InsertFileType.image) ??
@@ -298,7 +298,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                         }
         //                         Navigator.of(context).pop();
         //                       } else {
-        //                         var proceed = await widget.htmlToolbarOptions
+        //                         var proceed = await widget.toolbarOptions
         //                                 .mediaLinkInsertInterceptor
         //                                 ?.call(
         //                                     url.text, InsertFileType.image) ??
@@ -320,7 +320,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //   }
         // }
         // if (t.getIcons()[index].icon == Icons.audiotrack_outlined) {
-        //   var proceed = await widget.htmlToolbarOptions.onButtonPressed
+        //   var proceed = await widget.toolbarOptions.onButtonPressed
         //           ?.call(ButtonType.audio, null, null) ??
         //       true;
         //   if (proceed) {
@@ -363,7 +363,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                                   type: FileType.audio,
         //                                   withData: true,
         //                                   allowedExtensions: widget
-        //                                       .htmlToolbarOptions
+        //                                       .toolbarOptions
         //                                       .audioExtensions,
         //                                 );
         //                                 if (result?.files.single.name != null) {
@@ -435,7 +435,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                           result?.files.single.bytes != null) {
         //                         var base64Data =
         //                             base64.encode(result!.files.single.bytes!);
-        //                         var proceed = await widget.htmlToolbarOptions
+        //                         var proceed = await widget.toolbarOptions
         //                                 .mediaUploadInterceptor
         //                                 ?.call(result!.files.single,
         //                                     InsertFileType.audio) ??
@@ -446,7 +446,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                         }
         //                         Navigator.of(context).pop();
         //                       } else {
-        //                         var proceed = await widget.htmlToolbarOptions
+        //                         var proceed = await widget.toolbarOptions
         //                                 .mediaLinkInsertInterceptor
         //                                 ?.call(
         //                                     url.text, InsertFileType.audio) ??
@@ -468,7 +468,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //   }
         // }
         // if (t.getIcons()[index].icon == Icons.videocam_outlined) {
-        //   var proceed = await widget.htmlToolbarOptions.onButtonPressed
+        //   var proceed = await widget.toolbarOptions.onButtonPressed
         //           ?.call(ButtonType.video, null, null) ??
         //       true;
         //   if (proceed) {
@@ -511,7 +511,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                                   type: FileType.video,
         //                                   withData: true,
         //                                   allowedExtensions: widget
-        //                                       .htmlToolbarOptions
+        //                                       .toolbarOptions
         //                                       .videoExtensions,
         //                                 );
         //                                 if (result?.files.single.name != null) {
@@ -583,7 +583,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                           result?.files.single.bytes != null) {
         //                         var base64Data =
         //                             base64.encode(result!.files.single.bytes!);
-        //                         var proceed = await widget.htmlToolbarOptions
+        //                         var proceed = await widget.toolbarOptions
         //                                 .mediaUploadInterceptor
         //                                 ?.call(result!.files.single,
         //                                     InsertFileType.video) ??
@@ -594,7 +594,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                         }
         //                         Navigator.of(context).pop();
         //                       } else {
-        //                         var proceed = await widget.htmlToolbarOptions
+        //                         var proceed = await widget.toolbarOptions
         //                                 .mediaLinkInsertInterceptor
         //                                 ?.call(
         //                                     url.text, InsertFileType.video) ??
@@ -616,7 +616,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //   }
         // }
         // if (t.getIcons()[index].icon == Icons.attach_file) {
-        //   var proceed = await widget.htmlToolbarOptions.onButtonPressed
+        //   var proceed = await widget.toolbarOptions.onButtonPressed
         //           ?.call(ButtonType.otherFile, null, null) ??
         //       true;
         //   if (proceed) {
@@ -659,7 +659,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                                   type: FileType.any,
         //                                   withData: true,
         //                                   allowedExtensions: widget
-        //                                       .htmlToolbarOptions
+        //                                       .toolbarOptions
         //                                       .otherFileExtensions,
         //                                 );
         //                                 if (result?.files.single.name != null) {
@@ -729,11 +729,11 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //                         });
         //                       } else if (filename.text.isNotEmpty &&
         //                           result?.files.single.bytes != null) {
-        //                         widget.htmlToolbarOptions.onOtherFileUpload
+        //                         widget.toolbarOptions.onOtherFileUpload
         //                             ?.call(result!.files.single);
         //                         Navigator.of(context).pop();
         //                       } else {
-        //                         widget.htmlToolbarOptions.onOtherFileLinkInsert
+        //                         widget.toolbarOptions.onOtherFileLinkInsert
         //                             ?.call(url.text);
         //                         Navigator.of(context).pop();
         //                       }
@@ -748,7 +748,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //   }
         // }
         // if (t.getIcons()[index].icon == Icons.table_chart_outlined) {
-        //   var proceed = await widget.htmlToolbarOptions.onButtonPressed
+        //   var proceed = await widget.toolbarOptions.onButtonPressed
         //           ?.call(ButtonType.table, null, null) ??
         //       true;
         //   if (proceed) {
@@ -813,7 +813,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
         //   }
         // }
         if (t.getIcons()[index].icon == Icons.horizontal_rule) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed
+          var proceed = await widget.toolbarOptions.onButtonPressed
                   ?.call(ButtonType.hr, null, null) ??
               true;
           if (proceed) {

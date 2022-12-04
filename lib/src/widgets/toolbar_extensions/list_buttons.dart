@@ -7,10 +7,10 @@ extension ToolbarListButtons on ToolbarWidgetState {
   Widget _listStyles(ListButtons t) {
     return Container(
       padding: const EdgeInsets.only(left: 8.0),
-      height: widget.htmlToolbarOptions.toolbarItemHeight,
-      decoration: !widget.htmlToolbarOptions.renderBorder
+      height: widget.toolbarOptions.toolbarItemHeight,
+      decoration: !widget.toolbarOptions.renderBorder
           ? null
-          : widget.htmlToolbarOptions.dropdownBoxDecoration ??
+          : widget.toolbarOptions.dropdownBoxDecoration ??
               BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border.all(
@@ -20,21 +20,21 @@ extension ToolbarListButtons on ToolbarWidgetState {
                           .withOpacity(0.12))),
       child: CustomDropdownButtonHideUnderline(
         child: CustomDropdownButton<String>(
-          elevation: widget.htmlToolbarOptions.dropdownElevation,
-          icon: widget.htmlToolbarOptions.dropdownIcon,
-          iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
-          iconSize: widget.htmlToolbarOptions.dropdownIconSize,
-          itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
-          focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-          dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
-          menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ??
-              (widget.htmlToolbarOptions.toolbarPosition ==
+          elevation: widget.toolbarOptions.dropdownElevation,
+          icon: widget.toolbarOptions.dropdownIcon,
+          iconEnabledColor: widget.toolbarOptions.dropdownIconColor,
+          iconSize: widget.toolbarOptions.dropdownIconSize,
+          itemHeight: widget.toolbarOptions.dropdownItemHeight,
+          focusColor: widget.toolbarOptions.dropdownFocusColor,
+          dropdownColor: widget.toolbarOptions.dropdownBackgroundColor,
+          menuDirection: widget.toolbarOptions.dropdownMenuDirection ??
+              (widget.toolbarOptions.toolbarPosition ==
                       ToolbarPosition.belowEditor
                   ? DropdownMenuDirection.up
                   : DropdownMenuDirection.down),
-          menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+          menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
-          style: widget.htmlToolbarOptions.textStyle,
+          style: widget.toolbarOptions.textStyle,
           items: [
             CustomDropdownMenuItem(
               value: 'decimal',
@@ -81,9 +81,8 @@ extension ToolbarListButtons on ToolbarWidgetState {
             }
 
             if (changed != null) {
-              var proceed = await widget.htmlToolbarOptions.onDropdownChanged
-                      ?.call(DropdownType.listStyles, changed,
-                          updateSelectedItem) ??
+              var proceed = await widget.toolbarOptions.onDropdownChanged?.call(
+                      DropdownType.listStyles, changed, updateSelectedItem) ??
                   true;
               if (proceed) {
                 if (kIsWeb) {
@@ -109,22 +108,22 @@ extension ToolbarListButtons on ToolbarWidgetState {
   ToggleButtons _ulOl(ListButtons t) {
     return ToggleButtons(
       constraints: BoxConstraints.tightFor(
-        width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-        height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+        width: widget.toolbarOptions.toolbarItemHeight - 2,
+        height: widget.toolbarOptions.toolbarItemHeight - 2,
       ),
-      color: widget.htmlToolbarOptions.buttonColor,
-      selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-      fillColor: widget.htmlToolbarOptions.buttonFillColor,
-      focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-      highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-      hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-      splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-      selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
-      borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-      borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-      borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-      renderBorder: widget.htmlToolbarOptions.renderBorder,
-      textStyle: widget.htmlToolbarOptions.textStyle,
+      color: widget.toolbarOptions.buttonColor,
+      selectedColor: widget.toolbarOptions.buttonSelectedColor,
+      fillColor: widget.toolbarOptions.buttonFillColor,
+      focusColor: widget.toolbarOptions.buttonFocusColor,
+      highlightColor: widget.toolbarOptions.buttonHighlightColor,
+      hoverColor: widget.toolbarOptions.buttonHoverColor,
+      splashColor: widget.toolbarOptions.buttonSplashColor,
+      selectedBorderColor: widget.toolbarOptions.buttonSelectedBorderColor,
+      borderColor: widget.toolbarOptions.buttonBorderColor,
+      borderRadius: widget.toolbarOptions.buttonBorderRadius,
+      borderWidth: widget.toolbarOptions.buttonBorderWidth,
+      renderBorder: widget.toolbarOptions.renderBorder,
+      textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
         void updateStatus() {
           setState(mounted, this.setState, () {
@@ -133,7 +132,7 @@ extension ToolbarListButtons on ToolbarWidgetState {
         }
 
         if (t.getIcons()[index].icon == Icons.format_list_bulleted) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed
+          var proceed = await widget.toolbarOptions.onButtonPressed
                   ?.call(ButtonType.ul, _listSelected[index], updateStatus) ??
               true;
           if (proceed) {
@@ -146,7 +145,7 @@ extension ToolbarListButtons on ToolbarWidgetState {
           }
         }
         if (t.getIcons()[index].icon == Icons.format_list_numbered) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed
+          var proceed = await widget.toolbarOptions.onButtonPressed
                   ?.call(ButtonType.ol, _listSelected[index], updateStatus) ??
               true;
           if (proceed) {

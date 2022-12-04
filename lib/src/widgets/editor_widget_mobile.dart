@@ -29,8 +29,8 @@ class HtmlEditorWidget extends StatefulWidget {
   final HtmlEditorController controller;
   Callbacks? get callbacks => controller.callbacks;
   //List<Plugins> get plugins => controller.plugins;
-  HtmlEditorOptions get htmlEditorOptions => controller.htmlEditorOptions;
-  HtmlToolbarOptions get htmlToolbarOptions => controller.htmlToolbarOptions;
+  HtmlEditorOptions get editorOptions => controller.editorOptions;
+  HtmlToolbarOptions get toolbarOptions => controller.toolbarOptions;
 
   final double? height;
   final double? minHeight;
@@ -69,18 +69,16 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   /// the editor is focused much after its visibility changes
   double? cachedVisibleDecimal;
 
-  HtmlEditorOptions get htmlEditorOptions =>
-      widget.controller.htmlEditorOptions;
+  HtmlEditorOptions get editorOptions => widget.controller.editorOptions;
 
-  HtmlToolbarOptions get htmlToolbarOptions =>
-      widget.controller.htmlToolbarOptions;
+  HtmlToolbarOptions get toolbarOptions => widget.controller.toolbarOptions;
 
   @override
   void initState() {
-    docHeight = htmlEditorOptions.height ?? 64;
+    docHeight = editorOptions.height ?? 64;
     key = getRandString(10);
-    if (widget.htmlEditorOptions.filePath != null) {
-      filePath = widget.htmlEditorOptions.filePath!;
+    if (widget.editorOptions.filePath != null) {
+      filePath = widget.editorOptions.filePath!;
     } else {
       filePath = 'packages/flutter_rich_text_editor/assets/document.html';
     }
@@ -97,18 +95,18 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
   void resetHeight() async {
     if (mounted) {
       this.setState(() {
-        docHeight = htmlEditorOptions.height ?? 64;
+        docHeight = editorOptions.height ?? 64;
       });
       await widget.controller.editorController!.evaluateJavascript(
           source:
-              "\$('div.note-editable').outerHeight(${(widget.htmlEditorOptions.height ?? 32) - (toolbarKey.currentContext?.size?.height ?? 0)});");
+              "\$('div.note-editable').outerHeight(${(widget.editorOptions.height ?? 32) - (toolbarKey.currentContext?.size?.height ?? 0)});");
     }
   }
 
   /// if height if fixed = return fixed height, otherwise return
   /// greatest of `minHeight` and `contentHeight`.
   double get _height =>
-      htmlEditorOptions.height ??
+      editorOptions.height ??
       max(
           widget.minHeight ?? 0,
           widget.controller.contentHeight.value +
@@ -121,7 +119,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
         widget.controller.toolbarHeight = 0;
         if (!widget.controller.initialized) {
           widget.controller
-              .initEditor(widget.initBC, htmlEditorOptions.height ?? _height);
+              .initEditor(widget.initBC, editorOptions.height ?? _height);
         }
         //log('======toolbar height = ${controller.toolbarHeight}');
       } else {
@@ -143,21 +141,19 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
         onVisibilityChanged: (VisibilityInfo info) async {
           if (!visibleStream.isClosed) {
             cachedVisibleDecimal = info.visibleFraction == 1
-                ? (info.size.height / (htmlEditorOptions.height ?? 32))
-                    .clamp(0, 1)
+                ? (info.size.height / (editorOptions.height ?? 32)).clamp(0, 1)
                 : info.visibleFraction;
             visibleStream.add(info.visibleFraction == 1
-                ? (info.size.height / (htmlEditorOptions.height ?? 32))
-                    .clamp(0, 1)
+                ? (info.size.height / (editorOptions.height ?? 32)).clamp(0, 1)
                 : info.visibleFraction);
           }
         },
         child: Container(
           height: docHeight + 10,
-          decoration: htmlEditorOptions.decoration,
+          decoration: editorOptions.decoration,
           child: Column(
             children: [
-              widget.htmlToolbarOptions.toolbarPosition ==
+              widget.toolbarOptions.toolbarPosition ==
                       ToolbarPosition.aboveEditor
                   ? ToolbarWidget(
                       key: toolbarKey, controller: widget.controller)
@@ -184,22 +180,21 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                         useShouldOverrideUrlLoading: true,
                       ),
                       android: AndroidInAppWebViewOptions(
-                        useHybridComposition: widget
-                            .htmlEditorOptions.androidUseHybridComposition,
+                        useHybridComposition:
+                            widget.editorOptions.androidUseHybridComposition,
                         loadWithOverviewMode: true,
                       )),
-                  initialUserScripts:
-                      widget.htmlEditorOptions.mobileInitialScripts
-                          as UnmodifiableListView<UserScript>?,
-                  contextMenu: widget.htmlEditorOptions.mobileContextMenu
-                      as ContextMenu?,
+                  initialUserScripts: widget.editorOptions.mobileInitialScripts
+                      as UnmodifiableListView<UserScript>?,
+                  contextMenu:
+                      widget.editorOptions.mobileContextMenu as ContextMenu?,
                   gestureRecognizers: {
                     Factory<VerticalDragGestureRecognizer>(
                         () => VerticalDragGestureRecognizer()),
                     Factory<LongPressGestureRecognizer>(() =>
                         LongPressGestureRecognizer(
-                            duration: widget
-                                .htmlEditorOptions.mobileLongPressDuration)),
+                            duration:
+                                widget.editorOptions.mobileLongPressDuration)),
                   },
                   shouldOverrideUrlLoading: (controller, action) async {
                     if (!action.request.url.toString().contains(filePath)) {
@@ -214,13 +209,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                     print(message.message);
                   },
                   onWindowFocus: (controller) async {
-                    if (widget.htmlEditorOptions.shouldEnsureVisible &&
+                    if (widget.editorOptions.shouldEnsureVisible &&
                         Scrollable.of(context) != null) {
                       await Scrollable.of(context)!.position.ensureVisible(
                             context.findRenderObject()!,
                           );
                     }
-                    if (widget.htmlEditorOptions.adjustHeightForKeyboard &&
+                    if (widget.editorOptions.adjustHeightForKeyboard &&
                         mounted &&
                         !visibleStream.isClosed) {
                       Future<void> setHeightJS() async {
@@ -246,13 +241,13 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       /// editable elements still resizes the editor
                       if ((cachedVisibleDecimal ?? 0) > 0.1) {
                         this.setState(() {
-                          docHeight = htmlEditorOptions.height ??
+                          docHeight = editorOptions.height ??
                               32 * cachedVisibleDecimal!;
                         });
                         await setHeightJS();
                       }
                       var visibleDecimal = await visibleStream.stream.first;
-                      var newHeight = widget.htmlEditorOptions.height ?? 32;
+                      var newHeight = widget.editorOptions.height ?? 32;
                       if (visibleDecimal > 0.1) {
                         this.setState(() {
                           docHeight = newHeight * visibleDecimal;
@@ -272,7 +267,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                           onKeydown: function(e) {
                               var chars = \$(".note-editable").text();
                               var totalChars = chars.length;
-                              ${widget.htmlEditorOptions.characterLimit != null ? '''allowedKeys = (
+                              ${widget.editorOptions.characterLimit != null ? '''allowedKeys = (
                                   e.which === 8 ||  /* BACKSPACE */
                                   e.which === 35 || /* END */
                                   e.which === 36 || /* HOME */
@@ -287,7 +282,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                   e.ctrlKey === true && e.which === 86 || /* CTRL + V */
                                   e.ctrlKey === true && e.which === 90    /* CTRL + Z */
                               );
-                              if (!allowedKeys && \$(e.target).text().length >= ${widget.htmlEditorOptions.characterLimit}) {
+                              if (!allowedKeys && \$(e.target).text().length >= ${widget.editorOptions.characterLimit}) {
                                   e.preventDefault();
                               }''' : ''}
                               window.flutter_inappwebview.callHandler('totalChars', totalChars);
@@ -404,14 +399,14 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       summernoteCallbacks = summernoteCallbacks + '}';
                       await controller.evaluateJavascript(source: """
                           \$('#summernote-2').summernote({
-                              placeholder: "${widget.htmlEditorOptions.hint ?? ""}",
+                              placeholder: "${widget.editorOptions.hint ?? ""}",
                               tabsize: 2,
-                              height: ${htmlEditorOptions.height ?? 32 - (toolbarKey.currentContext?.size?.height ?? 0)},
+                              height: ${editorOptions.height ?? 32 - (toolbarKey.currentContext?.size?.height ?? 0)},
                               toolbar: $summernoteToolbar
                               disableGrammar: false,
-                              spellCheck: ${widget.htmlEditorOptions.spellCheck},
+                              spellCheck: ${widget.editorOptions.spellCheck},
                               maximumFileSize: $maximumFileSize,
-                              ${widget.htmlEditorOptions.customOptions}
+                              ${widget.editorOptions.customOptions}
                               $summernoteCallbacks
                           });
                           
@@ -485,20 +480,20 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                               "document.onselectionchange = onSelectionChange; console.log('done');");
                       await controller.evaluateJavascript(
                           source:
-                              "document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(widget.htmlEditorOptions.inputType)}');");
+                              "document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(widget.editorOptions.inputType)}');");
                       if ((Theme.of(context).brightness == Brightness.dark ||
-                              widget.htmlEditorOptions.darkMode == true) &&
-                          widget.htmlEditorOptions.darkMode != false) {
+                              widget.editorOptions.darkMode == true) &&
+                          widget.editorOptions.darkMode != false) {
                         //todo fix for iOS (https://github.com/pichillilorenzo/flutter_inappwebview/issues/695)
                         var darkCSS =
-                            '<link href=\"${(widget.htmlEditorOptions.filePath != null ? "file:///android_asset/flutter_assets/packages/flutter_rich_text_editor/assets/" : "") + "summernote-lite-dark.css"}\" rel=\"stylesheet\">';
+                            '<link href=\"${(widget.editorOptions.filePath != null ? "file:///android_asset/flutter_assets/packages/flutter_rich_text_editor/assets/" : "") + "summernote-lite-dark.css"}\" rel=\"stylesheet\">';
                         await controller.evaluateJavascript(
                             source: "\$('head').append('$darkCSS');");
                       }
                       //set the text once the editor is loaded
-                      if (widget.htmlEditorOptions.initialText != null) {
+                      if (widget.editorOptions.initialText != null) {
                         widget.controller
-                            .setText(widget.htmlEditorOptions.initialText!);
+                            .setText(widget.editorOptions.initialText!);
                       }
                       //adjusts the height of the editor when it is loaded
                       if (widget.controller.autoAdjustHeight) {
@@ -511,7 +506,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 setState(mounted, this.setState, () {
                                   docHeight = (double.tryParse(
                                               height.first.toString()) ??
-                                          widget.htmlEditorOptions.height ??
+                                          widget.editorOptions.height ??
                                           32) +
                                       (toolbarKey
                                               .currentContext?.size?.height ??
@@ -524,7 +519,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                                 "var height = document.body.scrollHeight; window.flutter_inappwebview.callHandler('setHeight', height);");
                       }
                       //reset the editor's height if the keyboard disappears at any point
-                      if (widget.htmlEditorOptions.adjustHeightForKeyboard) {
+                      if (widget.editorOptions.adjustHeightForKeyboard) {
                         var keyboardVisibilityController =
                             KeyboardVisibilityController();
                         keyboardVisibilityController.onChange
@@ -561,7 +556,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                       controller.addJavaScriptHandler(
                           handlerName: 'onChangeContent',
                           callback: (contents) {
-                            if (widget.htmlEditorOptions.shouldEnsureVisible &&
+                            if (widget.editorOptions.shouldEnsureVisible &&
                                 Scrollable.of(context) != null) {
                               Scrollable.of(context)!.position.ensureVisible(
                                     context.findRenderObject()!,
@@ -577,7 +572,7 @@ class _HtmlEditorWidgetMobileState extends State<HtmlEditorWidget> {
                   },
                 ),
               ),
-              widget.htmlToolbarOptions.toolbarPosition ==
+              widget.toolbarOptions.toolbarPosition ==
                       ToolbarPosition.belowEditor
                   ? ToolbarWidget(
                       key: toolbarKey, controller: widget.controller)

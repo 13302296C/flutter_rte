@@ -31,8 +31,8 @@ extension StreamProcessor on HtmlEditorController {
       case 'initEditor':
         if (response['result'] == 'Ok') {
           //_log('======= $viewId INIT SUCCESSFUL ==========');
-          if (htmlEditorOptions.initialText != null) {
-            setText(htmlEditorOptions.initialText!);
+          if (editorOptions.initialText != null) {
+            setText(editorOptions.initialText!);
           }
         } else {
           //_log('======= $viewId INIT FAILED ==========');

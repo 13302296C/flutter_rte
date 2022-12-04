@@ -26,14 +26,14 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
-    HtmlEditorOptions? htmlEditorOptions,
-    HtmlToolbarOptions? htmlToolbarOptions,
+    HtmlEditorOptions? editorOptions,
+    HtmlToolbarOptions? toolbarOptions,
   })  : _viewId = getRandString(10).substring(0, 14),
         super(
-            htmlEditorOptions: htmlEditorOptions ??
-                HtmlEditorOptions(hint: 'Enter text here ...'),
-            htmlToolbarOptions: htmlToolbarOptions ??
-                HtmlToolbarOptions(buttonColor: Colors.grey));
+            editorOptions:
+                editorOptions ?? HtmlEditorOptions(hint: 'Enter text here ...'),
+            toolbarOptions:
+                toolbarOptions ?? HtmlToolbarOptions(buttonColor: Colors.grey));
 
   /// Dictation controller
   // SpeechToText? speechToText;
@@ -519,7 +519,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         onKeydown: function(e) {
             var chars = \$(".note-editable").text();
             var totalChars = chars.length;
-            ${htmlEditorOptions.characterLimit != null ? '''allowedKeys = (
+            ${editorOptions.characterLimit != null ? '''allowedKeys = (
                 e.which === 8 ||  /* BACKSPACE */
                 e.which === 35 || /* END */
                 e.which === 36 || /* HOME */
@@ -534,7 +534,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
                 e.ctrlKey === true && e.which === 86 || /* CTRL + V */
                 e.ctrlKey === true && e.which === 90    /* CTRL + Z */
             );
-            if (!allowedKeys && \$(e.target).text().length >= ${htmlEditorOptions.characterLimit}) {
+            if (!allowedKeys && \$(e.target).text().length >= ${editorOptions.characterLimit}) {
                 e.preventDefault();
             }''' : ''}
             window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
@@ -574,11 +574,11 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     summernoteCallbacks = summernoteCallbacks + '}';
     if ((Theme.of(initBC).brightness == Brightness.dark ||
-            htmlEditorOptions.darkMode == true) &&
-        htmlEditorOptions.darkMode != false) {}
+            editorOptions.darkMode == true) &&
+        editorOptions.darkMode != false) {}
     var userScripts = '';
-    if (htmlEditorOptions.webInitialScripts != null) {
-      htmlEditorOptions.webInitialScripts!.forEach((element) {
+    if (editorOptions.webInitialScripts != null) {
+      editorOptions.webInitialScripts!.forEach((element) {
         userScripts = userScripts +
             '''
           if (data["type"].includes("${element.name}")) {
@@ -590,8 +590,8 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
     }
     var initScript = 'const viewId = \'$viewId\';';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
-    if (htmlEditorOptions.filePath != null) {
-      filePath = htmlEditorOptions.filePath!;
+    if (editorOptions.filePath != null) {
+      filePath = editorOptions.filePath!;
     }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
@@ -599,7 +599,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
     // if no explicit `height` is provided - hide the scrollbar as the
     // container height will always adjust to the document height
-    if (htmlEditorOptions.height == null) {
+    if (editorOptions.height == null) {
       var hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;
@@ -632,7 +632,7 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
         //   if (data['type'] != null &&
         //       data['type'].contains('toDart: onChangeContent') &&
         //       data['view'] == viewId) {
-        //     if (htmlEditorOptions.shouldEnsureVisible &&
+        //     if (editorOptions.shouldEnsureVisible &&
         //         Scrollable.of(context) != null) {
         //       Scrollable.of(context)!.position.ensureVisible(
         //           context.findRenderObject()!,

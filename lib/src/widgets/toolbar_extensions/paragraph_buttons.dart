@@ -7,10 +7,10 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
   Widget _caseConverter(ParagraphButtons t) {
     return Container(
       padding: const EdgeInsets.only(left: 8.0),
-      height: widget.htmlToolbarOptions.toolbarItemHeight,
-      decoration: !widget.htmlToolbarOptions.renderBorder
+      height: widget.toolbarOptions.toolbarItemHeight,
+      decoration: !widget.toolbarOptions.renderBorder
           ? null
-          : widget.htmlToolbarOptions.dropdownBoxDecoration ??
+          : widget.toolbarOptions.dropdownBoxDecoration ??
               BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border.all(
@@ -20,21 +20,21 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
                           .withOpacity(0.12))),
       child: CustomDropdownButtonHideUnderline(
         child: CustomDropdownButton<String>(
-          elevation: widget.htmlToolbarOptions.dropdownElevation,
-          icon: widget.htmlToolbarOptions.dropdownIcon,
-          iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
-          iconSize: widget.htmlToolbarOptions.dropdownIconSize,
-          itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
-          focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-          dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
-          menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ??
-              (widget.htmlToolbarOptions.toolbarPosition ==
+          elevation: widget.toolbarOptions.dropdownElevation,
+          icon: widget.toolbarOptions.dropdownIcon,
+          iconEnabledColor: widget.toolbarOptions.dropdownIconColor,
+          iconSize: widget.toolbarOptions.dropdownIconSize,
+          itemHeight: widget.toolbarOptions.dropdownItemHeight,
+          focusColor: widget.toolbarOptions.dropdownFocusColor,
+          dropdownColor: widget.toolbarOptions.dropdownBackgroundColor,
+          menuDirection: widget.toolbarOptions.dropdownMenuDirection ??
+              (widget.toolbarOptions.toolbarPosition ==
                       ToolbarPosition.belowEditor
                   ? DropdownMenuDirection.up
                   : DropdownMenuDirection.down),
-          menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+          menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
-          style: widget.htmlToolbarOptions.textStyle,
+          style: widget.toolbarOptions.textStyle,
           items: [
             CustomDropdownMenuItem(
               value: 'lower',
@@ -57,7 +57,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           value: null,
           onChanged: (String? changed) async {
             if (changed != null) {
-              var proceed = await widget.htmlToolbarOptions.onDropdownChanged
+              var proceed = await widget.toolbarOptions.onDropdownChanged
                       ?.call(DropdownType.caseConverter, changed, null) ??
                   true;
               if (proceed) {
@@ -106,22 +106,22 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
   ToggleButtons _textDirection(ParagraphButtons t) {
     return ToggleButtons(
       constraints: BoxConstraints.tightFor(
-        width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-        height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+        width: widget.toolbarOptions.toolbarItemHeight - 2,
+        height: widget.toolbarOptions.toolbarItemHeight - 2,
       ),
-      color: widget.htmlToolbarOptions.buttonColor,
-      selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-      fillColor: widget.htmlToolbarOptions.buttonFillColor,
-      focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-      highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-      hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-      splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-      selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
-      borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-      borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-      borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-      renderBorder: widget.htmlToolbarOptions.renderBorder,
-      textStyle: widget.htmlToolbarOptions.textStyle,
+      color: widget.toolbarOptions.buttonColor,
+      selectedColor: widget.toolbarOptions.buttonSelectedColor,
+      fillColor: widget.toolbarOptions.buttonFillColor,
+      focusColor: widget.toolbarOptions.buttonFocusColor,
+      highlightColor: widget.toolbarOptions.buttonHighlightColor,
+      hoverColor: widget.toolbarOptions.buttonHoverColor,
+      splashColor: widget.toolbarOptions.buttonSplashColor,
+      selectedBorderColor: widget.toolbarOptions.buttonSelectedBorderColor,
+      borderColor: widget.toolbarOptions.buttonBorderColor,
+      borderRadius: widget.toolbarOptions.buttonBorderRadius,
+      borderWidth: widget.toolbarOptions.buttonBorderWidth,
+      renderBorder: widget.toolbarOptions.renderBorder,
+      textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
         void updateStatus() {
           _textDirectionSelected = List<bool>.filled(2, false);
@@ -130,7 +130,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           });
         }
 
-        var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+        var proceed = await widget.toolbarOptions.onButtonPressed?.call(
                 index == 0 ? ButtonType.ltr : ButtonType.rtl,
                 _alignSelected[index],
                 updateStatus) ??
@@ -164,10 +164,10 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
   Widget _lineHeight(ParagraphButtons t) {
     return Container(
       padding: const EdgeInsets.only(left: 8.0),
-      height: widget.htmlToolbarOptions.toolbarItemHeight,
-      decoration: !widget.htmlToolbarOptions.renderBorder
+      height: widget.toolbarOptions.toolbarItemHeight,
+      decoration: !widget.toolbarOptions.renderBorder
           ? null
-          : widget.htmlToolbarOptions.dropdownBoxDecoration ??
+          : widget.toolbarOptions.dropdownBoxDecoration ??
               BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border.all(
@@ -177,21 +177,21 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
                           .withOpacity(0.12))),
       child: CustomDropdownButtonHideUnderline(
         child: CustomDropdownButton<double>(
-          elevation: widget.htmlToolbarOptions.dropdownElevation,
-          icon: widget.htmlToolbarOptions.dropdownIcon,
-          iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
-          iconSize: widget.htmlToolbarOptions.dropdownIconSize,
-          itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
-          focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-          dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
-          menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ??
-              (widget.htmlToolbarOptions.toolbarPosition ==
+          elevation: widget.toolbarOptions.dropdownElevation,
+          icon: widget.toolbarOptions.dropdownIcon,
+          iconEnabledColor: widget.toolbarOptions.dropdownIconColor,
+          iconSize: widget.toolbarOptions.dropdownIconSize,
+          itemHeight: widget.toolbarOptions.dropdownItemHeight,
+          focusColor: widget.toolbarOptions.dropdownFocusColor,
+          dropdownColor: widget.toolbarOptions.dropdownBackgroundColor,
+          menuDirection: widget.toolbarOptions.dropdownMenuDirection ??
+              (widget.toolbarOptions.toolbarPosition ==
                       ToolbarPosition.belowEditor
                   ? DropdownMenuDirection.up
                   : DropdownMenuDirection.down),
-          menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+          menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
-          style: widget.htmlToolbarOptions.textStyle,
+          style: widget.toolbarOptions.textStyle,
           items: [
             CustomDropdownMenuItem(
                 value: 1, child: PointerInterceptor(child: Text('1.0'))),
@@ -233,9 +233,8 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
             }
 
             if (changed != null) {
-              var proceed = await widget.htmlToolbarOptions.onDropdownChanged
-                      ?.call(DropdownType.lineHeight, changed,
-                          updateSelectedItem) ??
+              var proceed = await widget.toolbarOptions.onDropdownChanged?.call(
+                      DropdownType.lineHeight, changed, updateSelectedItem) ??
                   true;
               if (proceed) {
                 if (kIsWeb) {
@@ -258,25 +257,25 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
   ToggleButtons _indent(ParagraphButtons t) {
     return ToggleButtons(
       constraints: BoxConstraints.tightFor(
-        width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-        height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+        width: widget.toolbarOptions.toolbarItemHeight - 2,
+        height: widget.toolbarOptions.toolbarItemHeight - 2,
       ),
-      color: widget.htmlToolbarOptions.buttonColor,
-      selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-      fillColor: widget.htmlToolbarOptions.buttonFillColor,
-      focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-      highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-      hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-      splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-      selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
-      borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-      borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-      borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-      renderBorder: widget.htmlToolbarOptions.renderBorder,
-      textStyle: widget.htmlToolbarOptions.textStyle,
+      color: widget.toolbarOptions.buttonColor,
+      selectedColor: widget.toolbarOptions.buttonSelectedColor,
+      fillColor: widget.toolbarOptions.buttonFillColor,
+      focusColor: widget.toolbarOptions.buttonFocusColor,
+      highlightColor: widget.toolbarOptions.buttonHighlightColor,
+      hoverColor: widget.toolbarOptions.buttonHoverColor,
+      splashColor: widget.toolbarOptions.buttonSplashColor,
+      selectedBorderColor: widget.toolbarOptions.buttonSelectedBorderColor,
+      borderColor: widget.toolbarOptions.buttonBorderColor,
+      borderRadius: widget.toolbarOptions.buttonBorderRadius,
+      borderWidth: widget.toolbarOptions.buttonBorderWidth,
+      renderBorder: widget.toolbarOptions.renderBorder,
+      textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
         if (t.getIcons2()[index].icon == Icons.format_indent_increase) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed
+          var proceed = await widget.toolbarOptions.onButtonPressed
                   ?.call(ButtonType.increaseIndent, null, null) ??
               true;
           if (proceed) {
@@ -284,7 +283,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           }
         }
         if (t.getIcons2()[index].icon == Icons.format_indent_decrease) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed
+          var proceed = await widget.toolbarOptions.onButtonPressed
                   ?.call(ButtonType.decreaseIndent, null, null) ??
               true;
           if (proceed) {
@@ -301,22 +300,22 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
   ToggleButtons _paragraphButtons(ParagraphButtons t) {
     return ToggleButtons(
       constraints: BoxConstraints.tightFor(
-        width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-        height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+        width: widget.toolbarOptions.toolbarItemHeight - 2,
+        height: widget.toolbarOptions.toolbarItemHeight - 2,
       ),
-      color: widget.htmlToolbarOptions.buttonColor,
-      selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-      fillColor: widget.htmlToolbarOptions.buttonFillColor,
-      focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-      highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-      hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-      splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-      selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
-      borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-      borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-      borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-      renderBorder: widget.htmlToolbarOptions.renderBorder,
-      textStyle: widget.htmlToolbarOptions.textStyle,
+      color: widget.toolbarOptions.buttonColor,
+      selectedColor: widget.toolbarOptions.buttonSelectedColor,
+      fillColor: widget.toolbarOptions.buttonFillColor,
+      focusColor: widget.toolbarOptions.buttonFocusColor,
+      highlightColor: widget.toolbarOptions.buttonHighlightColor,
+      hoverColor: widget.toolbarOptions.buttonHoverColor,
+      splashColor: widget.toolbarOptions.buttonSplashColor,
+      selectedBorderColor: widget.toolbarOptions.buttonSelectedBorderColor,
+      borderColor: widget.toolbarOptions.buttonBorderColor,
+      borderRadius: widget.toolbarOptions.buttonBorderRadius,
+      borderWidth: widget.toolbarOptions.buttonBorderWidth,
+      renderBorder: widget.toolbarOptions.renderBorder,
+      textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
         void updateStatus() {
           _alignSelected = List<bool>.filled(t.getIcons1().length, false);
@@ -326,7 +325,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
         }
 
         if (t.getIcons1()[index].icon == Icons.format_align_left) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+          var proceed = await widget.toolbarOptions.onButtonPressed?.call(
                   ButtonType.alignLeft, _alignSelected[index], updateStatus) ??
               true;
           if (proceed) {
@@ -335,7 +334,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           }
         }
         if (t.getIcons1()[index].icon == Icons.format_align_center) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+          var proceed = await widget.toolbarOptions.onButtonPressed?.call(
                   ButtonType.alignCenter,
                   _alignSelected[index],
                   updateStatus) ??
@@ -346,7 +345,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           }
         }
         if (t.getIcons1()[index].icon == Icons.format_align_right) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+          var proceed = await widget.toolbarOptions.onButtonPressed?.call(
                   ButtonType.alignRight, _alignSelected[index], updateStatus) ??
               true;
           if (proceed) {
@@ -355,7 +354,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           }
         }
         if (t.getIcons1()[index].icon == Icons.format_align_justify) {
-          var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+          var proceed = await widget.toolbarOptions.onButtonPressed?.call(
                   ButtonType.alignJustify,
                   _alignSelected[index],
                   updateStatus) ??

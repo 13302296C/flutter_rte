@@ -26,7 +26,7 @@ part 'toolbar_extensions/style_buttons.dart';
 class ToolbarWidget extends StatefulWidget {
   /// The [HtmlEditorController] is mainly used to call the [execCommand] method
   final HtmlEditorController controller;
-  HtmlToolbarOptions get htmlToolbarOptions => controller.htmlToolbarOptions;
+  HtmlToolbarOptions get toolbarOptions => controller.toolbarOptions;
   Callbacks? get callbacks => controller.callbacks;
 
   const ToolbarWidget({
@@ -112,8 +112,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   @override
   void initState() {
     widget.controller.toolbar = this;
-    _isExpanded = widget.htmlToolbarOptions.initiallyExpanded;
-    for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
+    _isExpanded = widget.toolbarOptions.initiallyExpanded;
+    for (var t in widget.toolbarOptions.defaultToolbarButtons) {
       if (t is FontButtons) {
         _fontSelected = List<bool>.filled(t.getIcons1().length, false);
         _miscFontSelected = List<bool>.filled(t.getIcons2().length, false);
@@ -310,7 +310,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     }
     //use the remaining bool lists to update the selected items accordingly
     setState(mounted, this.setState, () {
-      for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
+      for (var t in widget.toolbarOptions.defaultToolbarButtons) {
         if (t is FontButtons) {
           for (var i = 0; i < _fontSelected.length; i++) {
             if (t.getIcons1()[i].icon == Icons.format_bold) {
@@ -399,22 +399,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Wraps every type of toolbar
   Widget _toolbarWrapper({required Widget child}) {
     return Container(
-      color: widget.htmlToolbarOptions.backgroundColor,
-      decoration: widget.htmlToolbarOptions.toolbarDecoration,
+      color: widget.toolbarOptions.backgroundColor,
+      decoration: widget.toolbarOptions.toolbarDecoration,
       child: PointerInterceptor(
         child: AbsorbPointer(
           absorbing: !_enabled,
           child: _enabled &&
-                      widget.controller.htmlToolbarOptions.toolbarPosition ==
+                      widget.controller.toolbarOptions.toolbarPosition ==
                           ToolbarPosition.custom ||
                   (_enabled &&
-                      widget.controller.htmlToolbarOptions.fixedToolbar &&
-                      (widget.controller.htmlToolbarOptions.toolbarPosition !=
+                      widget.controller.toolbarOptions.fixedToolbar &&
+                      (widget.controller.toolbarOptions.toolbarPosition !=
                           ToolbarPosition.custom)) ||
                   (_enabled &&
-                      widget.controller.htmlToolbarOptions.toolbarPosition !=
+                      widget.controller.toolbarOptions.toolbarPosition !=
                           ToolbarPosition.custom &&
-                      !widget.controller.htmlToolbarOptions.fixedToolbar)
+                      !widget.controller.toolbarOptions.fixedToolbar)
               ? child
               : SizedBox(),
         ),
@@ -424,22 +424,22 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.htmlToolbarOptions.toolbarType == ToolbarType.nativeGrid) {
+    if (widget.toolbarOptions.toolbarType == ToolbarType.nativeGrid) {
       return _toolbarWrapper(
         child: Padding(
           padding: const EdgeInsets.all(5.0),
           child: Wrap(
-            runSpacing: widget.htmlToolbarOptions.gridViewVerticalSpacing,
-            spacing: widget.htmlToolbarOptions.gridViewHorizontalSpacing,
+            runSpacing: widget.toolbarOptions.gridViewVerticalSpacing,
+            spacing: widget.toolbarOptions.gridViewHorizontalSpacing,
             children: _buildChildren(),
           ),
         ),
       );
-    } else if (widget.htmlToolbarOptions.toolbarType ==
+    } else if (widget.toolbarOptions.toolbarType ==
         ToolbarType.nativeScrollable) {
       return _toolbarWrapper(
         child: Container(
-          height: widget.htmlToolbarOptions.toolbarItemHeight + 15,
+          height: widget.toolbarOptions.toolbarItemHeight + 15,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
             child: CustomScrollView(
@@ -457,29 +457,27 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           ),
         ),
       );
-    } else if (widget.htmlToolbarOptions.toolbarType ==
+    } else if (widget.toolbarOptions.toolbarType ==
         ToolbarType.nativeExpandable) {
       return _toolbarWrapper(
         child: Container(
           constraints: BoxConstraints(
             maxHeight: _isExpanded
                 ? MediaQuery.of(context).size.height
-                : widget.htmlToolbarOptions.toolbarItemHeight + 15,
+                : widget.toolbarOptions.toolbarItemHeight + 15,
           ),
           child: _isExpanded
               ? Padding(
                   padding: const EdgeInsets.symmetric(
                       vertical: 5.0, horizontal: 8.0),
                   child: Wrap(
-                    runSpacing:
-                        widget.htmlToolbarOptions.gridViewVerticalSpacing,
-                    spacing:
-                        widget.htmlToolbarOptions.gridViewHorizontalSpacing,
+                    runSpacing: widget.toolbarOptions.gridViewVerticalSpacing,
+                    spacing: widget.toolbarOptions.gridViewHorizontalSpacing,
                     children: _buildChildren()
                       ..insert(
                           0,
                           Container(
-                            height: widget.htmlToolbarOptions.toolbarItemHeight,
+                            height: widget.toolbarOptions.toolbarItemHeight,
                             child: IconButton(
                               icon: Icon(
                                 _isExpanded
@@ -520,7 +518,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                       SliverPersistentHeader(
                         pinned: true,
                         delegate: ExpandIconDelegate(
-                            widget.htmlToolbarOptions.toolbarItemHeight,
+                            widget.toolbarOptions.toolbarItemHeight,
                             _isExpanded, () async {
                           setState(mounted, this.setState, () {
                             _isExpanded = !_isExpanded;
@@ -560,7 +558,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   ///
   List<Widget> _buildChildren() {
     var toolbarChildren = <Widget>[];
-    for (var t in widget.htmlToolbarOptions.defaultToolbarButtons) {
+    for (var t in widget.toolbarOptions.defaultToolbarButtons) {
       if (t is VoiceToTextButtons) {
         toolbarChildren.add(_dictationButtons(t));
       }
@@ -634,15 +632,15 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       }
     }
 
-    if (widget.htmlToolbarOptions.customButtonGroups.isNotEmpty) {
+    if (widget.toolbarOptions.customButtonGroups.isNotEmpty) {
       toolbarChildren = _customButtons(
-          toolbarChildren, widget.htmlToolbarOptions.customButtonGroups);
+          toolbarChildren, widget.toolbarOptions.customButtonGroups);
     }
 
-    if (widget.htmlToolbarOptions.renderSeparatorWidget) {
-      toolbarChildren = intersperse(
-              widget.htmlToolbarOptions.separatorWidget, toolbarChildren)
-          .toList();
+    if (widget.toolbarOptions.renderSeparatorWidget) {
+      toolbarChildren =
+          intersperse(widget.toolbarOptions.separatorWidget, toolbarChildren)
+              .toList();
     }
 
     return toolbarChildren;

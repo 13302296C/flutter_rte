@@ -7,10 +7,10 @@ extension ToolbarStyleButtons on ToolbarWidgetState {
   Widget _styleButtons(StyleButtons t) {
     return Container(
       padding: const EdgeInsets.only(left: 8.0),
-      height: widget.htmlToolbarOptions.toolbarItemHeight,
-      decoration: !widget.htmlToolbarOptions.renderBorder
+      height: widget.toolbarOptions.toolbarItemHeight,
+      decoration: !widget.toolbarOptions.renderBorder
           ? null
-          : widget.htmlToolbarOptions.dropdownBoxDecoration ??
+          : widget.toolbarOptions.dropdownBoxDecoration ??
               BoxDecoration(
                   color: Theme.of(context).scaffoldBackgroundColor,
                   border: Border.all(
@@ -20,21 +20,21 @@ extension ToolbarStyleButtons on ToolbarWidgetState {
                           .withOpacity(0.12))),
       child: CustomDropdownButtonHideUnderline(
         child: CustomDropdownButton<String>(
-          elevation: widget.htmlToolbarOptions.dropdownElevation,
-          icon: widget.htmlToolbarOptions.dropdownIcon,
-          iconEnabledColor: widget.htmlToolbarOptions.dropdownIconColor,
-          iconSize: widget.htmlToolbarOptions.dropdownIconSize,
-          itemHeight: widget.htmlToolbarOptions.dropdownItemHeight,
-          focusColor: widget.htmlToolbarOptions.dropdownFocusColor,
-          dropdownColor: widget.htmlToolbarOptions.dropdownBackgroundColor,
-          menuDirection: widget.htmlToolbarOptions.dropdownMenuDirection ??
-              (widget.htmlToolbarOptions.toolbarPosition ==
+          elevation: widget.toolbarOptions.dropdownElevation,
+          icon: widget.toolbarOptions.dropdownIcon,
+          iconEnabledColor: widget.toolbarOptions.dropdownIconColor,
+          iconSize: widget.toolbarOptions.dropdownIconSize,
+          itemHeight: widget.toolbarOptions.dropdownItemHeight,
+          focusColor: widget.toolbarOptions.dropdownFocusColor,
+          dropdownColor: widget.toolbarOptions.dropdownBackgroundColor,
+          menuDirection: widget.toolbarOptions.dropdownMenuDirection ??
+              (widget.toolbarOptions.toolbarPosition ==
                       ToolbarPosition.belowEditor
                   ? DropdownMenuDirection.up
                   : DropdownMenuDirection.down),
-          menuMaxHeight: widget.htmlToolbarOptions.dropdownMenuMaxHeight ??
+          menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
-          style: widget.htmlToolbarOptions.textStyle,
+          style: widget.toolbarOptions.textStyle,
           items: [
             CustomDropdownMenuItem(
                 value: 'p', child: PointerInterceptor(child: Text('Normal'))),
@@ -117,7 +117,7 @@ extension ToolbarStyleButtons on ToolbarWidgetState {
             }
 
             if (changed != null) {
-              var proceed = await widget.htmlToolbarOptions.onDropdownChanged
+              var proceed = await widget.toolbarOptions.onDropdownChanged
                       ?.call(DropdownType.style, changed, updateSelectedItem) ??
                   true;
               if (proceed) {

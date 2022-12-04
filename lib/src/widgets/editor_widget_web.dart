@@ -35,23 +35,21 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
 
   //List<Plugins> get plugins => widget.controller.plugins;
 
-  HtmlEditorOptions get htmlEditorOptions =>
-      widget.controller.htmlEditorOptions;
+  HtmlEditorOptions get editorOptions => widget.controller.editorOptions;
 
-  HtmlToolbarOptions get htmlToolbarOptions =>
-      widget.controller.htmlToolbarOptions;
+  HtmlToolbarOptions get toolbarOptions => widget.controller.toolbarOptions;
 
   /// if height if fixed = return fixed height, otherwise return
   /// greatest of `minHeight` and `contentHeight`.
   double get _height =>
-      htmlEditorOptions.height ??
+      editorOptions.height ??
       widget.height ??
       math.max(
           widget.minHeight ?? 0,
           widget.controller.contentHeight.value +
-              (widget.controller.htmlToolbarOptions.toolbarPosition ==
+              (widget.controller.toolbarOptions.toolbarPosition ==
                           ToolbarPosition.custom ||
-                      !widget.controller.htmlToolbarOptions.fixedToolbar
+                      !widget.controller.toolbarOptions.fixedToolbar
                   ? 0
                   : (widget.controller.toolbarHeight ?? 0)));
 
@@ -79,7 +77,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
         widget.controller.toolbarHeight = 0;
         if (!widget.controller.initialized) {
           widget.controller
-              .initEditor(widget.initBC, htmlEditorOptions.height ?? _height);
+              .initEditor(widget.initBC, editorOptions.height ?? _height);
         }
       } else {
         if (!widget.controller.initialized) {
@@ -87,7 +85,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
               widget.initBC, _height - (widget.controller.toolbarHeight ?? 0));
         }
         widget.controller.toolbarHeight = widget.controller.isReadOnly ||
-                widget.controller.htmlToolbarOptions.toolbarPosition ==
+                widget.controller.toolbarOptions.toolbarPosition ==
                     ToolbarPosition.custom
             ? 0
             : 51;
@@ -99,19 +97,18 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
           // log('======toolbar height = ${widget.controller.toolbarHeight}');
           // log('======content height = ${widget.controller.contentHeight.value}');
 
-          if (widget.controller.htmlToolbarOptions.fixedToolbar ||
-              htmlToolbarOptions.toolbarPosition == ToolbarPosition.custom) {
+          if (widget.controller.toolbarOptions.fixedToolbar ||
+              toolbarOptions.toolbarPosition == ToolbarPosition.custom) {
             return Container(
-              decoration: widget.controller.htmlEditorOptions.decoration,
+              decoration: widget.controller.editorOptions.decoration,
               height: _height,
               child: Column(
-                verticalDirection: htmlToolbarOptions.toolbarPosition ==
+                verticalDirection: toolbarOptions.toolbarPosition ==
                         ToolbarPosition.aboveEditor
                     ? VerticalDirection.down
                     : VerticalDirection.up,
                 children: <Widget>[
-                  if (htmlToolbarOptions.toolbarPosition !=
-                      ToolbarPosition.custom)
+                  if (toolbarOptions.toolbarPosition != ToolbarPosition.custom)
                     _toolbar(),
                   Expanded(
                       child: Directionality(
@@ -157,18 +154,18 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
           }
           return Container(
             height: _height,
-            decoration: widget.controller.htmlEditorOptions.decoration,
+            decoration: widget.controller.editorOptions.decoration,
             child: Stack(
               clipBehavior: Clip.none,
               children: [
                 Positioned(
-                    top: htmlToolbarOptions.toolbarPosition ==
+                    top: toolbarOptions.toolbarPosition ==
                             ToolbarPosition.aboveEditor
                         ? -51
                         : null,
                     left: 0,
                     right: 0,
-                    bottom: htmlToolbarOptions.toolbarPosition ==
+                    bottom: toolbarOptions.toolbarPosition ==
                             ToolbarPosition.aboveEditor
                         ? null
                         : -51,
@@ -201,7 +198,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
   ///STT popup
   Widget _sttDictationPreview() {
     if (!widget.controller.isRecording) return SizedBox();
-    var textColor = htmlEditorOptions.dictationPreviewTextColor ??
+    var textColor = editorOptions.dictationPreviewTextColor ??
         Theme.of(context).textTheme.bodyText1?.color;
     return PointerInterceptor(
       child: Positioned(
@@ -209,7 +206,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
           right: 10,
           bottom: 10,
           child: Container(
-            decoration: htmlEditorOptions.dictationPreviewDecoration ??
+            decoration: editorOptions.dictationPreviewDecoration ??
                 BoxDecoration(
                     color: Theme.of(context).canvasColor,
                     borderRadius: BorderRadius.circular(10),
@@ -289,8 +286,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
       return Positioned.fill(
           child: Padding(
         padding: const EdgeInsets.only(top: 24.0, left: 56),
-        child: Text(widget.controller.htmlEditorOptions.hint ?? '',
-            style: widget.controller.htmlEditorOptions.hintStyle ??
+        child: Text(widget.controller.editorOptions.hint ?? '',
+            style: widget.controller.editorOptions.hintStyle ??
                 TextStyle(
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
@@ -309,8 +306,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
   Widget _backgroundWidget(BuildContext context) {
     return Positioned.fill(
         child: Container(
-            decoration:
-                widget.controller.htmlEditorOptions.backgroundDecoration,
-            color: widget.controller.htmlEditorOptions.backgroundColor));
+            decoration: widget.controller.editorOptions.backgroundDecoration,
+            color: widget.controller.editorOptions.backgroundColor));
   }
 }

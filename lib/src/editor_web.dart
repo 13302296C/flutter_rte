@@ -17,16 +17,16 @@ class HtmlEditor extends StatelessWidget {
     //this.plugins = const [],
   }) : super(key: key) {
     if (initialValue != null &&
-        controller.htmlEditorOptions.initialText != null &&
+        controller.editorOptions.initialText != null &&
         !controller.initialized) {
       throw Exception(
-          'Cannot have both [initialValue] and [htmlEditorOptions.initialText]. Please choose one.');
+          'Cannot have both [initialValue] and [editorOptions.initialText]. Please choose one.');
     }
     if (initialValue != null) {
-      controller.htmlEditorOptions.initialText = initialValue;
+      controller.editorOptions.initialText = initialValue;
     }
 
-    controller.htmlEditorOptions.hint = hint ?? 'Your text here...';
+    controller.editorOptions.hint = hint ?? 'Your text here...';
 
     if (controller.isReadOnly != isReadOnly) {
       controller.isReadOnly = isReadOnly;

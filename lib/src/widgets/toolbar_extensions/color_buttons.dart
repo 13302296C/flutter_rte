@@ -6,22 +6,22 @@ extension ToolbarColorButtons on ToolbarWidgetState {
   ToggleButtons _colorButtons(ColorButtons t) {
     return ToggleButtons(
       constraints: BoxConstraints.tightFor(
-        width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-        height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+        width: widget.toolbarOptions.toolbarItemHeight - 2,
+        height: widget.toolbarOptions.toolbarItemHeight - 2,
       ),
-      color: widget.htmlToolbarOptions.buttonColor,
-      selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-      fillColor: widget.htmlToolbarOptions.buttonFillColor,
-      focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-      highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-      hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-      splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-      selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
-      borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-      borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-      borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-      renderBorder: widget.htmlToolbarOptions.renderBorder,
-      textStyle: widget.htmlToolbarOptions.textStyle,
+      color: widget.toolbarOptions.buttonColor,
+      selectedColor: widget.toolbarOptions.buttonSelectedColor,
+      fillColor: widget.toolbarOptions.buttonFillColor,
+      focusColor: widget.toolbarOptions.buttonFocusColor,
+      highlightColor: widget.toolbarOptions.buttonHighlightColor,
+      hoverColor: widget.toolbarOptions.buttonHoverColor,
+      splashColor: widget.toolbarOptions.buttonSplashColor,
+      selectedBorderColor: widget.toolbarOptions.buttonSelectedBorderColor,
+      borderColor: widget.toolbarOptions.buttonBorderColor,
+      borderRadius: widget.toolbarOptions.buttonBorderRadius,
+      borderWidth: widget.toolbarOptions.buttonBorderWidth,
+      renderBorder: widget.toolbarOptions.renderBorder,
+      textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
         void updateStatus(Color? color) {
           setState(mounted, this.setState, () {
@@ -39,7 +39,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
 
         if (_colorSelected[index]) {
           if (t.getIcons()[index].icon == Icons.format_color_text) {
-            var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+            var proceed = await widget.toolbarOptions.onButtonPressed?.call(
                     ButtonType.foregroundColor,
                     _colorSelected[index],
                     updateStatus) ??
@@ -54,7 +54,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
             }
           }
           if (t.getIcons()[index].icon == Icons.format_color_fill) {
-            var proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+            var proceed = await widget.toolbarOptions.onButtonPressed?.call(
                     ButtonType.highlightColor,
                     _colorSelected[index],
                     updateStatus) ??
@@ -71,13 +71,13 @@ extension ToolbarColorButtons on ToolbarWidgetState {
         } else {
           var proceed = true;
           if (t.getIcons()[index].icon == Icons.format_color_text) {
-            proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+            proceed = await widget.toolbarOptions.onButtonPressed?.call(
                     ButtonType.foregroundColor,
                     _colorSelected[index],
                     updateStatus) ??
                 true;
           } else if (t.getIcons()[index].icon == Icons.format_color_fill) {
-            proceed = await widget.htmlToolbarOptions.onButtonPressed?.call(
+            proceed = await widget.toolbarOptions.onButtonPressed?.call(
                     ButtonType.highlightColor,
                     _colorSelected[index],
                     updateStatus) ??

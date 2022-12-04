@@ -4,22 +4,22 @@ extension DictationButtons on ToolbarWidgetState {
   Widget _dictationButtons(VoiceToTextButtons t) {
     return ToggleButtons(
       constraints: BoxConstraints.tightFor(
-        width: widget.htmlToolbarOptions.toolbarItemHeight - 2,
-        height: widget.htmlToolbarOptions.toolbarItemHeight - 2,
+        width: widget.toolbarOptions.toolbarItemHeight - 2,
+        height: widget.toolbarOptions.toolbarItemHeight - 2,
       ),
-      color: widget.htmlToolbarOptions.buttonColor,
-      selectedColor: widget.htmlToolbarOptions.buttonSelectedColor,
-      fillColor: widget.htmlToolbarOptions.buttonFillColor,
-      focusColor: widget.htmlToolbarOptions.buttonFocusColor,
-      highlightColor: widget.htmlToolbarOptions.buttonHighlightColor,
-      hoverColor: widget.htmlToolbarOptions.buttonHoverColor,
-      splashColor: widget.htmlToolbarOptions.buttonSplashColor,
-      selectedBorderColor: widget.htmlToolbarOptions.buttonSelectedBorderColor,
-      borderColor: widget.htmlToolbarOptions.buttonBorderColor,
-      borderRadius: widget.htmlToolbarOptions.buttonBorderRadius,
-      borderWidth: widget.htmlToolbarOptions.buttonBorderWidth,
-      renderBorder: widget.htmlToolbarOptions.renderBorder,
-      textStyle: widget.htmlToolbarOptions.textStyle,
+      color: widget.toolbarOptions.buttonColor,
+      selectedColor: widget.toolbarOptions.buttonSelectedColor,
+      fillColor: widget.toolbarOptions.buttonFillColor,
+      focusColor: widget.toolbarOptions.buttonFocusColor,
+      highlightColor: widget.toolbarOptions.buttonHighlightColor,
+      hoverColor: widget.toolbarOptions.buttonHoverColor,
+      splashColor: widget.toolbarOptions.buttonSplashColor,
+      selectedBorderColor: widget.toolbarOptions.buttonSelectedBorderColor,
+      borderColor: widget.toolbarOptions.buttonBorderColor,
+      borderRadius: widget.toolbarOptions.buttonBorderRadius,
+      borderWidth: widget.toolbarOptions.buttonBorderWidth,
+      renderBorder: widget.toolbarOptions.renderBorder,
+      textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
         if (t.getIcons()[index].icon == Icons.mic_outlined) {
           if (!widget.controller.isRecording) {

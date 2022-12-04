@@ -10,16 +10,16 @@ class HtmlEditorController extends ChangeNotifier {
       {this.processInputHtml = true,
       this.processNewLineAsBr = false,
       this.processOutputHtml = true,
-      HtmlEditorOptions? htmlEditorOptions,
-      HtmlToolbarOptions? htmlToolbarOptions})
-      : htmlEditorOptions = htmlEditorOptions ?? HtmlEditorOptions(),
-        htmlToolbarOptions = htmlToolbarOptions ?? HtmlToolbarOptions();
+      HtmlEditorOptions? editorOptions,
+      HtmlToolbarOptions? toolbarOptions})
+      : editorOptions = editorOptions ?? HtmlEditorOptions(),
+        toolbarOptions = toolbarOptions ?? HtmlToolbarOptions();
 
   /// Defines options for the html editor
-  late HtmlEditorOptions htmlEditorOptions;
+  late HtmlEditorOptions editorOptions;
 
   /// Defines options for the editor toolbar
-  late HtmlToolbarOptions htmlToolbarOptions;
+  late HtmlToolbarOptions toolbarOptions;
 
   //late List<Plugins> plugins;
 
@@ -67,7 +67,7 @@ class HtmlEditorController extends ChangeNotifier {
   ///
   /// The default value is true. It is recommended to leave this as true because
   /// it significantly improves the UX.
-  bool get autoAdjustHeight => htmlEditorOptions.height == null;
+  bool get autoAdjustHeight => editorOptions.height == null;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.
