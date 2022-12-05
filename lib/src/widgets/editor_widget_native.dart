@@ -66,16 +66,22 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
   Timer? timer;
 
   ///
-  late final AnimationController _controller = AnimationController(
-    duration: const Duration(milliseconds: 350),
-    vsync: this,
-  );
+  // late final AnimationController _controller = AnimationController(
+  //   duration: const Duration(milliseconds: 350),
+  //   vsync: this,
+  // );
 
-  ///
-  late final Animation<double> _animation = CurvedAnimation(
-    parent: _controller,
-    curve: Curves.fastOutSlowIn,
-  );
+  // ///
+  // late final Animation<double> _animation = CurvedAnimation(
+  //   parent: _controller,
+  //   curve: Curves.fastOutSlowIn,
+  // );
+
+  @override
+  void initState() {
+    widget.controller.context ??= widget.initBC;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,89 +106,33 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
     return AnimatedBuilder(
         animation: widget.controller,
         builder: (context, _) {
-          // log('======toolbar height = ${widget.controller.toolbarHeight}');
-          // log('======content height = ${widget.controller.contentHeight.value}');
-
-          if (toolbarOptions.fixedToolbar ||
-              toolbarOptions.toolbarPosition == ToolbarPosition.custom) {
-            return Container(
-              decoration: editorOptions.decoration,
-              height: _height,
-              child: Column(
-                verticalDirection: toolbarOptions.toolbarPosition ==
-                        ToolbarPosition.aboveEditor
-                    ? VerticalDirection.down
-                    : VerticalDirection.up,
-                children: <Widget>[
-                  if (toolbarOptions.toolbarPosition != ToolbarPosition.custom)
-                    _toolbar(),
-                  Expanded(
-                      child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Stack(
-                      children: [
-                        _backgroundWidget(context),
-                        _hintTextWidget(context),
-                        widget.controller.initialized &&
-                                widget.controller.toolbarHeight != null
-                            ? view()
-                            : SizedBox(),
-                        _scrollPatch(context),
-                        _sttDictationPreview(),
-                      ],
-                    ),
-                  )),
-                ],
-              ),
-            );
-          }
-          // auto hide
-          if (widget.controller.hasFocus && _controller.value == 0) {
-            timer?.cancel();
-            timer = null;
-            _controller
-                .animateTo(1, duration: const Duration(seconds: 1))
-                .then((value) {
-              showToolbar = true;
-            });
-          } else if (!widget.controller.hasFocus &&
-              _controller.value != 0 &&
-              showToolbar) {
-            timer = Timer(toolbarOptions.collapseDelay, () {
-              _controller.reverse().then((_) {
-                setState(() {
-                  showToolbar = false;
-                });
-              });
-            });
-          }
           return Container(
-            height: _height,
             decoration: editorOptions.decoration,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Positioned(
-                    top: toolbarOptions.toolbarPosition ==
-                            ToolbarPosition.aboveEditor
-                        ? -51
-                        : null,
-                    left: 0,
-                    right: 0,
-                    bottom: toolbarOptions.toolbarPosition ==
-                            ToolbarPosition.aboveEditor
-                        ? null
-                        : -51,
-                    child:
-                        FadeTransition(opacity: _animation, child: _toolbar())),
-                _backgroundWidget(context),
-                _hintTextWidget(context),
-                widget.controller.initialized &&
-                        widget.controller.toolbarHeight != null
-                    ? view()
-                    : SizedBox(),
-                _scrollPatch(context),
-                _sttDictationPreview(),
+            height: _height,
+            child: Column(
+              verticalDirection:
+                  toolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor
+                      ? VerticalDirection.down
+                      : VerticalDirection.up,
+              children: <Widget>[
+                if (toolbarOptions.toolbarPosition != ToolbarPosition.custom)
+                  _toolbar(),
+                Expanded(
+                    child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Stack(
+                    children: [
+                      _backgroundWidget(context),
+                      _hintTextWidget(context),
+                      widget.controller.initialized &&
+                              widget.controller.toolbarHeight != null
+                          ? view()
+                          : SizedBox(),
+                      _scrollPatch(context),
+                      _sttDictationPreview(),
+                    ],
+                  ),
+                )),
               ],
             ),
           );
@@ -214,14 +164,12 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
         Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer()),
       },
       onPageFinished: (_) async {
-        print('Page finished');
         await _evaluateJavascript(data: {'type': 'toIframe: initEditor'});
       },
       navigationDelegate: (NavigationRequest request) =>
           NavigationDecision.navigate,
       onWebResourceError: (err) {
-        print(err.toString());
-        //throw Exception('${err.errorCode}:${err.description}');
+        throw Exception('${err.errorCode}: ${err.description}');
       },
       backgroundColor: Colors.transparent,
     );

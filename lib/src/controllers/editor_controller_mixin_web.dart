@@ -6,9 +6,22 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 abstract class PlatformSpecificMixin {
+  ///
   String viewId = '';
+
+  ///
+  final String filePath = '';
+
+  ///
+  WebViewController get editorController =>
+      throw Exception('webview controller does not exist on web.');
+
+  ///
+  set editorController(WebViewController controller) =>
+      throw Exception('webview controller does not exist on web.');
 
   ///
   StreamSubscription<html.MessageEvent>? _eventSub;
@@ -35,64 +48,6 @@ abstract class PlatformSpecificMixin {
       log('Event stream done.');
     });
 
-    //var headString = '';
-    var summernoteCallbacks = '''callbacks: {
-        onKeydown: function(e) {
-            var chars = \$(".note-editable").text();
-            var totalChars = chars.length;
-            ${c.editorOptions!.characterLimit != null ? '''allowedKeys = (
-                e.which === 8 ||  /* BACKSPACE */
-                e.which === 35 || /* END */
-                e.which === 36 || /* HOME */
-                e.which === 37 || /* LEFT */
-                e.which === 38 || /* UP */
-                e.which === 39 || /* RIGHT*/
-                e.which === 40 || /* DOWN */
-                e.which === 46 || /* DEL*/
-                e.ctrlKey === true && e.which === 65 || /* CTRL + A */
-                e.ctrlKey === true && e.which === 88 || /* CTRL + X */
-                e.ctrlKey === true && e.which === 67 || /* CTRL + C */
-                e.ctrlKey === true && e.which === 86 || /* CTRL + V */
-                e.ctrlKey === true && e.which === 90    /* CTRL + Z */
-            );
-            if (!allowedKeys && \$(e.target).text().length >= ${c.editorOptions!.characterLimit}) {
-                e.preventDefault();
-            }''' : ''}
-            window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
-        },
-    ''';
-    //var maximumFileSize = 10485760;
-    // for (var p in plugins) {
-    //   headString = headString + p.getHeadString() + '\n';
-    //   if (p is SummernoteAtMention) {
-    //     summernoteCallbacks = summernoteCallbacks +
-    //         '''
-    //         \nsummernoteAtMention: {
-    //           getSuggestions: (value) => {
-    //             const mentions = ${p.getMentionsWeb()};
-    //             return mentions.filter((mention) => {
-    //               return mention.includes(value);
-    //             });
-    //           },
-    //           onSelect: (value) => {
-    //             window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: onSelectMention", "value": value}), "*");
-    //           },
-    //         },
-    //       ''';
-    //     if (p.onSelect != null) {
-    //       html.window.onMessage.listen((event) {
-    //         var data = json.decode(event.data);
-    //         if (data['type'] != null &&
-    //             data['type'].contains('toDart:') &&
-    //             data['view'] == viewId &&
-    //             data['type'].contains('onSelectMention')) {
-    //           p.onSelect!.call(data['value']);
-    //         }
-    //       });
-    //     }
-    //   }
-    // }
-
     // summernoteCallbacks = summernoteCallbacks + '}';
     // if ((Theme.of(initBC).brightness == Brightness.dark ||
     //         editorOptions!.darkMode == true) &&
@@ -114,9 +69,6 @@ const viewId = \'$viewId\';
 var toDart = window.parent;
 ''';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
-    // if (c.editorOptions!.filePath != null) {
-    //   filePath = c.editorOptions!.filePath!;
-    // }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
         htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
@@ -149,22 +101,6 @@ var toDart = window.parent;
         if (c.callbacks != null && c.callbacks!.onInit != null) {
           c.callbacks!.onInit!.call();
         }
-
-        // html.window.onMessage.listen((event) {
-        //   var data = json.decode(event.data);
-
-        //   if (data['type'] != null &&
-        //       data['type'].contains('toDart: onChangeContent') &&
-        //       data['view'] == viewId) {
-        //     if (editorOptions!.shouldEnsureVisible &&
-        //         Scrollable.of(context) != null) {
-        //       Scrollable.of(context)!.position.ensureVisible(
-        //           context.findRenderObject()!,
-        //           duration: const Duration(milliseconds: 100),
-        //           curve: Curves.easeIn);
-        //     }
-        //   }
-        // });
 
         var data = <String, Object>{'type': 'toIframe: initEditor'};
         data['view'] = viewId;

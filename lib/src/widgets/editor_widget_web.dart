@@ -69,6 +69,13 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
   //   parent: _controller,
   //   curve: Curves.fastOutSlowIn,
   // );
+
+  @override
+  void initState() {
+    widget.controller.context ??= widget.initBC;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.controller.toolbarHeight == null) {

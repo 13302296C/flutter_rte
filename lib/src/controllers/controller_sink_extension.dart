@@ -1,5 +1,4 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
-
 part of 'editor_controller.dart';
 
 extension StreamProcessor on HtmlEditorController {
@@ -21,21 +20,16 @@ extension StreamProcessor on HtmlEditorController {
     if (response['view'] != viewId || response['type'] == null) return;
     if ((response['type'] as String).split(' ')[0] != 'toDart:') return;
 
-    //
-    //_log('Event stream data: ${event.data}');
-
     // channel method called
     var channelMethod = (response['type'] as String).split(' ')[1];
-    //_log('----- View[$viewId]: $channelMethod');
     switch (channelMethod) {
       case 'initEditor':
         if (response['result'] == 'Ok') {
-          //_log('======= $viewId INIT SUCCESSFUL ==========');
           if (editorOptions!.initialText != null) {
             setText(editorOptions!.initialText!);
           }
         } else {
-          //_log('======= $viewId INIT FAILED ==========');
+          throw Exception('HTML Editor failed to load');
         }
         break;
       case 'getSelectedText':
@@ -60,15 +54,10 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'htmlHeight':
-        var refresh =
-            contentHeight.value != response['height'] && autoAdjustHeight;
-        contentHeight.value = response['height'].toDouble();
-
-        if (refresh) {
-          //_log("------ Height: ${response['height']}");
+        if (contentHeight.value != response['height'] && autoAdjustHeight) {
+          contentHeight.value = response['height'].toDouble();
           notifyListeners();
         }
-
         break;
 
       case 'updateToolbar':
@@ -81,10 +70,19 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'onChangeContent':
-        if (autoAdjustHeight) unawaited(recalculateHeight());
         _buffer = response['contents'];
         print(_buffer);
         callbacks?.onChangeContent?.call(response['contents']);
+        if (context != null) {
+          if (editorOptions!.shouldEnsureVisible &&
+              Scrollable.of(context!) != null) {
+            unawaited(Scrollable.of(context!)!.position.ensureVisible(
+                context!.findRenderObject()!,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.easeIn));
+          }
+        }
+        if (autoAdjustHeight) unawaited(recalculateHeight());
         break;
 
       case 'onChangeCodeview':
@@ -97,7 +95,6 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onEnter':
         callbacks?.onEnter?.call();
-
         break;
 
       case 'onFocus':
@@ -120,54 +117,54 @@ extension StreamProcessor on HtmlEditorController {
         callbacks?.onBlurCodeview?.call();
         break;
 
-      case 'onImageLinkInsert':
-        callbacks?.onImageLinkInsert?.call(response['url']);
-        break;
+      // case 'onImageLinkInsert':
+      //   callbacks?.onImageLinkInsert?.call(response['url']);
+      //   break;
 
-      case 'onImageUpload':
-        var map = <String, dynamic>{
-          'lastModified': response['lastModified'],
-          'lastModifiedDate': response['lastModifiedDate'],
-          'name': response['name'],
-          'size': response['size'],
-          'type': response['mimeType'],
-          'base64': response['base64']
-        };
-        var jsonStr = json.encode(map);
-        var file = fileUploadFromJson(jsonStr);
-        callbacks?.onImageUpload?.call(file);
-        break;
+      // case 'onImageUpload':
+      //   var map = <String, dynamic>{
+      //     'lastModified': response['lastModified'],
+      //     'lastModifiedDate': response['lastModifiedDate'],
+      //     'name': response['name'],
+      //     'size': response['size'],
+      //     'type': response['mimeType'],
+      //     'base64': response['base64']
+      //   };
+      //   var jsonStr = json.encode(map);
+      //   var file = fileUploadFromJson(jsonStr);
+      //   callbacks?.onImageUpload?.call(file);
+      //   break;
 
-      case 'onImageUploadError':
-        if (response['base64'] != null) {
-          callbacks?.onImageUploadError?.call(
-              null,
-              response['base64'],
-              response['error'].contains('base64')
-                  ? UploadError.jsException
-                  : response['error'].contains('unsupported')
-                      ? UploadError.unsupportedFile
-                      : UploadError.exceededMaxSize);
-        } else {
-          var map = <String, dynamic>{
-            'lastModified': response['lastModified'],
-            'lastModifiedDate': response['lastModifiedDate'],
-            'name': response['name'],
-            'size': response['size'],
-            'type': response['mimeType']
-          };
-          var jsonStr = json.encode(map);
-          var file = fileUploadFromJson(jsonStr);
-          callbacks?.onImageUploadError?.call(
-              file,
-              null,
-              response['error'].contains('base64')
-                  ? UploadError.jsException
-                  : response['error'].contains('unsupported')
-                      ? UploadError.unsupportedFile
-                      : UploadError.exceededMaxSize);
-        }
-        break;
+      // case 'onImageUploadError':
+      //   if (response['base64'] != null) {
+      //     callbacks?.onImageUploadError?.call(
+      //         null,
+      //         response['base64'],
+      //         response['error'].contains('base64')
+      //             ? UploadError.jsException
+      //             : response['error'].contains('unsupported')
+      //                 ? UploadError.unsupportedFile
+      //                 : UploadError.exceededMaxSize);
+      //   } else {
+      //     var map = <String, dynamic>{
+      //       'lastModified': response['lastModified'],
+      //       'lastModifiedDate': response['lastModifiedDate'],
+      //       'name': response['name'],
+      //       'size': response['size'],
+      //       'type': response['mimeType']
+      //     };
+      //     var jsonStr = json.encode(map);
+      //     var file = fileUploadFromJson(jsonStr);
+      //     callbacks?.onImageUploadError?.call(
+      //         file,
+      //         null,
+      //         response['error'].contains('base64')
+      //             ? UploadError.jsException
+      //             : response['error'].contains('unsupported')
+      //                 ? UploadError.unsupportedFile
+      //                 : UploadError.exceededMaxSize);
+      //   }
+      //   break;
 
       case 'onKeyDown':
       case 'onKeyPress':
@@ -176,7 +173,7 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onKeyUp':
         callbacks?.onKeyUp?.call(response['keyCode']);
-        await recalculateHeight();
+        //await recalculateHeight();
         break;
 
       case 'onMouseDown':

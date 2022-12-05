@@ -22,7 +22,7 @@ class HtmlEditorExampleApp extends StatelessWidget {
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.light,
-      home: const HtmlEditorExample(title: 'Flutter HTML Editor Example'),
+      home: const Fullscreen(),
     );
   }
 }
@@ -48,12 +48,7 @@ class _HtmlEditorExampleState extends State<HtmlEditorExample> {
             controller.clearFocus();
           }
         },
-        child: Scaffold(
-            appBar: AppBar(
-              title: Text(widget.title),
-              elevation: 0,
-            ),
-            body: const Fullscreen()));
+        child: const Fullscreen());
   }
 }
 

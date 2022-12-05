@@ -27,11 +27,15 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     this.processOutputHtml = true,
     this.editorOptions,
     this.toolbarOptions,
+    this.context,
   }) {
     viewId = getRandString(10).substring(0, 14);
     editorOptions ??= HtmlEditorOptions();
     toolbarOptions ??= HtmlToolbarOptions();
   }
+
+  ///
+  BuildContext? context;
 
   /// Defines options for the html editor
   HtmlEditorOptions? editorOptions;
@@ -117,18 +121,6 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// not be used outside of the package itself.
   // ignore: unnecessary_getters_setters
   set characterCount(int count) => _characterCount = count;
-
-  /// Allows the [InAppWebViewController] for the Html editor to be accessed
-  /// outside of the package itself for endless control and customization.
-  WebViewController get editorController => _ec!;
-
-  WebViewController? _ec;
-
-  /// Internal method to set the [InAppWebViewController] when webview initialization
-  /// is complete
-  set editorController(WebViewController controller) {
-    _ec = controller;
-  }
 
   ///
   final Map<String, Completer> _openRequests = {};
@@ -377,27 +369,31 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 var toDart = window.parent;
 ''';
     }
-    // if (c.editorOptions!.filePath != null) {
-    //   filePath = c.editorOptions!.filePath!;
-    // }
-    var htmlString = await rootBundle.loadString(
-        'packages/flutter_rich_text_editor/lib/assets/document.html');
+    var htmlString = await rootBundle.loadString(filePath);
     htmlString =
         htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
 
-    // if no explicit `height` is provided - hide the scrollbar as the
-    // container height will always adjust to the document height
+    /// if no explicit `height` is provided - hide the scrollbar as the
+    /// container height will always adjust to the document height.
+    /// If the height is set - add padding for the boxed layouts.
+    var hideScrollbarCss = '';
     if (editorOptions!.height == null) {
-      var hideScrollbarCss = '''
+      hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;
     height: 0px;
   }
 ''';
-      htmlString = htmlString.replaceFirst(
-          '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
+    } else {
+      hideScrollbarCss = '''
+  body {
+    padding: .5em 1em;
+  }
+''';
     }
 
+    htmlString = htmlString.replaceFirst(
+        '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
     return htmlString;
   }
 }
