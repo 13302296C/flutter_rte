@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/src/models/callbacks.dart';
+import 'package:flutter_rich_text_editor/src/models/html_editor_options.dart';
+import 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
+import 'package:flutter_rich_text_editor/src/widgets/toolbar_widget.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
-import 'package:webview_flutter/webview_flutter.dart' as wv;
+import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
@@ -73,12 +76,6 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
     parent: _controller,
     curve: Curves.fastOutSlowIn,
   );
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,8 +191,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
 
   ///
   Widget view() {
-    return wv.WebView(
-      javascriptMode: wv.JavascriptMode.unrestricted,
+    return WebView(
+      javascriptMode: JavascriptMode.unrestricted,
       debuggingEnabled: true,
       onWebViewCreated: (c) async {
         widget.controller.editorController = c;
@@ -204,7 +201,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
             baseUrl: '/');
       },
       javascriptChannels: {
-        wv.JavascriptChannel(
+        JavascriptChannel(
             name: 'toDart',
             onMessageReceived: (message) {
               print(message.message);
@@ -220,8 +217,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
         print('Page finished');
         await _evaluateJavascript(data: {'type': 'toIframe: initEditor'});
       },
-      navigationDelegate: (wv.NavigationRequest request) =>
-          wv.NavigationDecision.navigate,
+      navigationDelegate: (NavigationRequest request) =>
+          NavigationDecision.navigate,
       onWebResourceError: (err) {
         print(err.toString());
         //throw Exception('${err.errorCode}:${err.description}');

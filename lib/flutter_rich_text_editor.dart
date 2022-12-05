@@ -7,16 +7,12 @@ export 'package:flutter_rich_text_editor/src/models/file_upload_model.dart';
 export 'package:flutter_rich_text_editor/src/models/html_editor_options.dart';
 export 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
 export 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
-export 'package:flutter_rich_text_editor/utils/plugins.dart';
+//export 'package:flutter_rich_text_editor/utils/plugins.dart';
 export 'package:flutter_rich_text_editor/utils/utils.dart'
     hide setState, intersperse, getRandString;
 
 export 'package:flutter_rich_text_editor/src/editor.dart';
 export 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
-
-export 'package:flutter_rich_text_editor/src/widgets/editor_widget_stub.dart'
-    if (dart.library.io) 'package:flutter_rich_text_editor/src/widgets/editor_widget_native.dart'
-    if (dart.library.html) 'package:flutter_rich_text_editor/src/widgets/editor_widget_web.dart';
 
 /// Defines the 3 different cases for file insertion failing
 enum UploadError { unsupportedFile, exceededMaxSize, jsException }

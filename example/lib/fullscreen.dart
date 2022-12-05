@@ -514,7 +514,7 @@ class ActionButton extends StatelessWidget {
     required this.label,
   });
 
-  final void Function()? onPressed;
+  final VoidCallback? onPressed;
   final Widget icon;
   final String label;
 

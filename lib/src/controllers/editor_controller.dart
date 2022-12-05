@@ -463,7 +463,6 @@ class HtmlEditorController extends ChangeNotifier {
     await speechToText?.cancel();
     isRecording = false;
     notifyListeners();
-    //setState(mounted, this.setState, () => isRecording = false);
   }
 
   Future<void> initEditor(BuildContext initBC, double initHeight) async {

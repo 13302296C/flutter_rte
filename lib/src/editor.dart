@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
+import 'package:flutter_rich_text_editor/src/models/callbacks.dart';
+import 'package:flutter_rich_text_editor/src/widgets/editor_widget_stub.dart'
+    if (dart.library.io) 'package:flutter_rich_text_editor/src/widgets/editor_widget_native.dart'
+    if (dart.library.html) 'package:flutter_rich_text_editor/src/widgets/editor_widget_web.dart';
 
 /// HTML rich text editor
 class HtmlEditor extends StatelessWidget {
