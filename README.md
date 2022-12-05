@@ -86,7 +86,20 @@ HtmlEditor(
 =
 ![Custom button](./media/custom_toolbar_button.jpg)
 
-## Special Considerations for the Web Platform
+## Special Considerations 
+
+Following needs to be done to make things work on each platform:
+
+### iOS
+For speech recognition to work - add following permission to your `Info.plist` file:
+```xml
+<key>NSSpeechRecognitionUsageDescription</key>
+<string>recognize speech</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Need microphone access for uploading videos</string>
+```
+
+### Web Platform
 
 To get the toolbar to scroll horizontally on Web, you will need to make sure you override the default scroll behavior:
 

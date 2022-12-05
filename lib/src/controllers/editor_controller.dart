@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
 //import 'dart:html' as html;
@@ -9,6 +11,7 @@ import 'package:flutter_rich_text_editor/utils/utils.dart';
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 import 'editor_interface.dart';
 
@@ -120,11 +123,15 @@ class HtmlEditorController extends ChangeNotifier {
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
-  dynamic get editorController => null;
+  WebViewController get editorController => _ec!;
+
+  WebViewController? _ec;
 
   /// Internal method to set the [InAppWebViewController] when webview initialization
   /// is complete
-  set editorController(dynamic controller) => {};
+  set editorController(WebViewController controller) {
+    _ec = controller;
+  }
 
   /// Internal method to set the view ID when iframe initialization
   /// is complete
@@ -464,5 +471,37 @@ class HtmlEditorController extends ChangeNotifier {
     await _interface.init(initBC, initHeight, this);
     initialized = true;
     notifyListeners();
+  }
+
+  ///
+  Future<String> getInitialContent() async {
+    var initScript = 'const viewId = \'$_viewId\';';
+    if (kIsWeb) {
+      initScript += '''
+var toDart = window.parent;
+''';
+    }
+    // if (c.editorOptions!.filePath != null) {
+    //   filePath = c.editorOptions!.filePath!;
+    // }
+    var htmlString = await rootBundle.loadString(
+        'packages/flutter_rich_text_editor/lib/assets/document.html');
+    htmlString =
+        htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
+
+    // if no explicit `height` is provided - hide the scrollbar as the
+    // container height will always adjust to the document height
+    if (editorOptions!.height == null) {
+      var hideScrollbarCss = '''
+  ::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+''';
+      htmlString = htmlString.replaceFirst(
+          '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
+    }
+
+    return htmlString;
   }
 }

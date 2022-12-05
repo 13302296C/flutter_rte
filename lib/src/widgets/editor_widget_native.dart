@@ -1,9 +1,13 @@
-export 'dart:html';
 import 'dart:async';
+import 'dart:convert';
+import 'dart:developer';
 import 'dart:math' as math;
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:webview_flutter/webview_flutter.dart' as wv;
 
 /// The HTML Editor widget itself, for web (uses IFrameElement)
 class HtmlEditorWidget extends StatefulWidget {
@@ -69,6 +73,13 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
     parent: _controller,
     curve: Curves.fastOutSlowIn,
   );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.controller.toolbarHeight == null) {
@@ -117,7 +128,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                         _hintTextWidget(context),
                         widget.controller.initialized &&
                                 widget.controller.toolbarHeight != null
-                            ? widget.controller.view
+                            ? view()
                             : SizedBox(),
                         _scrollPatch(context),
                         _sttDictationPreview(),
@@ -171,7 +182,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                 _hintTextWidget(context),
                 widget.controller.initialized &&
                         widget.controller.toolbarHeight != null
-                    ? widget.controller.view
+                    ? view()
                     : SizedBox(),
                 _scrollPatch(context),
                 _sttDictationPreview(),
@@ -179,6 +190,51 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
             ),
           );
         });
+  }
+
+  ///
+  Widget view() {
+    return wv.WebView(
+      javascriptMode: wv.JavascriptMode.unrestricted,
+      debuggingEnabled: true,
+      onWebViewCreated: (c) async {
+        widget.controller.editorController = c;
+
+        await c.loadHtmlString(await widget.controller.getInitialContent(),
+            baseUrl: '/');
+      },
+      javascriptChannels: {
+        wv.JavascriptChannel(
+            name: 'toDart',
+            onMessageReceived: (message) {
+              print(message.message);
+              widget.controller.processEvent(message.message);
+            })
+      },
+      gestureRecognizers: {
+        Factory<VerticalDragGestureRecognizer>(
+            () => VerticalDragGestureRecognizer()),
+        Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer()),
+      },
+      onPageFinished: (_) async {
+        print('Page finished');
+        await _evaluateJavascript(data: {'type': 'toIframe: initEditor'});
+      },
+      navigationDelegate: (wv.NavigationRequest request) =>
+          wv.NavigationDecision.navigate,
+      onWebResourceError: (err) {
+        print(err.toString());
+        //throw Exception('${err.errorCode}:${err.description}');
+      },
+      backgroundColor: Colors.transparent,
+    );
+  }
+
+  /// Helper function to run javascript and check current environment
+  Future<void> _evaluateJavascript({required Map<String, Object?> data}) async {
+    var js =
+        'window.postMessage(\'${JsonEncoder().convert(data..['view'] = widget._viewId)}\')';
+    await widget.controller.editorController.runJavascript(js);
   }
 
   ///

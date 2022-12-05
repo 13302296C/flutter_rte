@@ -88,12 +88,12 @@ extension ToolbarListButtons on ToolbarWidgetState {
                 if (kIsWeb) {
                   //widget.controller.changeListStyle(changed);
                 } else {
-                  await widget.controller.editorController!
-                      .evaluateJavascript(source: '''
-                               var \$focusNode = \$(window.getSelection().focusNode);
-                               var \$parentList = \$focusNode.closest("div.note-editable ol, div.note-editable ul");
-                               \$parentList.css("list-style-type", "$changed");
-                            ''');
+                  // await widget.controller.editorController!
+                  //     .evaluateJavascript(source: '''
+                  //              var \$focusNode = \$(window.getSelection().focusNode);
+                  //              var \$parentList = \$focusNode.closest("div.note-editable ol, div.note-editable ul");
+                  //              \$parentList.css("list-style-type", "$changed");
+                  //           ''');
                 }
                 updateSelectedItem(changed);
               }

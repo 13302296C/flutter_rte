@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
 import 'package:flutter_rich_text_editor/src/models/editor_settings.dart';
 import 'package:flutter_rich_text_editor/src/widgets/custom_dropdown_button.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
@@ -499,10 +498,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 if (kIsWeb) {
                                   await widget.controller.recalculateHeight();
                                 } else {
-                                  await widget.controller.editorController!
-                                      .evaluateJavascript(
-                                          source:
-                                              "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
+                                  // await widget.controller.editorController!
+                                  //     .evaluateJavascript(
+                                  //         source:
+                                  //             "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
                                 }
                               },
                             ),
@@ -532,10 +531,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                           if (kIsWeb) {
                             await widget.controller.recalculateHeight();
                           } else {
-                            await widget.controller.editorController!
-                                .evaluateJavascript(
-                                    source:
-                                        "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
+                            // await widget.controller.editorController!
+                            //     .evaluateJavascript(
+                            //         source:
+                            //             "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
                           }
                         }),
                       ),

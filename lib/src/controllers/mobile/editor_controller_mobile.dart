@@ -1,10 +1,10 @@
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/controllers/stub/editor_controller_unsupported.dart'
     as unsupported;
+import 'package:webview_flutter/webview_flutter.dart';
 
 /// Controller for mobile
 class HtmlEditorController extends unsupported.HtmlEditorController {
@@ -47,20 +47,20 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
   final bool processOutputHtml;
 
   /// Manages the [InAppWebViewController] for the [HtmlEditorController]
-  InAppWebViewController? _editorController;
+  WebViewController? _editorController;
 
   /// Allows the [InAppWebViewController] for the Html editor to be accessed
   /// outside of the package itself for endless control and customization.
   @override
   // ignore: unnecessary_getters_setters
-  InAppWebViewController? get editorController => _editorController;
+  WebViewController? get editorController => _editorController;
 
   /// Internal method to set the [InAppWebViewController] when webview initialization
   /// is complete
   @override
   // ignore: unnecessary_getters_setters
   set editorController(dynamic controller) =>
-      _editorController = controller as InAppWebViewController?;
+      _editorController = controller as WebViewController?;
 
   @override
   Future<void> initEditor(BuildContext initBC, double initHeight) async {
@@ -345,13 +345,13 @@ class HtmlEditorController extends unsupported.HtmlEditorController {
 
   /// Helper function to evaluate JS and check the current environment
   Future<dynamic> _evaluateJavascript({required source}) async {
-    if (editorController == null || await editorController!.isLoading()) {
-      return;
-      // throw Exception(
-      //     'HTML editor is still loading, please wait before evaluating this JS: $source!');
-    }
-    var result = await editorController!.evaluateJavascript(source: source);
-    return result;
+    // if (editorController == null || await editorController!.isLoading()) {
+    //   return;
+    //   // throw Exception(
+    //   //     'HTML editor is still loading, please wait before evaluating this JS: $source!');
+    // }
+    // var result = await editorController!.evaluateJavascript(source: source);
+    // return result;
   }
 
   @override

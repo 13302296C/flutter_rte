@@ -62,12 +62,12 @@ class HtmlEditor extends StatelessWidget {
   /// If controller is provided to the editor - initialize its values
   void initializeController() {
     controller ??= HtmlEditorController();
-    if (initialValue != null &&
-        controller!.editorOptions!.initialText != null &&
-        !controller!.initialized) {
-      throw Exception(
-          'Cannot have both [initialValue] and [editorOptions.initialText]. Please choose one.');
-    }
+    // if (initialValue != null &&
+    //     controller!.editorOptions!.initialText != null &&
+    //     !controller!.initialized) {
+    //   throw Exception(
+    //       'Cannot have both [initialValue] and [editorOptions.initialText]. Please choose one.');
+    // }
     if (initialValue != null) {
       controller!.setInitialText(initialValue!);
     }
