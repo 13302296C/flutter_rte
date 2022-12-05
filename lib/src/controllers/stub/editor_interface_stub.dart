@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
-import 'dart:html' as html;
 
 class HtmlEditorInterface {
   HtmlEditorInterface(String viewId) {
@@ -75,7 +74,7 @@ class HtmlEditorInterface {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-  Future<void> processEvent(html.MessageEvent event) async =>
+  Future<void> processEvent(String event) async =>
       throw Exception('Unimplemented');
 
   Future<void> init(BuildContext initBC, double initHeight,

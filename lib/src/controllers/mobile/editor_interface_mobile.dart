@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 
@@ -13,18 +14,23 @@ class HtmlEditorInterface {
   HtmlEditorInterface(String viewId) : _viewId = viewId;
 
   ///
-  late WebViewController _webviewController;
+  WebViewController? get webviewController =>
+      _editorController!.editorController;
 
   HtmlEditorController? _editorController;
 
-  late JavascriptChannel _channel;
+  late final JavascriptChannel _channel;
+
+  final String filePath =
+      'packages/flutter_rich_text_editor/lib/assets/document.html';
 
   ///
   Widget platformView(String id) => WebView(
         javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (c) {
-          _webviewController = c;
-          _webviewController.loadHtmlString(initialContent);
+        debuggingEnabled: true,
+        onWebViewCreated: (c) async {
+          //webviewController = c;
+          await webviewController!.loadHtmlString(initialContent, baseUrl: '/');
         },
         javascriptChannels: {_channel},
         gestureRecognizers: {
@@ -33,12 +39,16 @@ class HtmlEditorInterface {
           Factory<LongPressGestureRecognizer>(
               () => LongPressGestureRecognizer()),
         },
-        onPageFinished: (_) =>
-            _evaluateJavascript(data: {'type': 'toIframe: initEditor'}),
+        onPageFinished: (_) async {
+          print('Page finished');
+          await _evaluateJavascript(data: {'type': 'toIframe: initEditor'});
+        },
         navigationDelegate: (NavigationRequest request) =>
-            NavigationDecision.prevent,
-        onWebResourceError: (err) =>
-            throw Exception('${err.errorCode}:${err.description}'),
+            NavigationDecision.navigate,
+        onWebResourceError: (err) {
+          print(err.toString());
+          //throw Exception('${err.errorCode}:${err.description}');
+        },
         backgroundColor: Colors.transparent,
       );
 
@@ -49,8 +59,9 @@ class HtmlEditorInterface {
 
   /// Helper function to run javascript and check current environment
   Future<void> _evaluateJavascript({required Map<String, Object?> data}) async {
-    await _webviewController.runJavascript(
-        'html.window.postMessage(\'${JsonEncoder().convert(data..['view'] = _viewId)}\', \'*\')');
+    var js =
+        'window.postMessage(\'${JsonEncoder().convert(data..['view'] = _viewId)}\')';
+    await webviewController!.runJavascript(js);
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -259,7 +270,7 @@ class HtmlEditorInterface {
     //   });
     // }
     var initScript = 'const viewId = \'$_viewId\';';
-    var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
+
     // if (c.editorOptions!.filePath != null) {
     //   filePath = c.editorOptions!.filePath!;
     // }

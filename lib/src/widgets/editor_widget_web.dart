@@ -1,3 +1,4 @@
+export 'dart:html';
 import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -116,7 +117,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                         _hintTextWidget(context),
                         widget.controller.initialized &&
                                 widget.controller.toolbarHeight != null
-                            ? widget.controller.view
+                            ? HtmlElementView(viewType: widget._viewId)
                             : SizedBox(),
                         _scrollPatch(context),
                         _sttDictationPreview(),
@@ -170,7 +171,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                 _hintTextWidget(context),
                 widget.controller.initialized &&
                         widget.controller.toolbarHeight != null
-                    ? widget.controller.view
+                    ? HtmlElementView(viewType: widget._viewId)
                     : SizedBox(),
                 _scrollPatch(context),
                 _sttDictationPreview(),

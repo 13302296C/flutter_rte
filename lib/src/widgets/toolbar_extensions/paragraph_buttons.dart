@@ -64,35 +64,35 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
                 if (kIsWeb) {
                   //widget.controller.changeCase(changed);
                 } else {
-                  await widget.controller.editorController!
-                      .evaluateJavascript(source: """
-                          var selected = \$('#summernote-2').summernote('createRange');
-                          if(selected.toString()){
-                              var texto;
-                              var count = 0;
-                              var value = "$changed";
-                              var nodes = selected.nodes();
-                              for (var i=0; i< nodes.length; ++i) {
-                                  if (nodes[i].nodeName == "#text") {
-                                      count++;
-                                      texto = nodes[i].nodeValue.toLowerCase();
-                                      nodes[i].nodeValue = texto;
-                                      if (value == 'upper') {
-                                         nodes[i].nodeValue = texto.toUpperCase();
-                                      }
-                                      else if (value == 'sentence' && count==1) {
-                                         nodes[i].nodeValue = texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
-                                      } else if (value == 'title') {
-                                        var sentence = texto.split(" ");
-                                        for(var j = 0; j< sentence.length; j++){
-                                           sentence[j] = sentence[j][0].toUpperCase() + sentence[j].slice(1);
-                                        }
-                                        nodes[i].nodeValue = sentence.join(" ");
-                                      }
-                                  }
-                              }
-                          }
-                        """);
+                  // await widget.controller.editorController!
+                  //     .evaluateJavascript(source: """
+                  //         var selected = \$('#summernote-2').summernote('createRange');
+                  //         if(selected.toString()){
+                  //             var texto;
+                  //             var count = 0;
+                  //             var value = "$changed";
+                  //             var nodes = selected.nodes();
+                  //             for (var i=0; i< nodes.length; ++i) {
+                  //                 if (nodes[i].nodeName == "#text") {
+                  //                     count++;
+                  //                     texto = nodes[i].nodeValue.toLowerCase();
+                  //                     nodes[i].nodeValue = texto;
+                  //                     if (value == 'upper') {
+                  //                        nodes[i].nodeValue = texto.toUpperCase();
+                  //                     }
+                  //                     else if (value == 'sentence' && count==1) {
+                  //                        nodes[i].nodeValue = texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
+                  //                     } else if (value == 'title') {
+                  //                       var sentence = texto.split(" ");
+                  //                       for(var j = 0; j< sentence.length; j++){
+                  //                          sentence[j] = sentence[j][0].toUpperCase() + sentence[j].slice(1);
+                  //                       }
+                  //                       nodes[i].nodeValue = sentence.join(" ");
+                  //                     }
+                  //                 }
+                  //             }
+                  //         }
+                  //       """);
                 }
               }
             }
@@ -139,15 +139,15 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           if (kIsWeb) {
             //widget.controller.changeTextDirection(index == 0 ? 'ltr' : 'rtl');
           } else {
-            await widget.controller.editorController!
-                .evaluateJavascript(source: """
-                  var s=document.getSelection();			
-                  if(s==''){
-                      document.execCommand("insertHTML", false, "<p dir='${index == 0 ? "ltr" : "rtl"}'></p>");
-                  }else{
-                      document.execCommand("insertHTML", false, "<div dir='${index == 0 ? "ltr" : "rtl"}'>"+ document.getSelection()+"</div>");
-                  }
-                """);
+            // await widget.controller.editorController!
+            //     .evaluateJavascript(source: """
+            //       var s=document.getSelection();
+            //       if(s==''){
+            //           document.execCommand("insertHTML", false, "<p dir='${index == 0 ? "ltr" : "rtl"}'></p>");
+            //       }else{
+            //           document.execCommand("insertHTML", false, "<div dir='${index == 0 ? "ltr" : "rtl"}'>"+ document.getSelection()+"</div>");
+            //       }
+            //     """);
           }
           updateStatus();
         }
@@ -240,9 +240,9 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
                 if (kIsWeb) {
                   //widget.controller.changeLineHeight(changed.toString());
                 } else {
-                  await widget.controller.editorController!.evaluateJavascript(
-                      source:
-                          "\$('#summernote-2').summernote('lineHeight', '$changed');");
+                  // await widget.controller.editorController!.evaluateJavascript(
+                  //     source:
+                  //         "\$('#summernote-2').summernote('lineHeight', '$changed');");
                 }
                 updateSelectedItem(changed);
               }

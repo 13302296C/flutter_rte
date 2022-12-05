@@ -23,7 +23,7 @@ class HtmlEditorOptions {
     this.hintStyle,
     this.initialText,
     this.inputType = HtmlInputType.text,
-    this.mobileContextMenu,
+    // this.mobileContextMenu,
     // this.mobileLongPressDuration,
     // this.mobileInitialScripts,
     // this.webInitialScripts,
@@ -116,8 +116,8 @@ class HtmlEditorOptions {
   /// The default value is [HtmlInputType.text] (the standard virtual keyboard)
   final HtmlInputType inputType;
 
-  /// Customize the context menu for selected text on mobile
-  final ContextMenu? mobileContextMenu;
+  // /// Customize the context menu for selected text on mobile
+  // final ContextMenu? mobileContextMenu;
 
   /// Set the duration until a long-press is recognized.
   ///

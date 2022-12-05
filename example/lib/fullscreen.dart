@@ -59,8 +59,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
   Widget _popupToolbox() {
     return Positioned(
       top: 16,
-      left: 0,
-      right: 0,
+      left: 16,
+      right: 16,
       child: _currentController == null
           ? const SizedBox()
           : ScaleTransition(
@@ -121,6 +121,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
             ..toolbarOptions?.fixedToolbar = true
             ..toolbarOptions?.toolbarDecoration = null
             ..toolbarOptions?.backgroundColor = null
+            ..editorOptions?.height = null
             ..editorOptions?.decoration = null,
           callbacks: Callbacks(onFocus: () {
             setState(() {
@@ -145,6 +146,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
               borderRadius: const BorderRadius.all(Radius.circular(32)),
             )
             ..editorOptions?.decoration = null
+            ..editorOptions?.height = null
             ..toolbarOptions?.fixedToolbar = false,
         );
       } else if (_demoType == DemoType.boxed) {
@@ -186,114 +188,119 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
       ]);
     }
 
-    return Scaffold(
-      floatingActionButton: ExpandableFabClass(
-        distanceBetween: 112.0,
-        subChildren: [
-          ActionButton(
-            onPressed: () => setState(() {
-              _demoType = DemoType.autoHideToolbar;
-            }),
-            label: 'Auto-hide toolbar',
-            icon: const Icon(Icons.center_focus_strong_outlined),
-          ),
-          ActionButton(
-            onPressed: () => setState(() {
-              _demoType = DemoType.floatingToolbar;
-            }),
-            label: 'Floating toolbar',
-            icon: const Icon(Icons.blur_on_outlined),
-          ),
-          ActionButton(
-            onPressed: () => setState(() {
-              _demoType = DemoType.boxed;
-            }),
-            label: 'Boxed layout',
-            icon: const Icon(Icons.bento),
-          ),
-        ],
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-              image: Image.asset('${kIsWeb ? '' : 'assets/'}bgd.png').image,
-              fit: BoxFit.fill),
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: ExpandableFabClass(
+          distanceBetween: 112.0,
+          subChildren: [
+            ActionButton(
+              onPressed: () => setState(() {
+                _demoType = DemoType.autoHideToolbar;
+              }),
+              label: 'Auto-hide toolbar',
+              icon: const Icon(Icons.center_focus_strong_outlined),
+            ),
+            ActionButton(
+              onPressed: () => setState(() {
+                _demoType = DemoType.floatingToolbar;
+              }),
+              label: 'Floating toolbar',
+              icon: const Icon(Icons.blur_on_outlined),
+            ),
+            ActionButton(
+              onPressed: () => setState(() {
+                _demoType = DemoType.boxed;
+              }),
+              label: 'Boxed layout',
+              icon: const Icon(Icons.bento),
+            ),
+          ],
         ),
-        child: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Padding(
-                padding: kIsWeb
-                    ? const EdgeInsets.fromLTRB(16, 32, 16, 16)
-                    : const EdgeInsets.all(8),
-                child: Center(
-                  child: FittedBox(
-                      child: Container(
-                    decoration: BoxDecoration(color: Colors.white, boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey[600]!,
-                          spreadRadius: 0,
-                          blurRadius: 15),
-                    ]),
-                    constraints: const BoxConstraints(
-                      minHeight: 1500,
-                      minWidth: 1024,
-                      maxWidth: 1024,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 96.0, vertical: 96),
-                      child: Column(
-                        children: [
-                          Text('Science Experiment',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5!
-                                  .copyWith(fontWeight: FontWeight.bold)),
-                          const SizedBox(height: 32),
-                          Row(
-                            children: const [
-                              Expanded(
-                                  child: TextField(
-                                decoration: InputDecoration(hintText: 'Name'),
-                              )),
-                              VerticalDivider(width: 16),
-                              Expanded(
-                                  child: TextField(
-                                decoration:
-                                    InputDecoration(hintText: 'Department'),
-                              )),
-                              VerticalDivider(width: 16),
-                              Expanded(
-                                  child: TextField(
-                                decoration: InputDecoration(hintText: 'Date'),
-                              )),
-                            ],
-                          ),
-                          const SizedBox(height: 32),
-                          // HtmlEditor(
-                          //   controller: HtmlEditorController()
-                          //     ..toolbarOptions!.customButtonGroups = [
-                          //       CustomButtonGroup(index: 0, buttons: [
-                          //         CustomToolbarButton(
-                          //             icon: Icons.save_outlined,
-                          //             action: () => setState(() {}),
-                          //             isSelected: false)
-                          //       ])
-                          //     ],
-                          // ),
-                          const SizedBox(height: 32),
-                          const Divider(height: 2, thickness: 2),
-                          ...sections,
-                        ],
+        body: Container(
+          height: kIsWeb ? null : MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+                image: Image.asset('${kIsWeb ? '' : 'assets/'}bgd.png').image,
+                fit: BoxFit.fill),
+          ),
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Padding(
+                  padding: kIsWeb
+                      ? const EdgeInsets.fromLTRB(16, 32, 16, 16)
+                      : const EdgeInsets.all(8),
+                  child: Center(
+                    child: FittedBox(
+                        child: Container(
+                      decoration:
+                          BoxDecoration(color: Colors.white, boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey[600]!,
+                            spreadRadius: 0,
+                            blurRadius: 15),
+                      ]),
+                      constraints: const BoxConstraints(
+                        minHeight: kIsWeb ? 1500 : 700,
+                        minWidth: kIsWeb ? 1024 : 400,
+                        maxWidth: kIsWeb ? 1024 : 400,
                       ),
-                    ),
-                  )),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: kIsWeb ? 96.0 : 16,
+                            vertical: kIsWeb ? 96.0 : 16),
+                        child: Column(
+                          children: [
+                            Text('Science Experiment',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline5!
+                                    .copyWith(fontWeight: FontWeight.bold)),
+                            const SizedBox(height: 32),
+                            Row(
+                              children: const [
+                                Expanded(
+                                    child: TextField(
+                                  decoration: InputDecoration(hintText: 'Name'),
+                                )),
+                                VerticalDivider(width: 16),
+                                Expanded(
+                                    child: TextField(
+                                  decoration:
+                                      InputDecoration(hintText: 'Department'),
+                                )),
+                                VerticalDivider(width: 16),
+                                Expanded(
+                                    child: TextField(
+                                  decoration: InputDecoration(hintText: 'Date'),
+                                )),
+                              ],
+                            ),
+                            const SizedBox(height: 32),
+                            // HtmlEditor(
+                            //   controller: HtmlEditorController()
+                            //     ..toolbarOptions!.customButtonGroups = [
+                            //       CustomButtonGroup(index: 0, buttons: [
+                            //         CustomToolbarButton(
+                            //             icon: Icons.save_outlined,
+                            //             action: () => setState(() {}),
+                            //             isSelected: false)
+                            //       ])
+                            //     ],
+                            // ),
+                            const SizedBox(height: 32),
+                            const Divider(height: 2, thickness: 2),
+                            ...sections,
+                          ],
+                        ),
+                      ),
+                    )),
+                  ),
                 ),
               ),
-            ),
-            _popupToolbox(),
-          ],
+              _popupToolbox(),
+            ],
+          ),
         ),
       ),
     );
@@ -507,7 +514,7 @@ class ActionButton extends StatelessWidget {
     required this.label,
   });
 
-  final VoidCallback? onPressed;
+  final void Function()? onPressed;
   final Widget icon;
   final String label;
 

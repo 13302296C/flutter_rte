@@ -62,7 +62,7 @@ extension StreamProcessor on HtmlEditorController {
       case 'htmlHeight':
         var refresh =
             contentHeight.value != response['height'] && autoAdjustHeight;
-        contentHeight.value = response['height'];
+        contentHeight.value = response['height'].toDouble();
 
         if (refresh) {
           //_log("------ Height: ${response['height']}");

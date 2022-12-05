@@ -25,7 +25,7 @@ class Callbacks {
     this.onMouseDown,
     this.onMouseIn,
     this.onMouseOut,
-    this.onNavigationRequestMobile,
+    // this.onNavigationRequestMobile,
     this.onPaste,
     this.onScroll,
   });
@@ -170,7 +170,7 @@ class Callbacks {
   ///
   /// This function passes the URL to be loaded, and you must return a
   /// `NavigationActionPolicy` to tell the webview what to do.
-  FutureOr<NavigationActionPolicy> Function(String)? onNavigationRequestMobile;
+  // FutureOr<NavigationActionPolicy> Function(String)? onNavigationRequestMobile;
 
   /// Called whenever text is pasted into the rich text field. This will not be
   /// called when text is pasted into the code view editor.

@@ -242,7 +242,10 @@ class HtmlEditorInterface {
     //         '\n';
     //   });
     // }
-    var initScript = 'const viewId = \'$_viewId\';';
+    var initScript = '''
+const viewId = \'$_viewId\';
+var toDart = window.parent;
+''';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
     // if (c.editorOptions!.filePath != null) {
     //   filePath = c.editorOptions!.filePath!;

@@ -1,7 +1,71 @@
 import 'dart:async';
+import 'package:flutter_rich_text_editor/src/models/toolbar.dart';
+import 'package:flutter_rich_text_editor/src/widgets/custom_dropdown_button.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+
+import 'custom_toolbar_buttons.dart';
+
+/// Returns the type of button pressed in the `onButtonPressed` function
+enum ButtonType {
+  style,
+  bold,
+  italic,
+  underline,
+  clearFormatting,
+  strikethrough,
+  superscript,
+  subscript,
+  foregroundColor,
+  highlightColor,
+  ul,
+  ol,
+  alignLeft,
+  alignCenter,
+  alignRight,
+  alignJustify,
+  increaseIndent,
+  decreaseIndent,
+  ltr,
+  rtl,
+  link,
+  picture,
+  audio,
+  video,
+  otherFile,
+  table,
+  hr,
+  fullscreen,
+  codeview,
+  undo,
+  redo,
+  help,
+  copy,
+  paste
+}
+
+/// Returns the type of dropdown changed in the `onDropdownChanged` function
+enum DropdownType {
+  style,
+  fontName,
+  fontSize,
+  fontSizeUnit,
+  listStyles,
+  lineHeight,
+  caseConverter
+}
+
+/// Manages the position of the toolbar, whether above or below the editor
+/// [custom] - removes the toolbar. This is useful when you want to implement the
+/// toolbar in a custom location using [ToolbarWidget]
+enum ToolbarPosition { aboveEditor, belowEditor, custom }
+
+/// Manages the way the toolbar displays:
+/// [nativeGrid] - a grid view (non scrollable) of all the buttons
+/// [nativeScrollable] - a scrollable one-line view of all the buttons
+/// [nativeExpandable] - has an icon to switch between grid and scrollable formats
+/// on the fly
+enum ToolbarType { nativeGrid, nativeScrollable, nativeExpandable }
 
 /// Options that modify the toolbar and its behavior
 class HtmlToolbarOptions {
