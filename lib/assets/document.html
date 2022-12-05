@@ -73,8 +73,8 @@
   /* - - - Init Script - - - */
   document.addEventListener("DOMContentLoaded", function(event) {
 
-    if (window.parent !== window.self){
-      window.parent.addEventListener('message', handleMessage, false);
+    if (window.parent !== window.top){
+      window.addEventListener('message', handleMessage, false);
     } else {
       window.parent.addEventListener('message', handleMessage, false);
     }
