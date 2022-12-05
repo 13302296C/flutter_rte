@@ -6,36 +6,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
-//import 'dart:html' as html;
-// speech to text
+import 'package:webview_flutter/webview_flutter.dart';
+
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
-import 'editor_interface.dart';
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_stub.dart'
+    if (dart.library.io) 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_native.dart'
+    if (dart.library.html) 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_web.dart';
 
-part 'web/editor_interface_events.dart';
+part 'controller_sink_extension.dart';
+part 'dictation_extension.dart';
 
 /// Controller for web
-class HtmlEditorController extends ChangeNotifier {
+class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   HtmlEditorController({
     this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
     this.editorOptions,
     this.toolbarOptions,
-  }) : _viewId = getRandString(10).substring(0, 14) {
-    _interface = HtmlEditorInterface(_viewId);
+  }) {
+    viewId = getRandString(10).substring(0, 14);
     editorOptions ??= HtmlEditorOptions();
-    toolbarOptions ??= HtmlToolbarOptions(); //TODO: remove color
+    toolbarOptions ??= HtmlToolbarOptions();
   }
-
-  ///
-  late final HtmlEditorInterface _interface;
-
-  ///
-  Widget get view => _interface.platformView(_viewId);
 
   /// Defines options for the html editor
   HtmlEditorOptions? editorOptions;
@@ -70,6 +66,7 @@ class HtmlEditorController extends ChangeNotifier {
   ///
   ValueNotifier<double> contentHeight = ValueNotifier(64);
   double get actualHeight => contentHeight.value;
+  set actualHeight(double height) => contentHeight.value = height;
 
   double? _toolbarHeight;
   double? get toolbarHeight => _toolbarHeight;
@@ -133,8 +130,8 @@ class HtmlEditorController extends ChangeNotifier {
     _ec = controller;
   }
 
-  /// Internal method to set the view ID when iframe initialization
-  /// is complete
+  ///
+  final Map<String, Completer> _openRequests = {};
 
   /// Dictation controller
   SpeechToText? speechToText;
@@ -148,26 +145,10 @@ class HtmlEditorController extends ChangeNotifier {
   // /// Dictation result buffer
   String sttBuffer = '';
 
-  ///
-  final Map<String, Completer> _openRequests = {};
-
-  ///
-
   @override
   void dispose() {
-    _interface.dispose();
     super.dispose();
   }
-
-  /// Manages the view ID for the [HtmlEditorController] on web
-  String _viewId;
-
-  /// Internal method to set the view ID when iframe initialization
-  /// is complete
-
-  set viewId(String viewId) => _viewId = viewId;
-
-  String get viewId => _viewId;
 
   // ignore: prefer_final_fields
   String _buffer = '';
@@ -186,19 +167,18 @@ class HtmlEditorController extends ChangeNotifier {
 
   /// Sets the focus to the editor.
   void setFocus() {
-    if (!isDisabled) {
-      _interface.setFocus();
-    }
+    if (!isDisabled) evaluateJavascript(data: {'type': 'toIframe: setFocus'});
   }
 
   /// Clears the focus from the webview
-  void clearFocus() => _interface.clearFocus();
+  void clearFocus() =>
+      evaluateJavascript(data: {'type': 'toIframe: clearFocus'});
 
   /// disables the Html editor
   Future<void> disable() async {
     if (isDisabled) return;
     toolbar?.disable();
-    await _interface.disable();
+    await evaluateJavascript(data: {'type': 'toIframe: disable'});
     await recalculateHeight();
     notifyListeners();
     isDisabled = true;
@@ -207,37 +187,40 @@ class HtmlEditorController extends ChangeNotifier {
   /// enables the Html editor
   Future<void> enable() async {
     toolbar?.enable();
-    await _interface.enable();
+    await evaluateJavascript(data: {'type': 'toIframe: enable'});
     await recalculateHeight();
+    isDisabled = false;
     notifyListeners();
     setFocus();
-    isDisabled = false;
   }
 
   /// Undoes the last action
-  void undo() => _interface.undo();
+  void undo() => evaluateJavascript(data: {'type': 'toIframe: undo'});
 
   /// Redoes the last action
-  void redo() => _interface.redo();
+  void redo() => evaluateJavascript(data: {'type': 'toIframe: redo'});
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
   void setText(String text) {
-    _interface.setText(_processHtml(html: text));
+    evaluateJavascript(data: {'type': 'toIframe: setText', 'text': text});
     recalculateHeight();
   }
 
   /// Insert text at the end of the current HTML content in the editor
   /// Note: This method should only be used for plaintext strings
   Future<void> insertText(String text) async {
-    await _interface.insertText(text);
+    await evaluateJavascript(
+        data: {'type': 'toIframe: insertText', 'text': text});
   }
 
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
   Future<void> insertHtml(String html) async {
-    html = _processHtml(html: html);
-    await _interface.insertHtml(html);
+    await evaluateJavascript(data: {
+      'type': 'toIframe: insertHtml',
+      'html': _processHtml(html: html)
+    });
   }
 
   /// Gets the text from the editor and returns it as a [String].
@@ -249,18 +232,18 @@ class HtmlEditorController extends ChangeNotifier {
       // _openRequests.remove('toDart: getText');
     }
     _openRequests.addEntries({'toDart: getText': Completer<String>()}.entries);
-    unawaited(_interface.getText());
+    unawaited(evaluateJavascript(data: {'type': 'toIframe: getText'}));
     return _openRequests['toDart: getText']?.future as Future<String>;
   }
 
   /// Clears the editor of any text.
   Future<void> clear() async {
-    await _interface.clear();
+    await evaluateJavascript(data: {'type': 'toIframe: clear'});
   }
 
   /// toggles the codeview in the Html editor
   void toggleCodeView() {
-    _interface.toggleCodeView();
+    evaluateJavascript(data: {'type': 'toIframe: toggleCode'});
   }
 
   ///
@@ -268,42 +251,42 @@ class HtmlEditorController extends ChangeNotifier {
     //if (withHtmlTags) {
     _openRequests.addEntries(
         {'toIframe: getSelectedTextHtml': Completer<String>()}.entries);
-    unawaited(_interface.getSelectedText());
+    unawaited(
+        evaluateJavascript(data: {'type': 'toIframe: getSelectedTextHtml'}));
     return _openRequests['toIframe: getSelectedTextHtml']!.future
         as Future<String>;
-    // } else {
-    //   _openRequests
-    //       .addEntries({'toDart: getSelectedText': Completer<String>()}.entries);
-    //   unawaited(
-    //       _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedText'}));
-    //   return _openRequests['toDart: getSelectedText']!.future as Future<String>;
-    // }
-
-    // var e = await html.window.onMessage.firstWhere((element) =>
-    //     json.decode(element.data)['type'] == 'toDart: getSelectedText');
-    // return _openRequests['toDart: getSelectedText']
-    //     .future; // json.decode(e.data)['text'];
   }
 
   /// Insert a link at the position of the cursor in the editor
   Future<void> insertLink(String text, String url, bool isNewWindow) async {
-    await _interface.insertLink(text, url, isNewWindow);
+    await evaluateJavascript(data: {
+      'type': 'toIframe: makeLink',
+      'text': text,
+      'url': url,
+      'isNewWindow': isNewWindow
+    });
   }
 
   ///
   Future<void> removeLink() async {
-    await _interface.removeLink();
+    await evaluateJavascript(data: {'type': 'toIframe: removeLink'});
   }
 
   /// Recalculates the height of the editor to remove any vertical scrolling.
   /// This method will not do anything if [autoAdjustHeight] is turned off.
   Future<void> recalculateHeight() async {
-    await _interface.recalculateHeight();
+    await evaluateJavascript(data: {
+      'type': 'toIframe: getHeight',
+    });
   }
 
   /// A function to quickly call a document.execCommand function in a readable format
   Future<void> execCommand(String command, {String? argument}) async {
-    await _interface.execCommand(command, argument: argument);
+    await evaluateJavascript(data: {
+      'type': 'toIframe: execCommand',
+      'command': command,
+      'argument': argument
+    });
   }
 
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
@@ -379,102 +362,16 @@ class HtmlEditorController extends ChangeNotifier {
   }
 
   ///
-  Future<bool> _initSpeechToText() async {
-    if (sttAvailable) return true;
-    speechToText ??= SpeechToText();
-
-    await speechToText!
-        .initialize(
-      onError: (SpeechRecognitionError? error) {
-        if (error == null) {
-          throw Exception('The error was thrown, but no details provided.');
-        }
-        cancelRecording();
-        throw Exception(
-            'Speech-to-Text Error: ${error.errorMsg} - ${error.permanent}');
-      },
-      onStatus: log,
-      debugLogging: true,
-    )
-        .then((value) async {
-      sttAvailable = value;
-    }).onError((error, stackTrace) {
-      //setState(mounted, this.setState, () {
-      sttAvailable = false;
-      //});
-      notifyListeners();
-
-      return Future.error(error.toString());
-    });
-    return sttAvailable;
-  }
-
-  ///
-
-  Future<void> convertSpeechToText(Function(String v) onResult) async {
-    if (!await _initSpeechToText()) return;
-    //setState(mounted, this.setState, () => isRecording = true);
-    isRecording = true;
-    notifyListeners();
-    await speechToText?.listen(
-        onResult: (SpeechRecognitionResult result) {
-          if (!result.finalResult) {
-            sttBuffer = result.recognizedWords;
-            notifyListeners();
-            // setState(mounted, this.setState, () {
-            //   sttBuffer = result.recognizedWords;
-            // });
-            return;
-          } else {
-            onResult(result.recognizedWords);
-            if (isRecording) {
-              isRecording = false;
-              notifyListeners();
-              //setState(mounted, this.setState, () => isRecording = false);
-            }
-          }
-        },
-        listenFor: const Duration(seconds: 300),
-        pauseFor: const Duration(seconds: 300),
-        partialResults: true,
-        cancelOnError: true,
-        listenMode: ListenMode.dictation);
-  }
-
-  /// Triggers result from recognition
-
-  Future<void> stopRecording() async {
-    await speechToText?.stop();
-    isRecording = false;
-    notifyListeners();
-    //setState(mounted, this.setState, () => isRecording = false);
-    // Save dictation.
-    // this delay is needed to let controller inject new text.
-    // Otherwise it won't save.
-    // Future.delayed(Duration(seconds: 1)).then((value) {
-    //   context.read<IRForm>().update(doValidation: false, doUiRefresh: false);
-    //   _sttBuffer = '';
-    // });
-  }
-
-  /// Does not trigger result from recognition
-
-  Future<void> cancelRecording() async {
-    await speechToText?.cancel();
-    isRecording = false;
-    notifyListeners();
-  }
-
   Future<void> initEditor(BuildContext initBC, double initHeight) async {
     if (initialized) throw Exception('Already initialized');
-    await _interface.init(initBC, initHeight, this);
+    await init(initBC, initHeight, this);
     initialized = true;
     notifyListeners();
   }
 
   ///
   Future<String> getInitialContent() async {
-    var initScript = 'const viewId = \'$_viewId\';';
+    var initScript = 'const viewId = \'$viewId\';';
     if (kIsWeb) {
       initScript += '''
 var toDart = window.parent;

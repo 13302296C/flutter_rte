@@ -1,161 +1,28 @@
-// ignore: avoid_web_libraries_in_flutter
 import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:html' as html;
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
-import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart' as ui;
+import 'package:flutter/material.dart';
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
 
-class HtmlEditorInterface {
-  HtmlEditorInterface(String viewId) : _viewId = viewId;
-
-  ///
-  Widget platformView(String id) => HtmlElementView(viewType: id);
-
-  ///
-  final String _viewId;
+abstract class PlatformSpecificMixin {
+  String viewId = '';
 
   ///
   StreamSubscription<html.MessageEvent>? _eventSub;
 
+  ///
   /// Helper function to run javascript and check current environment
-  Future<void> _evaluateJavascriptWeb(
-      {required Map<String, Object?> data}) async {
-    if (kIsWeb) {
-      data['view'] = _viewId;
-      final jsonEncoder = JsonEncoder();
-      var json = jsonEncoder.convert(data);
-      html.window.postMessage(json, '*');
-    } else {
-      throw Exception(
-          'Non-Flutter Web environment detected, please make sure you are importing package:flutter_rich_text_editor/html_editor.dart');
-    }
-  }
-
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-  // - - - - - - - - METHODS API - - - - - - - - - - - - - - - - - - - - - //
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
-  /// Sets the focus to the editor.
-  void setFocus() =>
-      _evaluateJavascriptWeb(data: {'type': 'toIframe: setFocus'});
-
-  /// Clears the focus from the webview
-  void clearFocus() =>
-      _evaluateJavascriptWeb(data: {'type': 'toIframe: clearFocus'});
-
-  /// disables the Html editor
-  Future<void> disable() async =>
-      await _evaluateJavascriptWeb(data: {'type': 'toIframe: disable'});
-
-  /// enables the Html editor
-  Future<void> enable() async =>
-      await _evaluateJavascriptWeb(data: {'type': 'toIframe: enable'});
-
-  /// Undoes the last action
-  void undo() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: undo'});
-  }
-
-  /// Redoes the last action
-  void redo() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: redo'});
-  }
-
-  /// Sets the text of the editor. Some pre-processing is applied to convert
-  /// [String] elements like "\n" to HTML elements.
-  void setText(String text) {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: setText', 'text': text});
-  }
-
-  /// Insert text at the end of the current HTML content in the editor
-  /// Note: This method should only be used for plaintext strings
-  Future<void> insertText(String text) async {
-    await _evaluateJavascriptWeb(
-        data: {'type': 'toIframe: insertText', 'text': text});
-  }
-
-  /// Insert HTML at the position of the cursor in the editor
-  /// Note: This method should not be used for plaintext strings
-  Future<void> insertHtml(String html) async {
-    await _evaluateJavascriptWeb(
-        data: {'type': 'toIframe: insertHtml', 'html': html});
-  }
-
-  /// Gets the text from the editor and returns it as a [String].
-  Future<void> getText() async {
-    unawaited(_evaluateJavascriptWeb(data: {'type': 'toIframe: getText'}));
-  }
-
-  /// Clears the editor of any text.
-  Future<void> clear() async {
-    await _evaluateJavascriptWeb(data: {'type': 'toIframe: clear'});
-  }
-
-  /// toggles the codeview in the Html editor
-  void toggleCodeView() {
-    _evaluateJavascriptWeb(data: {'type': 'toIframe: toggleCode'});
+  Future<void> evaluateJavascript({required Map<String, Object?> data}) async {
+    data['view'] = viewId;
+    final jsonEncoder = JsonEncoder();
+    var json = jsonEncoder.convert(data);
+    html.window.postMessage(json, '*');
   }
 
   ///
-  Future<void> getSelectedText() async {
-    //if (withHtmlTags) {
-
-    unawaited(_evaluateJavascriptWeb(
-        data: {'type': 'toIframe: getSelectedTextHtml'}));
-
-    // } else {
-    //   _openRequests
-    //       .addEntries({'toDart: getSelectedText': Completer<String>()}.entries);
-    //   unawaited(
-    //       _evaluateJavascriptWeb(data: {'type': 'toIframe: getSelectedText'}));
-    //   return _openRequests['toDart: getSelectedText']!.future as Future<String>;
-    // }
-
-    // var e = await html.window.onMessage.firstWhere((element) =>
-    //     json.decode(element.data)['type'] == 'toDart: getSelectedText');
-    // return _openRequests['toDart: getSelectedText']
-    //     .future; // json.decode(e.data)['text'];
-  }
-
-  /// Insert a link at the position of the cursor in the editor
-  Future<void> insertLink(String text, String url, bool isNewWindow) async {
-    await _evaluateJavascriptWeb(data: {
-      'type': 'toIframe: makeLink',
-      'text': text,
-      'url': url,
-      'isNewWindow': isNewWindow
-    });
-  }
-
-  ///
-  Future<void> removeLink() async {
-    await _evaluateJavascriptWeb(data: {'type': 'toIframe: removeLink'});
-  }
-
-  /// Recalculates the height of the editor to remove any vertical scrolling.
-  /// This method will not do anything if [autoAdjustHeight] is turned off.
-  Future<void> recalculateHeight() async {
-    await _evaluateJavascriptWeb(data: {
-      'type': 'toIframe: getHeight',
-    });
-  }
-
-  /// A function to quickly call a document.execCommand function in a readable format
-  Future<void> execCommand(String command, {String? argument}) async {
-    await _evaluateJavascriptWeb(data: {
-      'type': 'toIframe: execCommand',
-      'command': command,
-      'argument': argument
-    });
-  }
-
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-  // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
-
   Future<void> init(
       BuildContext initBC, double initHeight, HtmlEditorController c) async {
     await _eventSub?.cancel();
@@ -191,7 +58,7 @@ class HtmlEditorInterface {
             if (!allowedKeys && \$(e.target).text().length >= ${c.editorOptions!.characterLimit}) {
                 e.preventDefault();
             }''' : ''}
-            window.parent.postMessage(JSON.stringify({"view": "$_viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
+            window.parent.postMessage(JSON.stringify({"view": "$viewId", "type": "toDart: characterCount", "totalChars": totalChars}), "*");
         },
     ''';
     //var maximumFileSize = 10485760;
@@ -243,7 +110,7 @@ class HtmlEditorInterface {
     //   });
     // }
     var initScript = '''
-const viewId = \'$_viewId\';
+const viewId = \'$viewId\';
 var toDart = window.parent;
 ''';
     var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
@@ -274,10 +141,10 @@ var toDart = window.parent;
       ..srcdoc = htmlString
       ..style.border = 'none'
       ..style.overflow = 'hidden'
-      ..id = _viewId
+      ..id = viewId
       ..onLoad.listen((event) async {
         if (c.isReadOnly && !c.isDisabled) {
-          await disable();
+          await c.disable();
         }
         if (c.callbacks != null && c.callbacks!.onInit != null) {
           c.callbacks!.onInit!.call();
@@ -300,15 +167,15 @@ var toDart = window.parent;
         // });
 
         var data = <String, Object>{'type': 'toIframe: initEditor'};
-        data['view'] = _viewId;
+        data['view'] = viewId;
         final jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);
         html.window.postMessage(jsonStr, '*');
       });
-    ui.platformViewRegistry
-        .registerViewFactory(_viewId, (int viewId) => iframe);
+    ui.platformViewRegistry.registerViewFactory(viewId, (int viewId) => iframe);
   }
 
+  ///
   void dispose() {
     _eventSub?.cancel();
   }

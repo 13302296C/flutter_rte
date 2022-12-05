@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/controllers/stub/editor_controller_unsupported.dart'
+import 'package:flutter_rich_text_editor/src/controllers/stub/editor_controller_stub.dart'
     as unsupported;
 import 'package:webview_flutter/webview_flutter.dart';
 

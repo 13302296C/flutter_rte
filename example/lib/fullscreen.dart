@@ -6,8 +6,12 @@ import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 
 enum DemoType { boxed, autoHideToolbar, floatingToolbar }
 
+final List<String> strings = List.filled(5, '');
+
 class Fullscreen extends StatefulWidget {
-  const Fullscreen({Key? key}) : super(key: key);
+  const Fullscreen({Key? key, this.demoType}) : super(key: key);
+
+  final DemoType? demoType;
 
   @override
   State<Fullscreen> createState() => _FullscreenState();
@@ -18,7 +22,7 @@ class Fullscreen extends StatefulWidget {
 }
 
 class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
-  DemoType _demoType = DemoType.floatingToolbar;
+  late DemoType _demoType;
 
   final List<String> _sections = [
     'Hypothesis',
@@ -38,11 +42,11 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
   );
   final Color? _tbBgd = Colors.blueGrey[50];
   final List<HtmlEditorController> _controllers = [];
-  final List<String> _strings = List.filled(5, '');
   HtmlEditorController? _currentController;
 
   @override
   void initState() {
+    _demoType = widget.demoType ?? DemoType.floatingToolbar;
     // ignore: unused_local_variable
     for (var s in _sections) {
       _controllers.add(HtmlEditorController(
@@ -112,9 +116,9 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
       Widget? editor;
       if (_demoType == DemoType.floatingToolbar) {
         editor = HtmlEditor(
-          initialValue: _strings[_sections.indexOf(e)],
+          initialValue: strings[_sections.indexOf(e)],
           onChanged: (s) {
-            _strings[_sections.indexOf(e)] = s ?? '';
+            strings[_sections.indexOf(e)] = s ?? '';
           },
           controller: _controllers[_sections.indexOf(e)]
             ..toolbarOptions?.toolbarPosition = ToolbarPosition.custom
@@ -134,9 +138,9 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
         );
       } else if (_demoType == DemoType.autoHideToolbar) {
         editor = HtmlEditor(
-          initialValue: _strings[_sections.indexOf(e)],
+          initialValue: strings[_sections.indexOf(e)],
           onChanged: (s) {
-            _strings[_sections.indexOf(e)] = s ?? '';
+            strings[_sections.indexOf(e)] = s ?? '';
           },
           controller: _controllers[_sections.indexOf(e)]
             ..toolbarOptions?.toolbarPosition = ToolbarPosition.aboveEditor
@@ -153,9 +157,9 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
         editor = ClipRRect(
           borderRadius: const BorderRadius.all(Radius.circular(7)),
           child: HtmlEditor(
-            initialValue: _strings[_sections.indexOf(e)],
+            initialValue: strings[_sections.indexOf(e)],
             onChanged: (s) {
-              _strings[_sections.indexOf(e)] = s ?? '';
+              strings[_sections.indexOf(e)] = s ?? '';
             },
             controller: _controllers[_sections.indexOf(e)]
               ..toolbarOptions?.toolbarPosition = ToolbarPosition.aboveEditor
@@ -193,24 +197,28 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
         floatingActionButton: ExpandableFabClass(
           distanceBetween: 112.0,
           subChildren: [
+            // ActionButton(
+            //   onPressed: () => setState(() {
+            //     _demoType = DemoType.autoHideToolbar;
+            //   }),
+            //   label: 'Auto-hide toolbar',
+            //   icon: const Icon(Icons.center_focus_strong_outlined),
+            // ),
             ActionButton(
-              onPressed: () => setState(() {
-                _demoType = DemoType.autoHideToolbar;
-              }),
-              label: 'Auto-hide toolbar',
-              icon: const Icon(Icons.center_focus_strong_outlined),
-            ),
-            ActionButton(
-              onPressed: () => setState(() {
-                _demoType = DemoType.floatingToolbar;
-              }),
+              onPressed: () =>
+                  Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                builder: (BuildContext context) =>
+                    const Fullscreen(demoType: DemoType.floatingToolbar),
+              )),
               label: 'Floating toolbar',
               icon: const Icon(Icons.blur_on_outlined),
             ),
             ActionButton(
-              onPressed: () => setState(() {
-                _demoType = DemoType.boxed;
-              }),
+              onPressed: () =>
+                  Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                builder: (BuildContext context) =>
+                    const Fullscreen(demoType: DemoType.boxed),
+              )),
               label: 'Boxed layout',
               icon: const Icon(Icons.bento),
             ),
@@ -315,7 +323,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
   }
 
   void setTimeout() {
-    timer = Timer(const Duration(seconds: 2), () {
+    timer = Timer(const Duration(seconds: 5), () {
       _controller.reverse(from: 1).then((_) {
         _currentController = null;
         setState(() {});

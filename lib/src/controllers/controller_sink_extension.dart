@@ -1,14 +1,14 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
-part of '../editor_controller.dart';
+part of 'editor_controller.dart';
 
 extension StreamProcessor on HtmlEditorController {
   /// checks if text provided is just an empty paragraph
   bool textHasNoValue(String text) {
     // check if the text starts with empty paragraph
-    var pattern1 = r'^<\s*p[^>]*>(<br[ ]?\/?>|&nbsp;|[ ]?)<\s*/\s*p>';
+    var pattern1 = r'^<\s*p[^>]*>(<br[ ]?\/?>|&nbsp;|[ ]?)<\s*\/\s*p>';
     // count how many paragraphs we have in that text
-    var pattern2 = r'<\s*p[^>]*>(.*?)<\s*/\s*p>';
+    var pattern2 = r'<\s*p[^>]*>(.*?)<\s*\/\s*p>';
     var regex1 = RegExp(pattern1);
     var regex2 = RegExp(pattern2);
     return regex1.hasMatch(text) && regex2.allMatches(text).length == 1;
@@ -83,6 +83,7 @@ extension StreamProcessor on HtmlEditorController {
       case 'onChangeContent':
         if (autoAdjustHeight) unawaited(recalculateHeight());
         _buffer = response['contents'];
+        print(_buffer);
         callbacks?.onChangeContent?.call(response['contents']);
         break;
 
@@ -107,7 +108,10 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onBlur':
         hasFocus = false;
-        if (textHasNoValue(_buffer)) _buffer = '';
+        if (textHasNoValue(_buffer)) {
+          _buffer = '';
+          callbacks?.onChangeContent?.call(_buffer);
+        }
         notifyListeners();
         callbacks?.onBlur?.call();
         break;
