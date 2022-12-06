@@ -245,13 +245,11 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   ///
   Future<String> getSelectedText() async {
-    //if (withHtmlTags) {
-    _openRequests.addEntries(
-        {'toIframe: getSelectedTextHtml': Completer<String>()}.entries);
+    _openRequests
+        .addEntries({'getSelectedTextHtml': Completer<String>()}.entries);
     unawaited(
         evaluateJavascript(data: {'type': 'toIframe: getSelectedTextHtml'}));
-    return _openRequests['toIframe: getSelectedTextHtml']!.future
-        as Future<String>;
+    return _openRequests['getSelectedTextHtml']!.future as Future<String>;
   }
 
   /// Insert a link at the position of the cursor in the editor

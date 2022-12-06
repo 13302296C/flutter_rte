@@ -28,6 +28,7 @@ extension StreamProcessor on HtmlEditorController {
           if (editorOptions!.initialText != null) {
             setText(editorOptions!.initialText!);
           }
+          callbacks?.onInit?.call();
         } else {
           _initialized = false;
           notifyListeners();
@@ -35,8 +36,9 @@ extension StreamProcessor on HtmlEditorController {
         }
         notifyListeners();
         break;
+
       case 'getSelectedText':
-      case 'getSelectedHtml':
+      case 'getSelectedTextHtml':
         if (_openRequests.keys.contains(channelMethod)) {
           _openRequests[channelMethod]?.complete(response['text']);
         }

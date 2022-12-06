@@ -48,7 +48,7 @@ abstract class PlatformSpecificMixin {
       debuggingEnabled: true,
       onWebViewCreated: (c) async {
         editorController = c;
-        String st = await await controller.getInitialContent();
+        var st = await controller.getInitialContent();
         await c.loadHtmlString(st);
       },
       javascriptChannels: {
@@ -62,7 +62,8 @@ abstract class PlatformSpecificMixin {
       gestureRecognizers: {
         Factory<VerticalDragGestureRecognizer>(
             () => VerticalDragGestureRecognizer()),
-        Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer()),
+        Factory<LongPressGestureRecognizer>(
+            () => LongPressGestureRecognizer(duration: Duration(seconds: 1))),
       },
       onPageFinished: (_) async {
         await evaluateJavascript(data: {'type': 'toIframe: initEditor'});

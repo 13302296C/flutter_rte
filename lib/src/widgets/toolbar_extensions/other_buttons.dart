@@ -30,7 +30,9 @@ extension ToolbarOtherButtons on ToolbarWidgetState {
               true;
           if (proceed) {
             var data = await widget.controller.getSelectedText();
-            await Clipboard.setData(ClipboardData(text: data));
+            await Clipboard.setData(ClipboardData(text: data)).onError(
+                (error, stackTrace) => throw Exception(
+                    'There was an error copying to clipboard: ${error.toString()}'));
           }
         }
         if (t.getIcons2()[index].icon == Icons.paste) {
@@ -38,7 +40,9 @@ extension ToolbarOtherButtons on ToolbarWidgetState {
                   ?.call(ButtonType.paste, null, null) ??
               true;
           if (proceed) {
-            var data = await Clipboard.getData(Clipboard.kTextPlain);
+            var data = await Clipboard.getData(Clipboard.kTextPlain).onError(
+                (error, stackTrace) => throw Exception(
+                    'There was an error pasting from clipboard: ${error.toString()}'));
             if (data != null) {
               var text = data.text!;
               await widget.controller.insertHtml(text);

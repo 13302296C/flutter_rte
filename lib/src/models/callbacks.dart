@@ -129,7 +129,7 @@ class Callbacks {
   /// base64 data, and last modified information so you can do error handling.
   void Function(FileUpload?, String?, UploadError)? onImageUploadError;
 
-  /// Called whenever [InAppWebViewController.onLoadStop] is fired on mobile
+  /// Called whenever [WebViewController.onLoadStop] is fired on mobile
   /// or when the [IFrameElement.onLoad] stream is fired on web. Note that this
   /// method will also be called on refresh on both platforms.
   ///

@@ -54,7 +54,9 @@
   } */
   [contenteditable]:focus {
       outline: 0px solid transparent;
+      display: block;
   }
+
 /* - - - Hide Scrollbar - - - */
 </style>
 <!-- Squire library:
@@ -96,10 +98,12 @@ https://github.com/neilj/Squire
 
   // sends message back based on platform
   function postChannelMessage(dataMap){
+    dataMap['view'] = viewId;
+    let s = JSON.stringify(dataMap);
     if(isNativePlatform){
-      window.toDart.postMessage(JSON.stringify(dataMap));
+      window.toDart.postMessage(s);
     } else {
-      window.parent.postMessage(JSON.stringify(dataMap), '*');
+      window.parent.postMessage(s, '*');
     }
   }
 
@@ -134,12 +138,11 @@ https://github.com/neilj/Squire
               });
               initCallbacks();
               console.log('Editor loading done');
-              postChannelMessage({"view": viewId, 
-                "type": "toDart: initEditor", "result": "Ok"});
+              postChannelMessage({"type": "toDart: initEditor", "result": "Ok"});
 
             } catch(e) {
-              postChannelMessage({"view": viewId, 
-              "type": "toDart: initEditor", "result": "Fail"});
+              postChannelMessage({"type": "toDart: initEditor", 
+              "result": "Fail"});
               console.log(e);
             }
             break;
@@ -147,12 +150,12 @@ https://github.com/neilj/Squire
           case 'getHeight':
             var height = document.body.scrollHeight;
             var width = document.body.scrollWidth;
-            postChannelMessage({"view": viewId, 
+            postChannelMessage({
               "type": "toDart: htmlHeight", "height": height, "width": width});
             break;
 
           case 'getText':
-          postChannelMessage({"view": viewId, 
+            postChannelMessage({
               "type": "toDart: getText", "text": editor.getHTML()});
             break;
           
@@ -193,16 +196,10 @@ https://github.com/neilj/Squire
             break;
           
           case 'getSelectedText':
-          postChannelMessage({"type": "toDart: getSelectedText", "text": editor.getSelectedText()});
-            break;
-
           case 'getSelectedTextHtml':
-            var range = editor.getSelection(); // window.getSelection().getRangeAt(0);
-            var content = range.cloneContents();
-            var span = document.createElement('span');
-            span.appendChild(content);
-            var htmlContent = span.innerHTML;
-            postChannelMessage({"type": "toDart: getSelectedTextHtml", "text": htmlContent});
+            var text = editor.getSelectedText();
+            postChannelMessage({"type": "toDart: getSelectedTextHtml", 
+              "text": text});
             break;
 
           // case 'getPath':
