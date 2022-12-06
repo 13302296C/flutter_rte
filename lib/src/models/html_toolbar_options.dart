@@ -80,7 +80,9 @@ class HtmlToolbarOptions {
           help: false,
           copy: false,
           paste: false),
-      FontButtons(strikethrough: false, subscript: false, superscript: false),
+      FontButtons(
+          //strikethrough: false, subscript: false, superscript: false
+          ),
       ColorButtons(),
       ParagraphButtons(
           textDirection: false, lineHeight: false, caseConverter: false),

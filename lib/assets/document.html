@@ -259,6 +259,30 @@ https://github.com/neilj/Squire
             editor.removeUnderline();
             break;
 
+          case 'strikethrough':
+            editor.strikethrough();
+            break;
+
+          case 'removeStrikethrough':
+            editor.removeStrikethrough();
+            break;
+
+          case 'superscript':
+            editor.superscript();
+            break;
+
+          case 'removeSuperscript':
+            editor.removeSuperscript();
+            break;
+
+          case 'subscript':
+            editor.subscript();
+            break;
+
+          case 'removeSubscript':
+            editor.removeSubscript();
+            break;
+            
           case 'makeLink':
             editor.makeLink(data['url'], {target: '_blank'});
             break;
@@ -356,9 +380,6 @@ https://github.com/neilj/Squire
           //   break;
           // case 'linkRegExp':
           //   break;
-          case 'strikeThrough':
-          case 'superscript':
-          case 'subscript':
           default:
             console.log(`Not implemented: ${command}`);
             break;

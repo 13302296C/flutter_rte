@@ -37,7 +37,12 @@ extension ToolbarFontButtons on ToolbarWidgetState {
                   updateStatus) ??
               true;
           if (proceed) {
-            await widget.controller.execCommand('strikeThrough');
+            if (_miscFontSelected[index]) {
+              await widget.controller.execCommand('removeStrikethrough');
+            } else {
+              await widget.controller.execCommand('strikethrough');
+            }
+
             updateStatus();
           }
         }
@@ -48,7 +53,12 @@ extension ToolbarFontButtons on ToolbarWidgetState {
                   updateStatus) ??
               true;
           if (proceed) {
-            await widget.controller.execCommand('superscript');
+            if (_miscFontSelected[index]) {
+              await widget.controller.execCommand('removeSuperscript');
+            } else {
+              await widget.controller.execCommand('superscript');
+            }
+
             updateStatus();
           }
         }
@@ -59,7 +69,12 @@ extension ToolbarFontButtons on ToolbarWidgetState {
                   updateStatus) ??
               true;
           if (proceed) {
-            await widget.controller.execCommand('subscript');
+            if (_miscFontSelected[index]) {
+              await widget.controller.execCommand('removeSubscript');
+            } else {
+              await widget.controller.execCommand('subscript');
+            }
+
             updateStatus();
           }
         }
