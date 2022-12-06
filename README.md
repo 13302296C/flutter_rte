@@ -19,21 +19,19 @@ Try it [here](https://flutter-rich-text.web.app/).
 ![Flutter Rich Text Editor Web](./media/screen1.jpg)
 
 ## Under the Hood
-This WYCIWYG HTML editor easy to use and provides great flexibility and control over the generated HTML.
+This WYCIWYG HTML editor easy to use and provides **great flexibility and control over the generated HTML.**
 
-Flutter package itself is a reworked [html_editor_enhanced](https://pub.dev/packages/html_editor_enhanced), but with few differences:
+This package is a reworked [html_editor_enhanced](https://pub.dev/packages/html_editor_enhanced), but with few differences:
 
-* This is based on [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) libraries instead of Summernote and jQuery, so it's much lighter and supports HTML5;
+* This is based on [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) libraries instead of Summernote and jQuery, so it's much lighter and supports **HTML5** (no `<font>` tags);
 * it uses the Google's official [webview_flutter](https://pub.dev/packages/webview_flutter) instead of [flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview)
-
-<br /><br />
-Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
-To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
 
 ## Basic Implementation
 
 ```Dart
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+
+// ...
 
 // 1. Define a var to store changes within parent class or a provider etc...
 String result = 'Hello world!';
@@ -76,6 +74,12 @@ Toolbar button groups could be enabled/disabled via `defaultToolbarButtons` attr
 <br /><br />
 Adding your own button groups to the toolbar is very simple - just provide a list of [CustomButtonGroup] objects to the `customButtonGroups` attribute. Each button group will consist of a list of [CustomToolbarButton] objects, each with its own icon, tap callback and an `isSelected` flag to let the toolbar know if the icon button should be highlighted.
 
+### Voice to Text (Dictation)
+
+Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
+To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
+
+
 ```Dart
 HtmlEditor(
     controller: HtmlEditorController()
@@ -100,7 +104,7 @@ Following needs to be done to make things work on each platform:
 
 ### Android
 
-Place this to `android > app > src > main > AndroidManifest.xml`
+For speech recognition to work - place this to `android > app > src > main > AndroidManifest.xml`
 
 ```xml
 
