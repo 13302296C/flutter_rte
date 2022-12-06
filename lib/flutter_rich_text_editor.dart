@@ -11,7 +11,7 @@ export 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart'
 export 'package:flutter_rich_text_editor/utils/utils.dart'
     hide setState, intersperse, getRandString;
 
-export 'package:flutter_rich_text_editor/src/editor.dart';
+export 'package:flutter_rich_text_editor/src/widgets/editor_widget.dart';
 export 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
 
 /// Defines the 3 different cases for file insertion failing

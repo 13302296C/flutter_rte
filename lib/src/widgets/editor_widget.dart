@@ -1,43 +1,78 @@
-export 'dart:html';
-import 'dart:async';
 import 'dart:math' as math;
+import 'dart:async';
+import 'package:flutter_rich_text_editor/src/widgets/toolbar_widget.dart';
+import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
+import 'package:flutter_rich_text_editor/src/models/callbacks.dart';
+import 'package:flutter_rich_text_editor/src/models/html_editor_options.dart';
+import 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
-/// The HTML Editor widget itself, for web (uses IFrameElement)
-class HtmlEditorWidget extends StatefulWidget {
-  HtmlEditorWidget({
+/// HTML rich text editor
+class HtmlEditor extends StatefulWidget {
+  HtmlEditor({
     Key? key,
-    required this.controller,
     this.height,
     this.minHeight,
-    required this.initBC,
-  })  : _viewId = controller.viewId,
-        super(key: key);
+    this.hint,
+    this.initialValue,
+    this.onChanged,
+    this.isReadOnly = false,
+    this.enableDicatation,
+    this.controller,
+    this.callbacks,
+    //this.plugins = const [],
+  }) : super(key: key);
 
-  final HtmlEditorController controller;
+  /// Shortcut for onChanged callback
+  final void Function(String?)? onChanged;
+
+  /// Provides access to all options and features
+  final HtmlEditorController? controller;
+
+  /// Sets the list of Summernote plugins enabled in the editor.
+  //final List<Plugins> plugins;
+
+  /// Puts editor in read-only mode, hiding its toollbar
+  final bool isReadOnly;
+
+  /// If enabled - shows microphone icon and allows to use dictation within
+  /// the editor
+  final bool? enableDicatation;
+
+  /// Desired hight. 'Auto' if null.
   final double? height;
+
+  /// If height is omited, the editor height
+  /// will be equal or greater than `minHeight`.
   final double? minHeight;
-  final String _viewId;
-  final BuildContext initBC;
+
+  /// Initial text to load into the editor
+  final String? initialValue;
+
+  /// Hint text to display when the editor is empty.
+  ///
+  /// Defaults to [ ***Your text here...*** ]
+  final String? hint;
+
+  /// Sets & activates callbacks. See the functions available in
+  /// [Callbacks] for more details.
+  final Callbacks? callbacks;
 
   @override
-  State<HtmlEditorWidget> createState() => _HtmlEditorWidgetState();
+  State<HtmlEditor> createState() => _HtmlEditorState();
 }
 
-class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
-    with TickerProviderStateMixin {
-  /// Tracks whether the editor was disabled onInit (to avoid re-disabling on reload)
-  //bool alreadyDisabled = false;
-
-  Callbacks? get callbacks => widget.controller.callbacks;
+class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
+  late final HtmlEditorController _controller;
+  Callbacks? get callbacks => _controller.callbacks;
 
   //List<Plugins> get plugins => widget.controller.plugins;
 
-  HtmlEditorOptions get editorOptions => widget.controller.editorOptions!;
+  HtmlEditorOptions get editorOptions => _controller.editorOptions!;
 
-  HtmlToolbarOptions get toolbarOptions => widget.controller.toolbarOptions!;
+  HtmlToolbarOptions get toolbarOptions => _controller.toolbarOptions!;
 
   /// if height if fixed = return fixed height, otherwise return
   /// greatest of `minHeight` and `contentHeight`.
@@ -46,64 +81,48 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
       widget.height ??
       math.max(
           widget.minHeight ?? 0,
-          widget.controller.contentHeight.value +
+          _controller.contentHeight.value +
               (toolbarOptions.toolbarPosition == ToolbarPosition.custom ||
                       !toolbarOptions.fixedToolbar
                   ? 0
-                  : (widget.controller.toolbarHeight ?? 0)));
+                  : (_controller.toolbarHeight ?? 0)));
 
   ///
   bool showToolbar = false;
 
   ///
+  @internal
   Timer? timer;
-
-  ///
-  // late final AnimationController _controller = AnimationController(
-  //   duration: const Duration(milliseconds: 350),
-  //   vsync: this,
-  // );
-
-  // ///
-  // late final Animation<double> _animation = CurvedAnimation(
-  //   parent: _controller,
-  //   curve: Curves.fastOutSlowIn,
-  // );
 
   @override
   void initState() {
-    widget.controller.context ??= widget.initBC;
+    _initializeController();
+    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (widget.controller.toolbarHeight == null) {
-      if (widget.controller.isReadOnly) {
-        widget.controller.toolbarHeight = 0;
-        if (!widget.controller.initialized) {
-          widget.controller
-              .initEditor(widget.initBC, editorOptions.height ?? _height);
+    if (_controller.toolbarHeight == null) {
+      if (_controller.isReadOnly) {
+        _controller.toolbarHeight = 0;
+        if (!_controller.initialized) {
+          _controller.initEditor(context, editorOptions.height ?? _height);
         }
       } else {
-        if (!widget.controller.initialized) {
-          widget.controller.initEditor(
-              widget.initBC, _height - (widget.controller.toolbarHeight ?? 0));
+        if (!_controller.initialized) {
+          _controller.initEditor(
+              context, _height - (_controller.toolbarHeight ?? 0));
         }
-        widget.controller.toolbarHeight = widget.controller.isReadOnly ||
+        _controller.toolbarHeight = _controller.isReadOnly ||
                 toolbarOptions.toolbarPosition == ToolbarPosition.custom
             ? 0
             : 51;
       }
     }
     return AnimatedBuilder(
-        animation: widget.controller,
+        animation: _controller,
         builder: (context, _) {
-          // log('======toolbar height = ${widget.controller.toolbarHeight}');
-          // log('======content height = ${widget.controller.contentHeight.value}');
-
-          // if (toolbarOptions.fixedToolbar ||
-          //     toolbarOptions.toolbarPosition == ToolbarPosition.custom) {
           return Container(
             decoration: editorOptions.decoration,
             height: _height,
@@ -122,9 +141,9 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                     children: [
                       _backgroundWidget(context),
                       _hintTextWidget(context),
-                      widget.controller.initialized &&
-                              widget.controller.toolbarHeight != null
-                          ? widget.controller.view(widget.controller)
+                      _controller.initialized &&
+                              _controller.toolbarHeight != null
+                          ? _controller.view(_controller)
                           : SizedBox(),
                       _scrollPatch(context),
                       _sttDictationPreview(),
@@ -134,71 +153,20 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
               ],
             ),
           );
-          // }
-          //   // auto hide
-          //   if (widget.controller.hasFocus && _controller.value == 0) {
-          //     timer?.cancel();
-          //     timer = null;
-          //     _controller
-          //         .animateTo(1, duration: const Duration(seconds: 1))
-          //         .then((value) {
-          //       showToolbar = true;
-          //     });
-          //   } else if (!widget.controller.hasFocus &&
-          //       _controller.value != 0 &&
-          //       showToolbar) {
-          //     timer = Timer(toolbarOptions.collapseDelay, () {
-          //       _controller.reverse().then((_) {
-          //         setState(() {
-          //           showToolbar = false;
-          //         });
-          //       });
-          //     });
-          //   }
-          //   return Container(
-          //     height: _height,
-          //     decoration: editorOptions.decoration,
-          //     child: Stack(
-          //       clipBehavior: Clip.none,
-          //       children: [
-          //         Positioned(
-          //             top: toolbarOptions.toolbarPosition ==
-          //                     ToolbarPosition.aboveEditor
-          //                 ? -51
-          //                 : null,
-          //             left: 0,
-          //             right: 0,
-          //             bottom: toolbarOptions.toolbarPosition ==
-          //                     ToolbarPosition.aboveEditor
-          //                 ? null
-          //                 : -51,
-          //             child:
-          //                 FadeTransition(opacity: _animation, child: _toolbar())),
-          //         _backgroundWidget(context),
-          //         _hintTextWidget(context),
-          //         widget.controller.initialized &&
-          //                 widget.controller.toolbarHeight != null
-          //             ? HtmlElementView(viewType: widget._viewId)
-          //             : SizedBox(),
-          //         _scrollPatch(context),
-          //         _sttDictationPreview(),
-          //       ],
-          //     ),
-          //   );
         });
   }
 
   ///
   Widget _toolbar() {
     return ToolbarWidget(
-      key: widget.controller.toolbarKey,
-      controller: widget.controller,
+      key: _controller.toolbarKey,
+      controller: _controller,
     );
   }
 
   ///STT popup
   Widget _sttDictationPreview() {
-    if (!widget.controller.isRecording) return SizedBox();
+    if (!_controller.isRecording) return SizedBox();
     var textColor = editorOptions.dictationPreviewTextColor ??
         Theme.of(context).textTheme.bodyText1?.color;
     return PointerInterceptor(
@@ -233,7 +201,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                           )),
                       SizedBox(width: 8),
                       Expanded(
-                        child: Text(widget.controller.sttBuffer,
+                        child: Text(_controller.sttBuffer,
                             style: TextStyle(
                               color: textColor,
                             )),
@@ -248,14 +216,14 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                          onPressed: widget.controller.cancelRecording,
+                          onPressed: _controller.cancelRecording,
                           child: Text('Discard',
                               style: TextStyle(
                                 color: textColor,
                               ))),
                       SizedBox(width: 24),
                       TextButton(
-                          onPressed: widget.controller.stopRecording,
+                          onPressed: _controller.stopRecording,
                           child: Text('Insert',
                               style: TextStyle(
                                 color: textColor,
@@ -271,19 +239,19 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
 
   ///
   Widget _scrollPatch(BuildContext context) {
-    // if (widget.controller.hasFocus && !widget.controller.alreadyDisabled) {
+    // if (_controller.hasFocus && !_controller.alreadyDisabled) {
     return SizedBox();
     // }
     // return GestureDetector(
     //     onTap: () {
-    //       widget.controller.setFocus();
+    //       _controller.setFocus();
     //     },
     //     child: PointerInterceptor(child: Positioned.fill(child: SizedBox())));
   }
 
   ///
   Widget _hintTextWidget(BuildContext context) {
-    if (widget.controller.isContentEmpty && !widget.controller.hasFocus) {
+    if (_controller.isContentEmpty && !_controller.hasFocus) {
       return Positioned.fill(
           child: Padding(
         padding: const EdgeInsets.only(top: 24.0, left: 56),
@@ -309,5 +277,57 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
         child: Container(
             decoration: editorOptions.backgroundDecoration,
             color: editorOptions.backgroundColor));
+  }
+
+  /// If controller is provided to the editor - initialize its values
+  /// otherwise create internal controller with the values provided
+  void _initializeController() {
+    _controller = widget.controller ?? HtmlEditorController();
+    _controller.context = context;
+    // if (initialValue != null &&
+    //     controller!.editorOptions!.initialText != null &&
+    //     !controller!.initialized) {
+    //   throw Exception(
+    //       'Cannot have both [initialValue] and [editorOptions.initialText]. Please choose one.');
+    // }
+    if (widget.initialValue != null) {
+      _controller.setInitialText(widget.initialValue!);
+    }
+    if (widget.hint != null) {
+      _controller.editorOptions!.hint = widget.hint;
+    }
+
+    if (widget.height != null) {
+      _controller.editorOptions!.height = widget.height;
+    }
+
+    if (widget.enableDicatation != null) {
+      _controller.enableDicatation = widget.enableDicatation!;
+    }
+
+    if (_controller.isReadOnly != widget.isReadOnly) {
+      _controller.isReadOnly = widget.isReadOnly;
+      _controller.toolbarHeight = null; // trigger recalc
+      if (widget.isReadOnly) {
+        _controller.disable();
+      } else {
+        _controller.enable();
+      }
+    }
+
+    _controller.callbacks = widget.callbacks;
+    //_controller.plugins = plugins;
+    if (widget.callbacks == null) {
+      _controller.callbacks = Callbacks(onChangeContent: widget.onChanged);
+    } else {
+      if (_controller.callbacks!.onChangeContent != null &&
+          widget.onChanged != null) {
+        throw Exception(
+            'Cannot have both onChanged and Callbacks.onChangeContent. Please pick one.');
+      }
+      if (widget.onChanged != null) {
+        _controller.callbacks!.onChangeContent = widget.onChanged;
+      }
+    }
   }
 }
