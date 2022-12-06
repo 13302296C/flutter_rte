@@ -31,19 +31,18 @@ To disable voice-to-text feature - set the corresponding top-level `enableDictat
 ## Basic Implementation
 
 ```Dart
-
 // 1. Define a var to store changes within parent class or a provider etc...
 String result = 'Hello world!';
 
 // ...
 
 // 2. Add HtmlEditor to your build method
-HtmlEditor(
-    initalValue: result,
-    onChanged:(s){
-        result = s ?? '';
-    }
-);
+@override
+Widget build(BuildContext context) {
+
+    return HtmlEditor(initalValue: result, onChanged:(s)=> result = s ?? '');
+    
+}
 ```
 
 ## Advanced Implementation
