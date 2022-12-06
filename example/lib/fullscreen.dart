@@ -64,15 +64,15 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
     List sections = [];
     for (var e in _sections) {
       Widget? editor;
-      if (_demoType == DemoType.floatingToolbar) {
+      if (_demoType == DemoType.floatingToolbar ||
+          _demoType == DemoType.fullscreen) {
         editor = HtmlEditor(
           initialValue: strings[_sections.indexOf(e)],
           onChanged: (s) {
             strings[_sections.indexOf(e)] = s ?? '';
           },
           controller: _controllers[_sections.indexOf(e)]
-            ..toolbarOptions?.toolbarPosition = ToolbarPosition.custom
-            ..toolbarOptions?.fixedToolbar = true,
+            ..toolbarOptions?.toolbarPosition = ToolbarPosition.custom,
           callbacks: Callbacks(onFocus: () {
             setState(() {
               resetTimeout();
@@ -125,6 +125,14 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
         appBar: AppBar(
           title: const Text('Flutter HTML Editor Example'),
           elevation: 0,
+          bottom: _demoType == DemoType.fullscreen
+              ? PreferredSize(
+                  preferredSize: Size(
+                      kIsWeb ? 900 : MediaQuery.of(context).size.width, 60),
+                  child: _currentController != null
+                      ? ToolbarWidget(controller: _currentController!)
+                      : const SizedBox())
+              : null,
         ),
         floatingActionButton: ExpandableFabClass(
           distanceBetween: 112.0,
@@ -154,16 +162,28 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
               label: 'Boxed layout',
               icon: const Icon(Icons.bento),
             ),
+            ActionButton(
+              onPressed: () =>
+                  Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
+                builder: (BuildContext context) =>
+                    const Fullscreen(demoType: DemoType.fullscreen),
+              )),
+              label: 'Fullscreen',
+              icon: const Icon(Icons.fullscreen),
+            ),
           ],
         ),
         body: Container(
           width: kIsWeb ? null : MediaQuery.of(context).size.width,
           height: kIsWeb ? null : MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-                image: Image.asset('${kIsWeb ? '' : 'assets/'}bgd.png').image,
-                fit: BoxFit.fill),
-          ),
+          decoration: _demoType == DemoType.fullscreen
+              ? null
+              : BoxDecoration(
+                  image: DecorationImage(
+                      image: Image.asset('${kIsWeb ? '' : 'assets/'}bgd.png')
+                          .image,
+                      fit: BoxFit.fill),
+                ),
           child: Stack(
             children: [
               SingleChildScrollView(
@@ -174,22 +194,29 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
                   child: Center(
                     child: FittedBox(
                         child: Container(
-                      decoration:
-                          BoxDecoration(color: Colors.white, boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey[600]!,
-                            spreadRadius: 0,
-                            blurRadius: 15),
-                      ]),
+                      decoration: BoxDecoration(
+                          color: _demoType == DemoType.fullscreen
+                              ? null
+                              : Colors.white,
+                          boxShadow: _demoType == DemoType.fullscreen
+                              ? null
+                              : [
+                                  BoxShadow(
+                                      color: Colors.grey[600]!,
+                                      spreadRadius: 0,
+                                      blurRadius: 15),
+                                ]),
                       constraints: const BoxConstraints(
                         minHeight: kIsWeb ? 1500 : 800,
                         minWidth: kIsWeb ? 1024 : 500,
                         maxWidth: kIsWeb ? 1024 : 500,
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: kIsWeb ? 96.0 : 16,
-                            vertical: kIsWeb ? 96.0 : 16),
+                        padding: _demoType == DemoType.fullscreen
+                            ? EdgeInsets.zero
+                            : const EdgeInsets.symmetric(
+                                horizontal: kIsWeb ? 96.0 : 16,
+                                vertical: kIsWeb ? 96.0 : 16),
                         child: Column(
                           children: [
                             Text('Science Experiment',
@@ -227,7 +254,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
                   ),
                 ),
               ),
-              _popupToolbox(),
+              if (_demoType == DemoType.floatingToolbar) _popupToolbox(),
             ],
           ),
         ),
