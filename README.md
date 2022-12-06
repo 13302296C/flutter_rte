@@ -74,11 +74,6 @@ Toolbar button groups could be enabled/disabled via `defaultToolbarButtons` attr
 <br /><br />
 Adding your own button groups to the toolbar is very simple - just provide a list of [CustomButtonGroup] objects to the `customButtonGroups` attribute. Each button group will consist of a list of [CustomToolbarButton] objects, each with its own icon, tap callback and an `isSelected` flag to let the toolbar know if the icon button should be highlighted.
 
-### Voice to Text (Dictation)
-
-Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
-To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
-
 
 ```Dart
 HtmlEditor(
@@ -97,6 +92,12 @@ HtmlEditor(
 ```
 =
 ![Custom button](./media/custom_toolbar_button.jpg)
+
+
+### Voice to Text (Dictation)
+
+Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
+To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
 
 ## Special Considerations 
 
