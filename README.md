@@ -21,11 +21,6 @@ Try it [here](https://flutter-rich-text.web.app/).
 ## Under the Hood
 This WYCIWYG HTML editor easy to use and provides **great flexibility and control over the generated HTML.**
 
-This package is a reworked [html_editor_enhanced](https://pub.dev/packages/html_editor_enhanced), but with few differences:
-
-* This is based on [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) libraries instead of Summernote and jQuery, so it's much lighter and supports **HTML5** (no `<font>` tags);
-* it uses the Google's official [webview_flutter](https://pub.dev/packages/webview_flutter) instead of [flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview)
-
 ## Basic Implementation
 
 ```Dart
