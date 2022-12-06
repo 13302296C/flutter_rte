@@ -6,6 +6,7 @@ import 'package:flutter_rich_text_editor/src/widgets/editor_widget_stub.dart'
     if (dart.library.html) 'package:flutter_rich_text_editor/src/widgets/editor_widget_web.dart';
 
 /// HTML rich text editor
+// ignore: must_be_immutable
 class HtmlEditor extends StatelessWidget {
   HtmlEditor({
     Key? key,
@@ -15,6 +16,7 @@ class HtmlEditor extends StatelessWidget {
     this.initialValue,
     this.onChanged,
     this.isReadOnly = false,
+    this.enableDicatation,
     this.controller,
     this.callbacks,
     //this.plugins = const [],
@@ -33,6 +35,10 @@ class HtmlEditor extends StatelessWidget {
 
   /// Puts editor in read-only mode, hiding its toollbar
   final bool isReadOnly;
+
+  /// If enabled - shows microphone icon and allows to use dictation within
+  /// the editor
+  final bool? enableDicatation;
 
   /// Desired hight. 'Auto' if null.
   final double? height;
@@ -64,6 +70,7 @@ class HtmlEditor extends StatelessWidget {
   }
 
   /// If controller is provided to the editor - initialize its values
+  /// otherwise create internal controller with the values provided
   void initializeController() {
     controller ??= HtmlEditorController();
     // if (initialValue != null &&
@@ -81,6 +88,10 @@ class HtmlEditor extends StatelessWidget {
 
     if (height != null) {
       controller!.editorOptions!.height = height;
+    }
+
+    if (enableDicatation != null) {
+      controller!.enableDicatation = enableDicatation!;
     }
 
     if (controller!.isReadOnly != isReadOnly) {

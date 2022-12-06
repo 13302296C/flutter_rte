@@ -559,7 +559,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     var toolbarChildren = <Widget>[];
     for (var t in widget.toolbarOptions.defaultToolbarButtons) {
       if (t is VoiceToTextButtons) {
-        toolbarChildren.add(_dictationButtons(t));
+        if (widget.controller.enableDicatation) {
+          toolbarChildren.add(_dictationButtons(t));
+        }
       }
       if (t is StyleButtons && t.style) {
         toolbarChildren.add(_styleButtons(t));

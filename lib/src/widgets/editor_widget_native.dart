@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:meta/meta.dart';
 import 'dart:math' as math;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -35,9 +35,6 @@ class HtmlEditorWidget extends StatefulWidget {
 
 class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
     with TickerProviderStateMixin {
-  /// Tracks whether the editor was disabled onInit (to avoid re-disabling on reload)
-  //bool alreadyDisabled = false;
-
   Callbacks? get callbacks => widget.controller.callbacks;
 
   //List<Plugins> get plugins => widget.controller.plugins;
@@ -63,19 +60,8 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
   bool showToolbar = false;
 
   ///
+  @internal
   Timer? timer;
-
-  ///
-  // late final AnimationController _controller = AnimationController(
-  //   duration: const Duration(milliseconds: 350),
-  //   vsync: this,
-  // );
-
-  // ///
-  // late final Animation<double> _animation = CurvedAnimation(
-  //   parent: _controller,
-  //   curve: Curves.fastOutSlowIn,
-  // );
 
   @override
   void initState() {
@@ -126,7 +112,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                       _hintTextWidget(context),
                       widget.controller.initialized &&
                               widget.controller.toolbarHeight != null
-                          ? view()
+                          ? widget.controller.view(widget.controller)
                           : SizedBox(),
                       _scrollPatch(context),
                       _sttDictationPreview(),
@@ -137,49 +123,6 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
             ),
           );
         });
-  }
-
-  ///
-  Widget view() {
-    return WebView(
-      javascriptMode: JavascriptMode.unrestricted,
-      debuggingEnabled: true,
-      onWebViewCreated: (c) async {
-        widget.controller.editorController = c;
-
-        await c.loadHtmlString(await widget.controller.getInitialContent(),
-            baseUrl: '/');
-      },
-      javascriptChannels: {
-        JavascriptChannel(
-            name: 'toDart',
-            onMessageReceived: (message) {
-              print(message.message);
-              widget.controller.processEvent(message.message);
-            })
-      },
-      gestureRecognizers: {
-        Factory<VerticalDragGestureRecognizer>(
-            () => VerticalDragGestureRecognizer()),
-        Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer()),
-      },
-      onPageFinished: (_) async {
-        await _evaluateJavascript(data: {'type': 'toIframe: initEditor'});
-      },
-      navigationDelegate: (NavigationRequest request) =>
-          NavigationDecision.navigate,
-      onWebResourceError: (err) {
-        throw Exception('${err.errorCode}: ${err.description}');
-      },
-      backgroundColor: Colors.transparent,
-    );
-  }
-
-  /// Helper function to run javascript and check current environment
-  Future<void> _evaluateJavascript({required Map<String, Object?> data}) async {
-    var js =
-        'window.postMessage(\'${JsonEncoder().convert(data..['view'] = widget._viewId)}\')';
-    await widget.controller.editorController.runJavascript(js);
   }
 
   ///

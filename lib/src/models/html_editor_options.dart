@@ -1,5 +1,3 @@
-import 'dart:collection';
-import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 

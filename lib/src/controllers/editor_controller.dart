@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/utils/utils.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -48,10 +47,16 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// Puts editor in read-only mode, hiding its toollbar
   bool isReadOnly = false;
 
-  /// whether the interface is initialized successfully
-  bool initialized = false;
+  /// If enabled - shows microphone icon and allows to use dictation within
+  /// the editor
+  bool enableDicatation = true;
 
-  /// reado only mode
+  /// whether the interface is initialized successfully
+  bool get initialized => _initialized;
+  // ignore: prefer_final_fields
+  bool _initialized = false;
+
+  /// read only mode
   bool isDisabled = false;
 
   ///
@@ -357,7 +362,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   Future<void> initEditor(BuildContext initBC, double initHeight) async {
     if (initialized) throw Exception('Already initialized');
     await init(initBC, initHeight, this);
-    initialized = true;
+    _initialized = true;
     notifyListeners();
   }
 

@@ -34,4 +34,8 @@ abstract class PlatformSpecificMixin {
   void dispose() {
     throw Exception('Platform not supported');
   }
+
+  ///
+  Widget view(HtmlEditorController controller) =>
+      throw Exception('Platform not supported');
 }

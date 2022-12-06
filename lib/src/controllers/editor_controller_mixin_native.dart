@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -37,5 +39,41 @@ abstract class PlatformSpecificMixin {
   ///
   void dispose() {
     // do nothing
+  }
+
+  ///
+  Widget view(HtmlEditorController controller) {
+    return WebView(
+      javascriptMode: JavascriptMode.unrestricted,
+      debuggingEnabled: true,
+      onWebViewCreated: (c) async {
+        editorController = c;
+
+        await c.loadHtmlString(await controller.getInitialContent(),
+            baseUrl: '/');
+      },
+      javascriptChannels: {
+        JavascriptChannel(
+            name: 'toDart',
+            onMessageReceived: (message) {
+              print(message.message);
+              controller.processEvent(message.message);
+            })
+      },
+      gestureRecognizers: {
+        Factory<VerticalDragGestureRecognizer>(
+            () => VerticalDragGestureRecognizer()),
+        Factory<LongPressGestureRecognizer>(() => LongPressGestureRecognizer()),
+      },
+      onPageFinished: (_) async {
+        await evaluateJavascript(data: {'type': 'toIframe: initEditor'});
+      },
+      navigationDelegate: (NavigationRequest request) =>
+          NavigationDecision.navigate,
+      onWebResourceError: (err) {
+        throw Exception('${err.errorCode}: ${err.description}');
+      },
+      backgroundColor: Colors.transparent,
+    );
   }
 }

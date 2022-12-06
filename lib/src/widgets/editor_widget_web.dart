@@ -124,7 +124,7 @@ class _HtmlEditorWidgetState extends State<HtmlEditorWidget>
                       _hintTextWidget(context),
                       widget.controller.initialized &&
                               widget.controller.toolbarHeight != null
-                          ? HtmlElementView(viewType: widget._viewId)
+                          ? widget.controller.view(widget.controller)
                           : SizedBox(),
                       _scrollPatch(context),
                       _sttDictationPreview(),

@@ -115,4 +115,8 @@ var toDart = window.parent;
   void dispose() {
     _eventSub?.cancel();
   }
+
+  ///
+  Widget view(HtmlEditorController controller) =>
+      HtmlElementView(viewType: viewId);
 }

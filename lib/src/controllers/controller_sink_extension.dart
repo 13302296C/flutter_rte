@@ -29,8 +29,11 @@ extension StreamProcessor on HtmlEditorController {
             setText(editorOptions!.initialText!);
           }
         } else {
+          _initialized = false;
+          notifyListeners();
           throw Exception('HTML Editor failed to load');
         }
+        notifyListeners();
         break;
       case 'getSelectedText':
       case 'getSelectedHtml':

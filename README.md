@@ -16,10 +16,10 @@ and the Flutter guide for
 Rich text editor for Flutter with built-in voice-to-text. 
 
 ## Under the Hood
-This WYCIWYG HTML editor is based on [Squire](https://github.com/neilj/Squire) library and offers great flexibility and control over the generated HTML.
+This WYCIWYG HTML editor is based on [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) libraries and offers great flexibility and control over the generated HTML.
 <br /><br />
 Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
-To disable voice-to-text feature - set the corresponding top-level attribute within [HtmlEditor] constructor.
+To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
 
 ## Basic Implementation
 
@@ -45,7 +45,7 @@ To take advantage of the entire API you'll need to create and configure an insta
 
  * Editor options group (all things editor)
  * Toolbar options group (all things toolbar)
- * Other options group (decoration and explicit height)
+ * Shortcuts (dictation, height settings, read-only, onChanged, initialValue, hint text)
 
 
 ### Sizing and Constraints
@@ -60,7 +60,7 @@ All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditor
 
  * _above_ or _below_ the editor container, by setting the `toolbarPosition` attribute;
  * _scrollable_, _grid_ or _expandable_ by setting the `toolbarType` attribute
- * Completely detached from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of inplementation please refer to the example. 
+ * Completely detached from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of inplementation please refer to the example within the package. 
 
 ### Toolbar Contents and Custom Button Groups
 
@@ -77,7 +77,7 @@ HtmlEditor(
             buttons: [
             CustomToolbarButton(
                 icon: Icons.save_outlined,
-                action: () => /* ... */,
+                action: () => /* TODO: implement your save method */,
                 isSelected: false)
         ])
         ],
