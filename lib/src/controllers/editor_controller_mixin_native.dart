@@ -48,9 +48,8 @@ abstract class PlatformSpecificMixin {
       debuggingEnabled: true,
       onWebViewCreated: (c) async {
         editorController = c;
-
-        await c.loadHtmlString(await controller.getInitialContent(),
-            baseUrl: '/');
+        String st = await await controller.getInitialContent();
+        await c.loadHtmlString(st);
       },
       javascriptChannels: {
         JavascriptChannel(

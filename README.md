@@ -91,6 +91,22 @@ HtmlEditor(
 
 Following needs to be done to make things work on each platform:
 
+### Android
+
+Place this to `android > app > src > main > AndroidManifest.xml`
+
+```xml
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.example">
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    
+   <application
+    ...
+```
+
 ### iOS
 For speech recognition to work - add following permission to your `Info.plist` file:
 ```xml

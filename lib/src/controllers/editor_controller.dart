@@ -371,7 +371,11 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     var initScript = 'const viewId = \'$viewId\';';
     if (kIsWeb) {
       initScript += '''
-var toDart = window.parent;
+const isNativePlatform = false;
+''';
+    } else {
+      initScript += '''
+const isNativePlatform = true;
 ''';
     }
     var htmlString = await rootBundle.loadString(filePath);

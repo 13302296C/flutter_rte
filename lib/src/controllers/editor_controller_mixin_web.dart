@@ -13,7 +13,8 @@ abstract class PlatformSpecificMixin {
   String viewId = '';
 
   ///
-  final String filePath = '';
+  final String filePath =
+      'packages/flutter_rich_text_editor/lib/assets/document.html';
 
   ///
   WebViewController get editorController =>
@@ -64,33 +65,12 @@ abstract class PlatformSpecificMixin {
     //         '\n';
     //   });
     // }
-    var initScript = '''
-const viewId = \'$viewId\';
-var toDart = window.parent;
-''';
-    var filePath = 'packages/flutter_rich_text_editor/lib/assets/document.html';
-    var htmlString = await rootBundle.loadString(filePath);
-    htmlString =
-        htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
-
-    // if no explicit `height` is provided - hide the scrollbar as the
-    // container height will always adjust to the document height
-    if (c.editorOptions!.height == null) {
-      var hideScrollbarCss = '''
-  ::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-  }
-''';
-      htmlString = htmlString.replaceFirst(
-          '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
-    }
 
     final iframe = html.IFrameElement()
       ..width = MediaQuery.of(initBC).size.width.toString() //'800'
       ..height = '100%'
       // ignore: unsafe_html, necessary to load HTML string
-      ..srcdoc = htmlString
+      ..srcdoc = await c.getInitialContent()
       ..style.border = 'none'
       ..style.overflow = 'hidden'
       ..id = viewId

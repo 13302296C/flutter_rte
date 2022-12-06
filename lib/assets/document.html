@@ -92,6 +92,18 @@ https://github.com/neilj/Squire
 
     document.onselectionchange = onSelectionChange;
   });
+
+
+  // sends message back based on platform
+  function postChannelMessage(dataMap){
+    if(isNativePlatform){
+      window.toDart.postMessage(JSON.stringify(dataMap));
+    } else {
+      window.parent.postMessage(JSON.stringify(dataMap), '*');
+    }
+  }
+
+  // main incoming message handler
   function handleMessage(e) {
     if (e && e.data && e.data.includes("toIframe:")) {
       var data = JSON.parse(e.data);
@@ -122,12 +134,12 @@ https://github.com/neilj/Squire
               });
               initCallbacks();
               console.log('Editor loading done');
-              toDart.postMessage(JSON.stringify({"view": viewId, 
-                "type": "toDart: initEditor", "result": "Ok"}), '*');
+              postChannelMessage({"view": viewId, 
+                "type": "toDart: initEditor", "result": "Ok"});
 
             } catch(e) {
-              toDart.postMessage(JSON.stringify({"view": viewId, 
-              "type": "toDart: initEditor", "result": "Fail"}), '*');
+              postChannelMessage({"view": viewId, 
+              "type": "toDart: initEditor", "result": "Fail"});
               console.log(e);
             }
             break;
@@ -135,13 +147,13 @@ https://github.com/neilj/Squire
           case 'getHeight':
             var height = document.body.scrollHeight;
             var width = document.body.scrollWidth;
-            toDart.postMessage(JSON.stringify({"view": viewId, 
-              "type": "toDart: htmlHeight", "height": height, "width": width}), "*");
+            postChannelMessage({"view": viewId, 
+              "type": "toDart: htmlHeight", "height": height, "width": width});
             break;
 
           case 'getText':
-            toDart.postMessage(JSON.stringify({"view": viewId, 
-              "type": "toDart: getText", "text": editor.getHTML()}), "*");
+          postChannelMessage({"view": viewId, 
+              "type": "toDart: getText", "text": editor.getHTML()});
             break;
           
           case 'setText':
@@ -181,7 +193,7 @@ https://github.com/neilj/Squire
             break;
           
           case 'getSelectedText':
-            toDart.postMessage(JSON.stringify({"type": "toDart: getSelectedText", "text": editor.getSelectedText()}), "*");
+          postChannelMessage({"type": "toDart: getSelectedText", "text": editor.getSelectedText()});
             break;
 
           case 'getSelectedTextHtml':
@@ -190,7 +202,7 @@ https://github.com/neilj/Squire
             var span = document.createElement('span');
             span.appendChild(content);
             var htmlContent = span.innerHTML;
-            toDart.postMessage(JSON.stringify({"type": "toDart: getSelectedTextHtml", "text": htmlContent}), "*");
+            postChannelMessage({"type": "toDart: getSelectedTextHtml", "text": htmlContent});
             break;
 
           // case 'getPath':
@@ -505,73 +517,67 @@ https://github.com/neilj/Squire
       'lineHeight': lineHeight,
       'direction': direction,
     };
-    toDart.postMessage(JSON.stringify(message), "*");
+    postChannelMessage(message);
   }
 
-
+  //
   function initCallbacks(){
 
       // change content
       editor.addEventListener('input', function(){
         const str = editor.getHTML();
-        toDart.postMessage(
-          JSON.stringify({ "view": viewId, 
-            "type": "toDart: onChangeContent", "contents": str}), "*");
+        postChannelMessage({ "view": viewId, 
+            "type": "toDart: onChangeContent", "contents": str});
         //console.log(`onChangeContent: ${str}`);
       });
     
       //on focus
       editor.addEventListener('focus', function(){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-        "type": "toDart: onFocus"}), "*");
+        postChannelMessage({"view": viewId, "type": "toDart: onFocus"});
       });
 
       //on blur
       editor.addEventListener('blur', function(){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-        "type": "toDart: onBlur"}), "*");
+        postChannelMessage({"view": viewId, "type": "toDart: onBlur"});
       });
 
       //on keyDown
       editor.addEventListener('keydown', function(e){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-        "type": "toDart: onKeyDown", "keyCode": e.keyCode}), "*");
+        postChannelMessage({"view": viewId, 
+        "type": "toDart: onKeyDown", "keyCode": e.keyCode});
       });
 
       //on keyUp
       editor.addEventListener('keyup', function(e){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-        "type": "toDart: onKeyUp", "keyCode": e.keyCode}), "*");
+        postChannelMessage({"view": viewId, 
+        "type": "toDart: onKeyUp", "keyCode": e.keyCode});
       });
 
       //on keyPress
       editor.addEventListener('keypress', function(e){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-        "type": "toDart: onKeyPress", "keyCode": e.keyCode}), "*");
+        postChannelMessage({"view": viewId, 
+        "type": "toDart: onKeyPress", "keyCode": e.keyCode});
       });
 
       //willPaste
       editor.addEventListener('willPaste', function(e){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-        "type": "toDart: onPaste", "text": e.fragment}), "*");
+        postChannelMessage({"view": viewId, 
+        "type": "toDart: onPaste", "text": e.fragment});
       });
 
       // mouse in
       document.addEventListener('mouseenter', function(e){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-          "type": "toDart: mouseIn"}), "*");
+        postChannelMessage({"view": viewId, "type": "toDart: mouseIn"});
       });
      
       // mouse out
       document.addEventListener('mouseleave', function(e){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-          "type": "toDart: mouseOut"}), "*");
+        postChannelMessage({"view": viewId, "type": "toDart: mouseOut"});
       });
 
       // mouse click
       document.addEventListener('click', function(e){
-        toDart.postMessage(JSON.stringify({"view": viewId, 
-          "type": "toDart: mouseClick"}), "*");
+        postChannelMessage({"view": viewId, "type": "toDart: mouseClick"});
       });
 
       // scroll
@@ -580,7 +586,7 @@ https://github.com/neilj/Squire
       // }
       // window.addEventListener('scroll', function(e){
       //   console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
-      //   toDart.postMessage(JSON.stringify({"view": viewId, 
+      //   window.toDart.postMessage(JSON.stringify({"view": viewId, 
       //     "type": "toDart: scroll"}), "*");
       // });
     
@@ -589,7 +595,7 @@ https://github.com/neilj/Squire
     //   callbacks = callbacks +
     //       """
     //       \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
-    //         toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBeforeCommand", "contents": contents}), "*");
+    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBeforeCommand", "contents": contents}), "*");
     //       });\n
     //     """;
     // }
@@ -597,7 +603,7 @@ https://github.com/neilj/Squire
     //   callbacks = callbacks +
     //       """
     //       \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
-    //         toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onChangeCodeview", "contents": contents}), "*");
+    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onChangeCodeview", "contents": contents}), "*");
     //       });\n
     //     """;
     // }
@@ -606,7 +612,7 @@ https://github.com/neilj/Squire
     //   callbacks = callbacks +
     //       """
     //       \$('#summernote-2').on('summernote.enter', function() {
-    //         toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onEnter"}), "*");
+    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onEnter"}), "*");
     //       });\n
     //     """;
     // }
@@ -615,7 +621,7 @@ https://github.com/neilj/Squire
     //   callbacks = callbacks +
     //       """
     //       \$('#summernote-2').on('summernote.blur.codeview', function() {
-    //         toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBlurCodeview"}), "*");
+    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBlurCodeview"}), "*");
     //       });\n
     //     """;
     // }
