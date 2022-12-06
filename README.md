@@ -16,6 +16,8 @@ and the Flutter guide for
 Rich text editor for Flutter with built-in voice-to-text.
 Try it [here](https://flutter-rich-text.web.app/).
 
+![Flutter Rich Text Editor Web](./media/screen1.jpg)
+
 ## Under the Hood
 This WYCIWYG HTML editor easy to use and provides great flexibility and control over the generated HTML.
 
@@ -31,6 +33,8 @@ To disable voice-to-text feature - set the corresponding top-level `enableDictat
 ## Basic Implementation
 
 ```Dart
+import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+
 // 1. Define a var to store changes within parent class or a provider etc...
 String result = 'Hello world!';
 
@@ -38,11 +42,9 @@ String result = 'Hello world!';
 
 // 2. Add HtmlEditor to your build method
 @override
-Widget build(BuildContext context) {
+Widget build(BuildContext context) =>
+    HtmlEditor(initalValue: result, onChanged:(s)=> result = s ?? '');
 
-    return HtmlEditor(initalValue: result, onChanged:(s)=> result = s ?? '');
-    
-}
 ```
 
 ## Advanced Implementation
