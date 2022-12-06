@@ -17,7 +17,13 @@ Rich text editor for Flutter with built-in voice-to-text.
 Try it [here](https://flutter-rich-text.web.app/).
 
 ## Under the Hood
-This WYCIWYG HTML editor is based on [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) libraries and offers great flexibility and control over the generated HTML.
+This WYCIWYG HTML editor easy to use and provides great flexibility and control over the generated HTML.
+
+Flutter package itself is a reworked [html_editor_enhanced](https://pub.dev/packages/html_editor_enhanced), but with few differences:
+
+* This is based on [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) libraries instead of Summernote and jQuery, so it's much lighter and supports HTML5;
+* it uses the Google's official [webview_flutter](https://pub.dev/packages/webview_flutter) instead of [flutter_inappwebview](https://pub.dev/packages/flutter_inappwebview)
+
 <br /><br />
 Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
 To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
