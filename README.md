@@ -13,7 +13,8 @@ and the Flutter guide for
 
 # Flutter Rich Text Editor
 
-Rich text editor for Flutter with built-in voice-to-text. 
+Rich text editor for Flutter with built-in voice-to-text.
+Try it [here](https://flutter-rich-text.web.app/).
 
 ## Under the Hood
 This WYCIWYG HTML editor is based on [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) libraries and offers great flexibility and control over the generated HTML.
