@@ -200,7 +200,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
   void setText(String text) {
-    evaluateJavascript(data: {'type': 'toIframe: setText', 'text': text});
+    var html = _processHtml(html: text);
+    evaluateJavascript(data: {'type': 'toIframe: setText', 'text': html});
     recalculateHeight();
   }
 
@@ -353,6 +354,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     } else {
       html = html.replaceAll('\n', '').replaceAll('\n\n', '');
     }
+    html = html.replaceAll('<br>', '<br />');
+    //return HtmlEscape().convert(html);
     return html;
   }
 
@@ -401,6 +404,10 @@ const isNativePlatform = true;
 
     htmlString = htmlString.replaceFirst(
         '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
+
+    htmlString = htmlString.replaceFirst(
+        '<squirecontent>', '${editorOptions?.initialText ?? ''}');
+
     return htmlString;
   }
 }

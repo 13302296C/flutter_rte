@@ -25,9 +25,16 @@ extension StreamProcessor on HtmlEditorController {
     switch (channelMethod) {
       case 'initEditor':
         if (response['result'] == 'Ok') {
-          if (editorOptions!.initialText != null) {
-            setText(editorOptions!.initialText!);
-          }
+          // if (editorOptions!.initialText != null) {
+          //   if (editorOptions!.initialText!.isNotEmpty) {
+          //     unawaited(
+          //         Future.delayed(Duration(milliseconds: 100)).then((value) {
+          //       setText(editorOptions!.initialText!);
+          //       print('--------------------- load');
+          //     }));
+          //   }
+          // }
+          await recalculateHeight();
           callbacks?.onInit?.call();
         } else {
           _initialized = false;
@@ -51,7 +58,6 @@ extension StreamProcessor on HtmlEditorController {
           _buffer = text;
           _openRequests[channelMethod]?.complete(text);
         }
-
         break;
 
       case 'setHeight':
