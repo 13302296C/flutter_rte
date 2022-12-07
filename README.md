@@ -21,6 +21,11 @@ Try it [here](https://flutter-rich-text.web.app/).
 ## Under the Hood
 This WYCIWYG HTML editor easy to use and provides **great flexibility and control over the generated HTML.**
 
+This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with the following key differences:
+ * Vertical auto-sizing to content size with height change notifier
+ * Summernote and jQuery replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for security, HTML5 compatibility, features, performance and size.
+ * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter) for security.
+
 ## Basic Implementation
 
 ```Dart
@@ -42,7 +47,7 @@ Widget build(BuildContext context) =>
 
 ## Advanced Implementation
 
-To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the two main groups of features:
+To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the following groups of features:
 
  * Editor options group (all things editor)
  * Toolbar options group (all things toolbar)
@@ -93,6 +98,14 @@ var stylingOptions = HtmlStylingOptions(
       onChanged: (p0) => (p0) {/* TODO */},
       initialValue: '' /* TODO */,
     );
+```
+
+The code above should result in the following HTML being generated for each paragraph:
+
+```html
+
+<p style="text-indent:3.5em; text-align:justify;" class="my-custom-pgf"></p>
+
 ```
 
 ### Sizing and Constraints

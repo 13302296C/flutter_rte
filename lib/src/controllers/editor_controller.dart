@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/utils/utils.dart';
+import 'package:meta/meta.dart';
 
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -64,6 +65,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   bool _initialized = false;
 
   /// read only mode
+  @internal
   bool isDisabled = false;
 
   ///
@@ -366,7 +368,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     return html;
   }
 
-  ///
+  /// Initialization of native UI component
+  /// the `init` method is pulle from platform-specific mixin
+  /// and is different for each platform
   Future<void> initEditor(BuildContext initBC, double initHeight) async {
     if (initialized) throw Exception('Already initialized');
     await init(initBC, initHeight, this);
@@ -374,7 +378,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     notifyListeners();
   }
 
-  ///
+  /// This method compiles HTML document based on various controller settings
   Future<String> getInitialContent() async {
     var initScript = 'const viewId = \'$viewId\';';
     if (kIsWeb) {

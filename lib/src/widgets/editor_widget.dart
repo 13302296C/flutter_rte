@@ -234,14 +234,23 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   ///
   Widget _scrollPatch(BuildContext context) {
-    // if (_controller.hasFocus && !_controller.alreadyDisabled) {
+    //if disabled or read-only - intercept all events
+    if (_controller.isReadOnly || _controller.isDisabled) {
+      return Positioned.fill(
+          child: PointerInterceptor(child: SizedBox.expand()));
+      //
+    } else if (!_controller.hasFocus) {
+      return Positioned.fill(
+        child: GestureDetector(
+            onTap: () {
+              print('click');
+              _controller.setFocus();
+            },
+            child: PointerInterceptor(child: SizedBox())),
+      );
+    }
+
     return SizedBox();
-    // }
-    // return GestureDetector(
-    //     onTap: () {
-    //       _controller.setFocus();
-    //     },
-    //     child: PointerInterceptor(child: Positioned.fill(child: SizedBox())));
   }
 
   ///

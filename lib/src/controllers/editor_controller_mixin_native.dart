@@ -25,6 +25,7 @@ abstract class PlatformSpecificMixin {
 
   /// Helper function to run javascript and check current environment
   Future<void> evaluateJavascript({required Map<String, Object?> data}) async {
+    if (_ec == null) return;
     var js =
         'window.postMessage(\'${JsonEncoder().convert(data..['view'] = viewId)}\')';
     await editorController.runJavascript(js);

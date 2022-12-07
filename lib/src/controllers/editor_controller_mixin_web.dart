@@ -74,7 +74,7 @@ abstract class PlatformSpecificMixin {
       ..style.overflow = 'hidden'
       ..id = viewId
       ..onLoad.listen((event) async {
-        if (c.isReadOnly && !c.isDisabled) {
+        if (c.isReadOnly || c.isDisabled) {
           await c.disable();
         }
         if (c.callbacks != null && c.callbacks!.onInit != null) {
