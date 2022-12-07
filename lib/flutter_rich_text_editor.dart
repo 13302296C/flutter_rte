@@ -5,10 +5,11 @@ export 'package:flutter_rich_text_editor/src/models/callbacks.dart';
 export 'package:flutter_rich_text_editor/src/models/toolbar.dart';
 export 'package:flutter_rich_text_editor/src/models/file_upload_model.dart';
 export 'package:flutter_rich_text_editor/src/models/html_editor_options.dart';
+export 'package:flutter_rich_text_editor/src/models/html_styling_options.dart';
 export 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
 export 'package:flutter_rich_text_editor/src/models/custom_toolbar_buttons.dart';
 //export 'package:flutter_rich_text_editor/utils/plugins.dart';
-export 'package:flutter_rich_text_editor/utils/utils.dart'
+export 'package:flutter_rich_text_editor/src/utils/utils.dart'
     hide setState, intersperse, getRandString;
 
 export 'package:flutter_rich_text_editor/src/widgets/editor_widget.dart';

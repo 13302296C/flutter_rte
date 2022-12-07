@@ -46,8 +46,54 @@ To take advantage of the entire API you'll need to create and configure an insta
 
  * Editor options group (all things editor)
  * Toolbar options group (all things toolbar)
+ * Styling options group (all things CSS, HTML and sanitizing)
  * Shortcuts (dictation, height settings, read-only, onChanged, initialValue, hint text)
 
+
+### HTML Styling Options
+
+The `stylingOptions` parameter of [HtmlEditorController] class defines the look of generated HTML. Here you can select which tag to use for paragraphs and how your tags are styled.
+
+```Dart
+
+var stylingOptions = HtmlStylingOptions(
+
+    // Adding global style is optional, but could be set in two ways:
+    // 1. by providing a CSS string to the parameter `globalStyleSheet`:
+    globalStyleSheet: '/* Your CSS string contents of style.css file */',
+    // This defines which tag to use for paragraphs.
+    // The default value is `p`, however the `div` is also acceptable.
+    blockTag: 'p',
+    // defines `style` and `class` attributes of a block tag
+    blockTagAttributes: HtmlTagAttributes(
+        // this is added as inline CSS for every tag
+        inlineStyle: 'text-indent:3.5em; text-align:justify;',
+        // defines `class` attribute value of every tag
+        cssClass: 'my-custom-pgf'),
+    // next we can define attributes for other tags (li, ul, ol, a etc):
+    li: HtmlTagAttributes(
+        inlineStyle: 'margin: .5em 1em  .5em .5em',
+        cssClass: 'my-custom-li-class'),
+    // ... other HTML tag definitions ... //
+    code: HtmlTagAttributes(
+        inlineStyle: 'padding: ', cssClass: 'my-custom-li-class'),
+    // when sanitizeOnPaste is `true` - editor will strip all 
+    // HTML pasted into the editor down to plain text
+    sanitizeOnPaste: true,
+    );
+
+    // 2. another way to add global CSS is to call this async method:
+    await stylingOptions.importCssFromFile('path/to/style.css');
+
+    // ...
+
+    // Now create the editor passing the styling options
+    return HtmlEditor(
+      controller: HtmlEditorController(stylingOpitons: stylingOptions),
+      onChanged: (p0) => (p0) {/* TODO */},
+      initialValue: '' /* TODO */,
+    );
+```
 
 ### Sizing and Constraints
 

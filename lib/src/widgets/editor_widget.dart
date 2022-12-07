@@ -1,12 +1,8 @@
 import 'dart:math' as math;
 import 'dart:async';
-import 'package:flutter_rich_text_editor/src/widgets/toolbar_widget.dart';
+import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
-import 'package:flutter_rich_text_editor/src/models/callbacks.dart';
-import 'package:flutter_rich_text_editor/src/models/html_editor_options.dart';
-import 'package:flutter_rich_text_editor/src/models/html_toolbar_options.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// HTML rich text editor
@@ -97,7 +93,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   @override
   void initState() {
     _initializeController();
-    // TODO: implement initState
     super.initState();
   }
 

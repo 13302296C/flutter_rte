@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rich_text_editor/utils/shims/dart_ui.dart';
+import 'package:flutter_rich_text_editor/src/utils/shims/dart_ui.dart';
 
 /// Sets the direction the dropdown menu opens
 enum DropdownMenuDirection { down, up }

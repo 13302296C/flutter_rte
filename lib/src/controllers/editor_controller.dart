@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/utils/utils.dart';
+import 'package:flutter_rich_text_editor/src/utils/utils.dart';
 
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
@@ -15,7 +15,7 @@ import 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin
     if (dart.library.io) 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_native.dart'
     if (dart.library.html) 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_web.dart';
 
-part 'controller_sink_extension.dart';
+part 'event_sink_extension.dart';
 part 'dictation_extension.dart';
 
 /// Controller for web
@@ -26,11 +26,15 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     this.processOutputHtml = true,
     this.editorOptions,
     this.toolbarOptions,
+    this.stylingOpitons,
     this.context,
   }) {
     viewId = getRandString(10).substring(0, 14);
     editorOptions ??= HtmlEditorOptions();
     toolbarOptions ??= HtmlToolbarOptions();
+    stylingOpitons ??= HtmlStylingOptions(
+        blockTagAttributes: HtmlTagAttributes(
+            inlineStyle: 'text-indent:3.5em; text-align:justify;'));
   }
 
   ///
@@ -41,6 +45,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Defines options for the editor toolbar
   HtmlToolbarOptions? toolbarOptions;
+
+  /// Defines CSS styles for various components and whe
+  HtmlStylingOptions? stylingOpitons;
 
   //late List<Plugins> plugins;
 
@@ -381,7 +388,7 @@ const isNativePlatform = true;
     }
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
-        htmlString.replaceFirst('/* - - - Init Script - - - */', initScript);
+        htmlString.replaceFirst('/*---- Init Script ----*/', initScript);
 
     /// if no explicit `height` is provided - hide the scrollbar as the
     /// container height will always adjust to the document height.
@@ -403,10 +410,16 @@ const isNativePlatform = true;
     }
 
     htmlString = htmlString.replaceFirst(
-        '/* - - - Hide Scrollbar - - - */', hideScrollbarCss);
+        '/*---- Hide Scrollbar ----*/', hideScrollbarCss);
+
+    htmlString = htmlString.replaceFirst(
+        '/*---- Root Stylesheet ----*/', stylingOpitons!.getRootStyleText);
 
     htmlString = htmlString.replaceFirst(
         '<squirecontent>', '${editorOptions?.initialText ?? ''}');
+
+    htmlString = htmlString.replaceFirst(
+        '/*---- Squire Config ----*/', stylingOpitons!.options);
 
     return htmlString;
   }

@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:flutter_rich_text_editor/src/models/editor_settings.dart';
 import 'package:flutter_rich_text_editor/src/widgets/custom_dropdown_button.dart';
-import 'package:flutter_rich_text_editor/utils/utils.dart';
+import 'package:flutter_rich_text_editor/src/utils/utils.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
 import 'toolbar_expand_icon.dart';
 
