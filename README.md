@@ -237,7 +237,9 @@ ____
 
 ## Special Considerations 
 
-Following needs to be done to make things work on each platform:
+1. Due to some framework issues on ***Web***, this plugin is only compatible with Flutter 3.3. If you want to use this plugin with earlier versions of Flutter - downgrade pointer_interceptor in this dependency to __0.9.0+1__.
+
+2. Following needs to be done to make things work on each platform:
 
 ### Android
 
