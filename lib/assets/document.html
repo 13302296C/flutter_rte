@@ -242,10 +242,13 @@ https://github.com/neilj/Squire
             editor.removeLink();
             break;
 
-          // case 'setFontFace':
-          //   break;
-          // case 'setFontSize':
-          //   break;
+          case 'fontName':
+            editor.setFontFace(data['argument']);
+            break;
+
+          case 'fontSize':
+            editor.setFontSize(data['argument']);
+            break;
 
           case 'textColor':
             editor.setTextColour(`#${data['argument']}`);
@@ -323,8 +326,10 @@ https://github.com/neilj/Squire
             editor.removeAllFormatting();
             break;
 
-          // case 'changeFormat':
-          //   break;
+          case 'formatBlock':
+            editor.changeFormat({'tag': data['argument']});
+            break;
+
           // case 'modifyDocument':
           //   break;
           // case 'linkRegExp':

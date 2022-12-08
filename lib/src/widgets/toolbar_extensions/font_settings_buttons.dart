@@ -184,8 +184,9 @@ extension ToolbarFontSettingsButtons on ToolbarWidgetState {
                     _actualFontSizeSelectedItem = 48;
                     break;
                 }
-                await widget.controller
-                    .execCommand('fontSize', argument: changed.toString());
+                var size =
+                    '$_actualFontSizeSelectedItem$_fontSizeUnitSelectedItem';
+                await widget.controller.execCommand('fontSize', argument: size);
                 updateSelectedItem(changed);
               }
             }
@@ -235,10 +236,10 @@ extension ToolbarFontSettingsButtons on ToolbarWidgetState {
                       style: TextStyle(fontFamily: 'Courier'))),
             ),
             CustomDropdownMenuItem(
-              value: 'sans-serif',
+              value: 'Helvetica',
               child: PointerInterceptor(
-                  child: Text('Sans Serif',
-                      style: TextStyle(fontFamily: 'sans-serif'))),
+                  child: Text('Helvetica',
+                      style: TextStyle(fontFamily: 'Helvetica'))),
             ),
             CustomDropdownMenuItem(
               value: 'Times New Roman',

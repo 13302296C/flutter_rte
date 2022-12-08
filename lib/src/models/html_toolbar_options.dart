@@ -80,6 +80,14 @@ class HtmlToolbarOptions {
           help: false,
           copy: false,
           paste: false),
+      OtherButtons(
+          undo: false,
+          redo: false,
+          fullscreen: false,
+          codeview: false,
+          help: false),
+      StyleButtons(),
+      FontSettingButtons(),
       FontButtons(
           //strikethrough: false, subscript: false, superscript: false
           ),
@@ -93,12 +101,6 @@ class HtmlToolbarOptions {
           table: false,
           otherFile: false,
           picture: false),
-      OtherButtons(
-          undo: false,
-          redo: false,
-          fullscreen: false,
-          codeview: false,
-          help: false),
     ],
     // this.otherFileExtensions,
     // this.imageExtensions,
@@ -169,7 +171,7 @@ class HtmlToolbarOptions {
   ///
   /// This option only works when you have set [toolbarType] to
   /// [ToolbarType.nativeExpandable].
-  final bool initiallyExpanded;
+  bool initiallyExpanded;
 
   /// Allows you to intercept any links being inserted into the editor. The
   /// function passes the display text, the URL itself, and whether the

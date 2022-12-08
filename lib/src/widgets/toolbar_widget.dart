@@ -73,7 +73,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Sets the selected item for the font style dropdown
   String _fontSelectedItem = 'p';
 
-  String _fontNameSelectedItem = 'sans-serif';
+  String _fontNameSelectedItem = 'Helvetica';
 
   /// Sets the selected item for the font size dropdown
   double _fontSizeSelectedItem = 3;
@@ -159,6 +159,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     String parentElem = json['style'] ?? '';
     //get font name
     var fontName = (json['fontName'] ?? '').toString().replaceAll('"', '');
+    if (fontName.contains(',')) fontName = fontName.split(',')[0];
+
     //get font size
     var fontSize = double.tryParse(json['fontSize']) ?? 3;
     //get bold/underline/italic status
@@ -192,13 +194,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       });
     }
     //check the font name if it matches one of the predetermined fonts and update the toolbar
-    if (['Courier New', 'sans-serif', 'Times New Roman'].contains(fontName)) {
+    if (['Courier New', 'Helvetica', 'Times New Roman'].contains(fontName)) {
       setState(mounted, this.setState, () {
         _fontNameSelectedItem = fontName;
       });
     } else {
       setState(mounted, this.setState, () {
-        _fontNameSelectedItem = 'sans-serif';
+        _fontNameSelectedItem = 'Helvetica';
       });
     }
     //update the fore/back selected color if necessary
@@ -397,27 +399,34 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   /// Wraps every type of toolbar
   Widget _toolbarWrapper({required Widget child}) {
-    return Container(
-      color: widget.toolbarOptions.backgroundColor,
-      decoration: widget.toolbarOptions.toolbarDecoration,
-      child: PointerInterceptor(
-        child: AbsorbPointer(
-          absorbing: !_enabled,
-          child: _enabled &&
-                      widget.controller.toolbarOptions!.toolbarPosition ==
-                          ToolbarPosition.custom ||
-                  (_enabled &&
-                      widget.controller.toolbarOptions!.fixedToolbar &&
-                      (widget.controller.toolbarOptions!.toolbarPosition !=
-                          ToolbarPosition.custom)) ||
-                  (_enabled &&
-                      widget.controller.toolbarOptions!.toolbarPosition !=
-                          ToolbarPosition.custom &&
-                      !widget.controller.toolbarOptions!.fixedToolbar)
-              ? child
-              : SizedBox(),
+    return Row(
+      children: [
+        Expanded(
+          child: Container(
+            color: widget.toolbarOptions.backgroundColor,
+            decoration: widget.toolbarOptions.toolbarDecoration,
+            child: PointerInterceptor(
+              child: AbsorbPointer(
+                absorbing: !_enabled,
+                child: _enabled &&
+                            widget.controller.toolbarOptions!.toolbarPosition ==
+                                ToolbarPosition.custom ||
+                        (_enabled &&
+                            widget.controller.toolbarOptions!.fixedToolbar &&
+                            (widget.controller.toolbarOptions!
+                                    .toolbarPosition !=
+                                ToolbarPosition.custom)) ||
+                        (_enabled &&
+                            widget.controller.toolbarOptions!.toolbarPosition !=
+                                ToolbarPosition.custom &&
+                            !widget.controller.toolbarOptions!.fixedToolbar)
+                    ? child
+                    : SizedBox(),
+              ),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 

@@ -121,8 +121,8 @@ extension ToolbarStyleButtons on ToolbarWidgetState {
                       ?.call(DropdownType.style, changed, updateSelectedItem) ??
                   true;
               if (proceed) {
-                await widget.controller
-                    .execCommand('formatBlock', argument: changed);
+                await widget.controller.execCommand('formatBlock',
+                    argument: changed.toUpperCase());
                 updateSelectedItem(changed);
               }
             }
