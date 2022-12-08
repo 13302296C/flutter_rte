@@ -17,7 +17,7 @@ class HtmlEditor extends StatefulWidget {
     this.initialValue,
     this.onChanged,
     this.isReadOnly,
-    this.enableDicatation,
+    this.enableDictation,
     this.controller,
     this.callbacks,
     //this.plugins = const [],
@@ -39,7 +39,7 @@ class HtmlEditor extends StatefulWidget {
 
   /// If enabled - shows microphone icon and allows to use dictation within
   /// the editor
-  final bool? enableDicatation;
+  final bool? enableDictation;
 
   /// Desired hight. 'Auto' if null.
   final double? height;
@@ -332,8 +332,8 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       _controller.editorOptions!.height = widget.height;
     }
 
-    if (widget.enableDicatation != null) {
-      _controller.enableDicatation = widget.enableDicatation!;
+    if (widget.enableDictation != null) {
+      _controller.enableDictation = widget.enableDictation!;
     }
 
     if (widget.isReadOnly != null) {

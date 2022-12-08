@@ -57,7 +57,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// If enabled - shows microphone icon and allows to use dictation within
   /// the editor
-  bool enableDicatation = true;
+  bool enableDictation = true;
 
   /// whether the interface is initialized successfully
   bool get initialized => _initialized;

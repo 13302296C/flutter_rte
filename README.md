@@ -34,7 +34,7 @@ ____
 
 ## Basic Implementation
 
-Basic implementation of this editor doesn't require a controller. For simplicity and eas of use, [HtmlEditor] gives you access to the following top-level attributes:
+Basic implementation of this editor doesn't require a controller. For simplicity and ease of use, [HtmlEditor] gives you access to the following top-level attributes:
 
 - height,
 - minHeight,
@@ -42,7 +42,7 @@ Basic implementation of this editor doesn't require a controller. For simplicity
 - initialValue,  
 - onChanged,
 - isReadOnly, 
-- enableDicatation
+- enableDictation
 
 
 ```Dart
