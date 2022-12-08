@@ -93,7 +93,6 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
             controller: _controllers[_sections.indexOf(e)]
               ..toolbarOptions?.toolbarPosition = ToolbarPosition.aboveEditor
               ..toolbarOptions?.backgroundColor = _tbBgd
-              ..toolbarOptions?.fixedToolbar = true
               ..editorOptions?.decoration = BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   border: Border.all(color: _tbBgd!, width: 2)),
@@ -316,11 +315,12 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
     timer = null;
   }
 
+  ///
   void setTimeout() {
     timer = Timer(const Duration(seconds: 5), () {
       _controller.reverse(from: 1).then((_) {
         _currentController = null;
-        setState(() {});
+        if (mounted) setState(() {});
       });
     });
   }

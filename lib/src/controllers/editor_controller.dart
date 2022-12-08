@@ -71,6 +71,10 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   ///
   bool hasFocus = false;
 
+  ///
+  @internal
+  FocusNode? focusNode;
+
   /// Toolbar widget state to call various methods. For internal use only.
   ToolbarWidgetState? toolbar;
 
@@ -173,7 +177,10 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Sets the focus to the editor.
   void setFocus() {
-    if (!isDisabled) evaluateJavascript(data: {'type': 'toIframe: setFocus'});
+    if (!isDisabled && !isReadOnly) {
+      evaluateJavascript(data: {'type': 'toIframe: setFocus'});
+      if (!kIsWeb) focusNode?.requestFocus();
+    }
   }
 
   /// Clears the focus from the webview

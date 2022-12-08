@@ -1,5 +1,7 @@
+import 'dart:io' as io;
 import 'dart:math' as math;
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +16,7 @@ class HtmlEditor extends StatefulWidget {
     this.hint,
     this.initialValue,
     this.onChanged,
-    this.isReadOnly = false,
+    this.isReadOnly,
     this.enableDicatation,
     this.controller,
     this.callbacks,
@@ -31,7 +33,7 @@ class HtmlEditor extends StatefulWidget {
   //final List<Plugins> plugins;
 
   /// Puts editor in read-only mode, hiding its toollbar
-  final bool isReadOnly;
+  final bool? isReadOnly;
 
   /// If enabled - shows microphone icon and allows to use dictation within
   /// the editor
@@ -93,7 +95,15 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   @override
   void initState() {
     _initializeController();
+    _controller.focusNode = FocusNode();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.focusNode?.dispose();
+    _controller.focusNode = null;
+    super.dispose();
   }
 
   @override
@@ -236,18 +246,31 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   Widget _scrollPatch(BuildContext context) {
     //if disabled or read-only - intercept all events
     if (_controller.isReadOnly || _controller.isDisabled) {
-      return Positioned.fill(
-          child: PointerInterceptor(child: SizedBox.expand()));
+      if (kIsWeb) {
+        return Positioned.fill(
+            child: PointerInterceptor(child: SizedBox.expand()));
+      }
+      return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
       //
     } else if (!_controller.hasFocus) {
-      return Positioned.fill(
-        child: GestureDetector(
-            onTap: () {
-              print('click');
-              _controller.setFocus();
-            },
-            child: PointerInterceptor(child: SizedBox())),
-      );
+      if (kIsWeb) {
+        return Positioned.fill(
+          child: Listener(
+              onPointerUp: (e) {
+                _controller.setFocus();
+              },
+              child: PointerInterceptor(child: SizedBox.expand())),
+        );
+      }
+      if (io.Platform.isIOS) {
+        return Positioned.fill(
+          child: GestureDetector(
+              onTap: () {
+                _controller.setFocus();
+              },
+              child: AbsorbPointer(child: SizedBox.expand())),
+        );
+      }
     }
 
     return SizedBox();
@@ -255,7 +278,9 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   ///
   Widget _hintTextWidget(BuildContext context) {
-    if (_controller.isContentEmpty && !_controller.hasFocus) {
+    if (_controller.isContentEmpty &&
+        !_controller.hasFocus &&
+        !_controller.isReadOnly) {
       return Positioned.fill(
           child: Padding(
         padding: const EdgeInsets.only(top: 24.0, left: 56),
@@ -309,13 +334,13 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       _controller.enableDicatation = widget.enableDicatation!;
     }
 
-    if (_controller.isReadOnly != widget.isReadOnly) {
-      _controller.isReadOnly = widget.isReadOnly;
+    if (widget.isReadOnly != null) {
+      _controller.isReadOnly = widget.isReadOnly!;
       _controller.toolbarHeight = null; // trigger recalc
-      if (widget.isReadOnly) {
+      if (_controller.isReadOnly) {
         _controller.disable();
       } else {
-        _controller.enable();
+        //_controller.enable();
       }
     }
 

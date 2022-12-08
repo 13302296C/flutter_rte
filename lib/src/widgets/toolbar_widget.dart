@@ -423,6 +423,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _enabled = !widget.controller.isReadOnly;
     if (widget.toolbarOptions.toolbarType == ToolbarType.nativeGrid) {
       return _toolbarWrapper(
         child: Padding(

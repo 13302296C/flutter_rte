@@ -25,7 +25,7 @@ class HtmlEditorOptions {
     // this.mobileLongPressDuration,
     // this.mobileInitialScripts,
     // this.webInitialScripts,
-    this.shouldEnsureVisible = false,
+    this.shouldEnsureVisible = true,
     this.spellCheck = false,
   }) {
     if (backgroundColor != null && backgroundDecoration != null) {

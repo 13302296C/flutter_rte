@@ -81,7 +81,7 @@ var stylingOptions = HtmlStylingOptions(
         cssClass: 'my-custom-li-class'),
     // ... other HTML tag definitions ... //
     code: HtmlTagAttributes(
-        inlineStyle: 'padding: ', cssClass: 'my-custom-li-class'),
+        inlineStyle: 'padding: .5em 1em;', cssClass: 'my-custom-li-class'),
     // when sanitizeOnPaste is `true` - editor will strip all 
     // HTML pasted into the editor down to plain text
     sanitizeOnPaste: true,

@@ -55,10 +55,8 @@ abstract class PlatformSpecificMixin {
       javascriptChannels: {
         JavascriptChannel(
             name: 'toDart',
-            onMessageReceived: (message) {
-              print(message.message);
-              controller.processEvent(message.message);
-            })
+            onMessageReceived: (message) =>
+                controller.processEvent(message.message))
       },
       gestureRecognizers: {
         Factory<VerticalDragGestureRecognizer>(
@@ -68,9 +66,14 @@ abstract class PlatformSpecificMixin {
       },
       onPageFinished: (_) async {
         await evaluateJavascript(data: {'type': 'toIframe: initEditor'});
+        if (controller.isReadOnly || controller.isDisabled) {
+          await controller.disable();
+        }
       },
-      navigationDelegate: (NavigationRequest request) =>
-          NavigationDecision.navigate,
+      navigationDelegate: (NavigationRequest request) {
+        if (request.url != 'about:blank') return NavigationDecision.prevent;
+        return NavigationDecision.navigate;
+      },
       onWebResourceError: (err) {
         throw Exception('${err.errorCode}: ${err.description}');
       },

@@ -13,6 +13,22 @@ extension StreamProcessor on HtmlEditorController {
     return regex1.hasMatch(text) && regex2.allMatches(text).length == 1;
   }
 
+  /// checks scroll settings and scrolls if needed
+  void maybeScrollIntoView() {
+    if (context == null) return;
+    if (editorOptions!.shouldEnsureVisible && Scrollable.of(context!) != null) {
+      // scroll into view with a short delay, to let the keyboard unfold
+      // and make experience more smooth
+      unawaited(Future.delayed(Duration(milliseconds: 300)).then((_) {
+        unawaited(Scrollable.of(context!)!.position.ensureVisible(
+            context!.findRenderObject()!,
+            alignment: 0.5,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeIn));
+      }));
+    }
+  }
+
   /// Process events coming from the iframe
   Future<void> processEvent(String data) async {
     // full response
@@ -25,15 +41,6 @@ extension StreamProcessor on HtmlEditorController {
     switch (channelMethod) {
       case 'initEditor':
         if (response['result'] == 'Ok') {
-          // if (editorOptions!.initialText != null) {
-          //   if (editorOptions!.initialText!.isNotEmpty) {
-          //     unawaited(
-          //         Future.delayed(Duration(milliseconds: 100)).then((value) {
-          //       setText(editorOptions!.initialText!);
-          //       print('--------------------- load');
-          //     }));
-          //   }
-          // }
           await recalculateHeight();
           callbacks?.onInit?.call();
         } else {
@@ -84,15 +91,7 @@ extension StreamProcessor on HtmlEditorController {
         _buffer = response['contents'];
         print(_buffer);
         callbacks?.onChangeContent?.call(response['contents']);
-        if (context != null) {
-          if (editorOptions!.shouldEnsureVisible &&
-              Scrollable.of(context!) != null) {
-            unawaited(Scrollable.of(context!)!.position.ensureVisible(
-                context!.findRenderObject()!,
-                duration: const Duration(milliseconds: 100),
-                curve: Curves.easeIn));
-          }
-        }
+        maybeScrollIntoView();
         if (autoAdjustHeight) unawaited(recalculateHeight());
         break;
 
@@ -110,7 +109,9 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onFocus':
         hasFocus = true;
-        notifyListeners();
+        //notifyListeners();
+        focusNode?.requestFocus();
+        maybeScrollIntoView();
         callbacks?.onFocus?.call();
         break;
 
