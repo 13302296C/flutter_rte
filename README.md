@@ -49,12 +49,18 @@ Widget build(BuildContext context) =>
 
 To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the following groups of features:
 
- * Editor options group (all things editor)
- * Toolbar options group (all things toolbar)
- * Styling options group (all things CSS, HTML and sanitizing)
- * Shortcuts (dictation, height settings, read-only, onChanged, initialValue, hint text)
-
-
+ * **Editor options** group (all things editor)
+ * **Toolbar options** group (all things toolbar)
+ * **Styling options** group (all things CSS, HTML and sanitizing)
+ * **Shortcuts** 
+    - height,
+    - minHeight,
+    - hint,   
+    - initialValue,  
+    - onChanged,
+    - isReadOnly, 
+    - enableDicatation
+     
 ### HTML Styling Options
 
 The `stylingOptions` parameter of [HtmlEditorController] class defines the look of generated HTML. Here you can select which tag to use for paragraphs and how your tags are styled.
@@ -146,9 +152,22 @@ If explicit `height` is provided - the widget will size it's height precisely to
 
 All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditorController] class. Toolbar could be positionned:
 
- * _above_ or _below_ the editor container, by setting the `toolbarPosition` attribute;
+ * __above__, __below__ the editor container, by setting the `toolbarPosition` attribute;
+
+
+Above editor:
+![Toolbar above editor](./media/tb_above.png)
+
+
+Below editor:
+![Toolbar below editor](./media/tb_below.png)
+
+
+ * Completely detached from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of implementation please refer to the example within the package. 
+ ![Toolbar floating](./media/tb_custom.png)
+
  * _scrollable_, _grid_ or _expandable_ by setting the `toolbarType` attribute
- * Completely detached from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of inplementation please refer to the example within the package. 
+
 
 ### Toolbar Contents and Custom Button Groups
 
