@@ -36,13 +36,13 @@ ____
 
 Basic implementation of this editor doesn't require a controller. For simplicity and eas of use, [HtmlEditor] gives you access to the following top-level attributes:
 
-    - height,
-    - minHeight,
-    - hint,   
-    - initialValue,  
-    - onChanged,
-    - isReadOnly, 
-    - enableDicatation
+- height,
+- minHeight,
+- hint,   
+- initialValue,  
+- onChanged,
+- isReadOnly, 
+- enableDicatation
 
 
 ```Dart
@@ -88,22 +88,30 @@ var stylingOptions = HtmlStylingOptions(
     // Adding global style is optional, but could be set in two ways:
     // 1. by providing a CSS string to the parameter `globalStyleSheet`:
     globalStyleSheet: '/* Your CSS string contents of style.css file */',
+
     // This defines which tag to use for paragraphs.
     // The default value is `p`, however the `div` is also acceptable.
     blockTag: 'p',
+
     // defines `style` and `class` attributes of a block tag
     blockTagAttributes: HtmlTagAttributes(
+
         // this is added as inline CSS for every tag
         inlineStyle: 'text-indent:3.5em; text-align:justify;',
+
         // defines `class` attribute value of every tag
         cssClass: 'my-custom-pgf'),
+
     // next we can define attributes for other tags (li, ul, ol, a etc):
     li: HtmlTagAttributes(
         inlineStyle: 'margin: .5em 1em  .5em .5em',
         cssClass: 'my-custom-li-class'),
+
     // ... other HTML tag definitions ... //
+
     code: HtmlTagAttributes(
         inlineStyle: 'padding: .5em 1em;', cssClass: 'my-custom-li-class'),
+
     // when sanitizeOnPaste is `true` - editor will strip all 
     // HTML pasted into the editor down to plain text
     sanitizeOnPaste: true,
