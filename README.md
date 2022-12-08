@@ -111,8 +111,36 @@ The code above should result in the following HTML being generated for each para
 ### Sizing and Constraints
 
 By default widget is trying to occupy all available width and sizes its height based on the height of its content, but not less than the value of `minHeight` attribute of [HtmlEditor] widget.
-<br /><br />
+
+```Dart
+    // since explicit height is not provided - the editor will size itself
+    // based on content, but will be not less than 250px
+    return HtmlEditor(
+      controller: controller,
+      // ...
+      minHeight: 250, // should be not less than 64px
+      // ...
+    );
+
+    // and here you can listen to changes in height of the editor
+    ValueListenableBuilder<int>(
+        builder: (BuildContext context, int value, Widget? child) {
+        return Text('Height changed to $value px');
+        },
+        valueListenable: controller.contentHeight);
+    
+```
+
+<br />
 If explicit `height` is provided - the widget will size it's height precisely to the value of `height` attribute. In this case, if content height is greater than the widget height - the content becomes scrollable.
+
+```Dart
+    // here we've provided the height value, so the editor will always be
+    // that height and the content will scroll if overflows the height.
+    return HtmlEditor(
+      height: 250,
+    );
+```
 
 ### Toolbar Position
 

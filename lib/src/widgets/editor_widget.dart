@@ -21,7 +21,9 @@ class HtmlEditor extends StatefulWidget {
     this.controller,
     this.callbacks,
     //this.plugins = const [],
-  }) : super(key: key);
+  })  : assert(minHeight == null || minHeight >= 64),
+        assert(height == null || height >= 64),
+        super(key: key);
 
   /// Shortcut for onChanged callback
   final void Function(String?)? onChanged;
