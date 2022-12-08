@@ -34,6 +34,17 @@ ____
 
 ## Basic Implementation
 
+Basic implementation of this editor doesn't require a controller. For simplicity and eas of use, [HtmlEditor] gives you access to the following top-level attributes:
+
+    - height,
+    - minHeight,
+    - hint,   
+    - initialValue,  
+    - onChanged,
+    - isReadOnly, 
+    - enableDicatation
+
+
 ```Dart
 import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 
@@ -58,19 +69,11 @@ ____
 
 To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the following groups of features:
 
- * **Editor options** group (all things editor)
- * **Toolbar options** group (all things toolbar)
  * **Styling options** group (all things CSS, HTML and sanitizing)
- * **Top-level, quick access attributes:** 
-    - height,
-    - minHeight,
-    - hint,   
-    - initialValue,  
-    - onChanged,
-    - isReadOnly, 
-    - enableDicatation
+ * **Toolbar options** group (all things toolbar)
+ * **Editor options** group (all things editor)
 
- 
+
 ____
 
     
