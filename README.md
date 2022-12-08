@@ -18,6 +18,9 @@ Try it [here](https://flutter-rich-text.web.app/).
 
 ![Flutter Rich Text Editor Web](./media/screen1.jpg)
 
+____
+
+
 ## Under the Hood
 This WYCIWYG HTML editor easy to use and provides **great flexibility and control over the generated HTML.**
 
@@ -25,6 +28,9 @@ This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html
  * Vertical auto-sizing to content size with height change notifier
  * ***Summernote*** and ***jQuery*** **replaced** with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for HTML5 compatibility, features, performance and size.
  * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
+
+
+____
 
 ## Basic Implementation
 
@@ -45,6 +51,9 @@ Widget build(BuildContext context) =>
 
 ```
 
+____
+
+
 ## Advanced Implementation
 
 To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the following groups of features:
@@ -52,7 +61,7 @@ To take advantage of the entire API you'll need to create and configure an insta
  * **Editor options** group (all things editor)
  * **Toolbar options** group (all things toolbar)
  * **Styling options** group (all things CSS, HTML and sanitizing)
- * **Shortcuts** 
+ * **Top-level, quick access attributes:** 
     - height,
     - minHeight,
     - hint,   
@@ -60,7 +69,11 @@ To take advantage of the entire API you'll need to create and configure an insta
     - onChanged,
     - isReadOnly, 
     - enableDicatation
-     
+
+ 
+____
+
+    
 ### HTML Styling Options
 
 The `stylingOptions` parameter of [HtmlEditorController] class defines the look of generated HTML. Here you can select which tag to use for paragraphs and how your tags are styled.
@@ -172,6 +185,9 @@ All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditor
  * _scrollable_, _grid_ or _expandable_ by setting the `toolbarType` attribute
 
 
+____
+
+
 ### Toolbar Contents and Custom Button Groups
 
 Toolbar button groups could be enabled/disabled via `defaultToolbarButtons` attribute of [HtmlToolbarOptions] class within the controller. You can customize the toolbar by overriding the default value of this attribute.
@@ -198,10 +214,15 @@ HtmlEditor(
 ![Custom button](./media/custom_toolbar_button.jpg)
 
 
+____
+
+
 ### Voice to Text (Dictation)
 
 Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
 To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
+
+____
 
 ## Special Considerations 
 
