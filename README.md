@@ -148,6 +148,9 @@ If explicit `height` is provided - the widget will size it's height precisely to
     );
 ```
 
+____
+
+
 ### Toolbar Position
 
 All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditorController] class. Toolbar could be positionned:
@@ -155,15 +158,15 @@ All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditor
  * __above__, __below__ the editor container, by setting the `toolbarPosition` attribute;
 
 
-Above editor:
+#### Above editor:
 ![Toolbar above editor](./media/tb_above.png)
 
 
-Below editor:
+#### Below editor:
 ![Toolbar below editor](./media/tb_below.png)
 
 
- * Completely detached from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of implementation please refer to the example within the package. 
+ * __detached__ from the editor and located anywhere outside the [HtmlEditor]widget. This allows [ToolbarWidget] to be attached to several HtmlEditors. For this type of implementation please refer to the example within the package. 
  ![Toolbar floating](./media/tb_custom.png)
 
  * _scrollable_, _grid_ or _expandable_ by setting the `toolbarType` attribute
