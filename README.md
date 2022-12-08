@@ -23,8 +23,8 @@ This WYCIWYG HTML editor easy to use and provides **great flexibility and contro
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with the following key differences:
  * Vertical auto-sizing to content size with height change notifier
- * Summernote and jQuery replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for security, HTML5 compatibility, features, performance and size.
- * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter) for security.
+ * ***Summernote*** and ***jQuery*** **replaced** with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for HTML5 compatibility, features, performance and size.
+ * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
 
 ## Basic Implementation
 
@@ -123,8 +123,8 @@ By default widget is trying to occupy all available width and sizes its height b
     );
 
     // and here you can listen to changes in height of the editor
-    ValueListenableBuilder<int>(
-        builder: (BuildContext context, int value, Widget? child) {
+    ValueListenableBuilder<double>(
+        builder: (BuildContext context, double value, Widget? child) {
         return Text('Height changed to $value px');
         },
         valueListenable: controller.contentHeight);
