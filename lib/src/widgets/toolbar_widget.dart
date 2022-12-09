@@ -108,10 +108,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Tracks the expanded status of the toolbar
   bool _isExpanded = false;
 
+  ///
+  double? toolbarActualHeight;
+
+  /// global toolbar height constraint for building the widget
+  double get getHeightConstraint => !_enabled
+      ? 0
+      : widget.toolbarOptions.toolbarType == ToolbarType.nativeExpandable &&
+              _isExpanded
+          ? mounted
+              ? MediaQuery.of(context).size.height
+              : 0
+          : widget.toolbarOptions.toolbarItemHeight + 15;
+
   @override
   void initState() {
     widget.controller.toolbar = this;
     _isExpanded = widget.toolbarOptions.initiallyExpanded;
+    _enabled = !(widget.controller.isReadOnly || widget.controller.isDisabled);
     for (var t in widget.toolbarOptions.defaultToolbarButtons) {
       if (t is FontButtons) {
         _fontSelected = List<bool>.filled(t.getIcons1().length, false);
@@ -135,7 +149,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       }
     }
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      widget.controller.toolbarHeight = context.size?.height ?? 0;
+      toolbarActualHeight = context.size?.height ?? 0;
     });
     super.initState();
   }
@@ -432,7 +446,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // this line ensures that the toolbar reacts to real-time
+    // enabling and disabling of the component
     _enabled = !widget.controller.isReadOnly;
+
+    // this block ensures that when the same toolbar is shared by multiple
+    // editors - the editor in focus gets the reference to this toolbar
+    // and that the toolbar components are updated based on cursor location
+    if (widget.controller.toolbar == null) {
+      widget.controller.toolbar ??= this;
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        setState(mounted, this.setState, () {
+          // just another refresh to make sure
+          // the controls highlighting is refreshed
+          widget.controller.updateToolbar();
+        });
+      });
+    }
+
     if (widget.toolbarOptions.toolbarType == ToolbarType.nativeGrid) {
       return _toolbarWrapper(
         child: Padding(
@@ -448,7 +479,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         ToolbarType.nativeScrollable) {
       return _toolbarWrapper(
         child: Container(
-          height: widget.toolbarOptions.toolbarItemHeight + 15,
+          height: getHeightConstraint,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
             child: CustomScrollView(
@@ -471,9 +502,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       return _toolbarWrapper(
         child: Container(
           constraints: BoxConstraints(
-            maxHeight: _isExpanded
-                ? MediaQuery.of(context).size.height
-                : widget.toolbarOptions.toolbarItemHeight + 15,
+            maxHeight: getHeightConstraint,
           ),
           child: _isExpanded
               ? Padding(
@@ -497,22 +526,14 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                               onPressed: () async {
                                 setState(mounted, this.setState, () {
                                   _isExpanded = !_isExpanded;
-                                  WidgetsBinding.instance
-                                      .addPostFrameCallback((timeStamp) {
-                                    widget.controller.toolbarHeight =
-                                        context.size!.height;
-                                  });
                                 });
                                 await Future.delayed(
                                     Duration(milliseconds: 100));
-                                if (kIsWeb) {
-                                  await widget.controller.recalculateHeight();
-                                } else {
-                                  // await widget.controller.editorController!
-                                  //     .evaluateJavascript(
-                                  //         source:
-                                  //             "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
-                                }
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((timeStamp) {
+                                  toolbarActualHeight = context.size!.height;
+                                  widget.controller.recalculateTotalHeight();
+                                });
                               },
                             ),
                           )),
@@ -531,21 +552,13 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                             _isExpanded, () async {
                           setState(mounted, this.setState, () {
                             _isExpanded = !_isExpanded;
-                            WidgetsBinding.instance
-                                .addPostFrameCallback((timeStamp) {
-                              widget.controller.toolbarHeight =
-                                  context.size!.height;
-                            });
                           });
                           await Future.delayed(Duration(milliseconds: 100));
-                          if (kIsWeb) {
-                            await widget.controller.recalculateHeight();
-                          } else {
-                            // await widget.controller.editorController!
-                            //     .evaluateJavascript(
-                            //         source:
-                            //             "var height = \$('div.note-editable').outerHeight(true); window.flutter_inappwebview.callHandler('setHeight', height);");
-                          }
+                          WidgetsBinding.instance
+                              .addPostFrameCallback((timeStamp) {
+                            toolbarActualHeight = context.size!.height;
+                            widget.controller.recalculateTotalHeight();
+                          });
                         }),
                       ),
                       SliverFillRemaining(

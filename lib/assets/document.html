@@ -15,7 +15,7 @@
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     height: 100%;
-    padding: .5em 0;
+    padding: .425em 0;
     margin:0;
     background: transparent;
     /* color: #2b2b2b; do not change -  */
@@ -280,14 +280,6 @@ https://github.com/neilj/Squire
             editor.setTextAlignment('justify');
             break;
 
-          // case 'setTextDirection':
-          //   break;
-          // case 'forEachBlock':
-          //   break;
-          // case 'modifyBlocks':
-          //   break;
-
-
           case 'indent':
             editor.increaseQuoteLevel();
             break;
@@ -299,16 +291,14 @@ https://github.com/neilj/Squire
           case 'insertUnorderedList':
             editor.makeUnorderedList();
             break;
+
           case 'insertOrderedList':
             editor.makeOrderedList();
             break;
+
           case 'removeList':
             editor.removeList();
             break;
-          // case 'increaseListLevel':
-          //   break;
-          // case 'decreaseListLevel':
-          //   break;
 
           case 'code':
             editor.code();
@@ -330,90 +320,14 @@ https://github.com/neilj/Squire
             editor.changeFormat({'tag': data['argument']});
             break;
 
-          // case 'modifyDocument':
-          //   break;
-          // case 'linkRegExp':
-          //   break;
+          case 'updateToolbar':
+            onSelectionChange();
+            break;
+
           default:
             console.log(`Not implemented: ${command}`);
             break;
         }
-
-        
-        
-        
-        // if (data["type"].includes("setInputType")) {
-        //   document.getElementsByClassName('note-editable')[0].setAttribute('inputmode', '${describeEnum(editorOptions.inputType)}');
-        // }
-        
-        // if (data["type"].includes("setFullScreen")) {
-        //   $("#summernote-2").summernote("fullscreen.toggle");
-        // }
-
-        
-        // if (data["type"].includes("clear")) {
-        //   $('#summernote-2').summernote('reset');
-        // }
-        // if (data["type"].includes("setHint")) {
-        //   $(".note-placeholder").html(data["text"]);
-        // }
-       
-
-        // if (data["type"].includes("insertLink")) {
-        //   $('#summernote-2').summernote('createLink', {
-        //     text: data["text"],
-        //     url: data["url"],
-        //     isNewWindow: data["isNewWindow"]
-        //   });
-        // }
-
-        
-
-        // if (data["type"].includes("changeListStyle")) {
-        //   var $focusNode = $(window.getSelection().focusNode);
-        //   var $parentList = $focusNode.closest("div.note-editable ol, div.note-editable ul");
-        //   $parentList.css("list-style-type", data["changed"]);
-        // }
-        // if (data["type"].includes("changeLineHeight")) {
-        //   $('#summernote-2').summernote('lineHeight', data["changed"]);
-        // }
-        // if (data["type"].includes("changeTextDirection")) {
-        //   var s=document.getSelection();			
-        //   if(s==''){
-        //       document.execCommand("insertHTML", false, "<p dir='"+data['direction']+"'></p>");
-        //   }else{
-        //       document.execCommand("insertHTML", false, "<div dir='"+data['direction']+"'>"+ document.getSelection()+"</div>");
-        //   }
-        // }
-        // if (data["type"].includes("changeCase")) {
-        //   var selected = $('#summernote-2').summernote('createRange');
-        //     if(selected.toString()){
-        //         var texto;
-        //         var count = 0;
-        //         var value = data["case"];
-        //         console.log(value);
-        //         var nodes = selected.nodes();
-        //         for (var i=0; i< nodes.length; ++i) {
-        //             if (nodes[i].nodeName == "#text") {
-        //                 count++;
-        //                 texto = nodes[i].nodeValue.toLowerCase();
-        //                 nodes[i].nodeValue = texto;
-        //                 if (value == 'upper') {
-        //                    nodes[i].nodeValue = texto.toUpperCase();
-        //                 }
-        //                 else if (value == 'sentence' && count==1) {
-        //                    nodes[i].nodeValue = texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase();
-        //                 } else if (value == 'title') {
-        //                   var sentence = texto.split(" ");
-        //                   for(var j = 0; j< sentence.length; j++){
-        //                      sentence[j] = sentence[j][0].toUpperCase() + sentence[j].slice(1);
-        //                   }
-        //                   nodes[i].nodeValue = sentence.join(" ");
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
       }
     }
   }

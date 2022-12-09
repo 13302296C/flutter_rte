@@ -42,7 +42,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    _demoType = widget.demoType ?? DemoType.boxed;
+    _demoType = widget.demoType ?? DemoType.floatingToolbar;
     // ignore: unused_local_variable
     for (var s in _sections) {
       _controllers.add(HtmlEditorController(
@@ -73,7 +73,9 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           },
           controller: _controllers[_sections.indexOf(e)]
             ..toolbarOptions?.toolbarPosition = ToolbarPosition.custom
-            ..toolbarOptions?.toolbarType = ToolbarType.nativeExpandable
+            ..toolbarOptions?.toolbarType = _demoType == DemoType.fullscreen
+                ? ToolbarType.nativeScrollable
+                : ToolbarType.nativeExpandable
             ..toolbarOptions?.initiallyExpanded = true,
           callbacks: Callbacks(onFocus: () {
             setState(() {
@@ -95,7 +97,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
             controller: _controllers[_sections.indexOf(e)]
               ..toolbarOptions?.toolbarPosition = ToolbarPosition.aboveEditor
               ..toolbarOptions?.toolbarType = ToolbarType.nativeExpandable
-              ..toolbarOptions?.initiallyExpanded = true
+              ..toolbarOptions?.initiallyExpanded = false
               ..toolbarOptions?.backgroundColor = _tbBgd
               ..editorOptions?.decoration = BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),

@@ -74,18 +74,23 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   HtmlToolbarOptions get toolbarOptions => _controller.toolbarOptions!;
 
-  /// if height if fixed = return fixed height, otherwise return
-  /// greatest of `minHeight` and `contentHeight`.
-  double get _height =>
-      editorOptions.height ??
-      widget.height ??
-      math.max(
-          widget.minHeight ?? 0,
-          _controller.contentHeight.value +
-              (toolbarOptions.toolbarPosition == ToolbarPosition.custom ||
-                      !toolbarOptions.fixedToolbar
-                  ? 0
-                  : (_controller.toolbarHeight ?? 0)));
+  double? get _height {
+    // if no need to show toolbar - return the content height only
+    if (toolbarOptions.toolbarPosition == ToolbarPosition.custom ||
+        _controller.isDisabled ||
+        _controller.isReadOnly) {
+      return editorOptions.height ??
+          math.max(widget.minHeight ?? 0, _controller.contentHeight);
+    }
+
+    // if height if fixed = return fixed height, otherwise return
+    // greatest of `minHeight` and `contentHeight`.
+    return editorOptions.height ??
+        (_controller.toolbarHeight == null
+            ? null
+            : math.max(widget.minHeight ?? 0,
+                _controller.contentHeight + _controller.toolbarHeight!));
+  }
 
   ///
   bool showToolbar = false;
@@ -110,64 +115,49 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (_controller.toolbarHeight == null) {
-      if (_controller.isReadOnly) {
-        _controller.toolbarHeight = 0;
-        if (!_controller.initialized) {
-          _controller.initEditor(context, editorOptions.height ?? _height);
-        }
-      } else {
-        if (!_controller.initialized) {
-          _controller.initEditor(
-              context, _height - (_controller.toolbarHeight ?? 0));
-        }
-        _controller.toolbarHeight = _controller.isReadOnly ||
-                toolbarOptions.toolbarPosition == ToolbarPosition.custom
-            ? 0
-            : 51;
-      }
+    if (!_controller.initialized) {
+      _controller.initEditor(context);
     }
     return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, _) {
-          return Container(
-            decoration: editorOptions.decoration,
-            height: _height,
-            child: Column(
-              verticalDirection:
-                  toolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor
-                      ? VerticalDirection.down
-                      : VerticalDirection.up,
-              children: <Widget>[
-                if (toolbarOptions.toolbarPosition != ToolbarPosition.custom)
-                  _toolbar(),
-                Expanded(
-                    child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: Stack(
-                    children: [
-                      _backgroundWidget(context),
-                      _hintTextWidget(context),
-                      _controller.initialized &&
-                              _controller.toolbarHeight != null
-                          ? _controller.view(_controller)
-                          : SizedBox(),
-                      _scrollPatch(context),
-                      _sttDictationPreview(),
-                    ],
-                  ),
-                )),
-              ],
-            ),
-          );
-        });
-  }
-
-  ///
-  Widget _toolbar() {
-    return ToolbarWidget(
-      key: _controller.toolbarKey,
-      controller: _controller,
+      animation: _controller,
+      builder: (context, child) {
+        return Container(
+          decoration: editorOptions.decoration,
+          height: _height,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            verticalDirection:
+                toolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor
+                    ? VerticalDirection.down
+                    : VerticalDirection.up,
+            children: <Widget>[
+              if (toolbarOptions.toolbarPosition != ToolbarPosition.custom)
+                ToolbarWidget(
+                  key: _controller.toolbarKey,
+                  controller: _controller,
+                ),
+              ..._controller.initialized
+                  ? [
+                      Expanded(
+                          child: Directionality(
+                        textDirection: TextDirection.ltr,
+                        child: Stack(
+                          children: [
+                            _backgroundWidget(context),
+                            _hintTextWidget(context),
+                            child!,
+                            _scrollPatch(context),
+                            _sttDictationPreview(),
+                          ],
+                        ),
+                      ))
+                    ]
+                  : [SizedBox()],
+            ],
+          ),
+        );
+      },
+      child: _controller.view(_controller),
     );
   }
 
@@ -244,7 +234,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     );
   }
 
-  ///
+  /// This top overlay widget patches scrolling issues on iOS and Web
   Widget _scrollPatch(BuildContext context) {
     //if disabled or read-only - intercept all events
     if (_controller.isReadOnly || _controller.isDisabled) {
@@ -254,7 +244,8 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       }
       return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
       //
-    } else if (!_controller.hasFocus) {
+    } else if (!_controller.hasFocus ||
+        (kIsWeb && _controller.isContentEmpty)) {
       if (kIsWeb) {
         return Positioned.fill(
           child: Listener(
@@ -263,8 +254,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
               },
               child: PointerInterceptor(child: SizedBox.expand())),
         );
-      }
-      if (io.Platform.isIOS) {
+      } else if (io.Platform.isIOS) {
         return Positioned.fill(
           child: GestureDetector(
               onTap: () {
@@ -274,7 +264,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
         );
       }
     }
-
+    // Android doesn't need special treatment :)
     return SizedBox();
   }
 
@@ -338,7 +328,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
     if (widget.isReadOnly != null) {
       _controller.isReadOnly = widget.isReadOnly!;
-      _controller.toolbarHeight = null; // trigger recalc
       if (_controller.isReadOnly) {
         _controller.disable();
       } else {

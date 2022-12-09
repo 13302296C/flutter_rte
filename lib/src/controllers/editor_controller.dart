@@ -38,7 +38,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
             inlineStyle: 'text-indent:3.5em; text-align:justify;'));
   }
 
-  ///
+  /// This context is used __only__ if you need to provide a context other than
+  /// the one the Editor will get by default.
   BuildContext? context;
 
   /// Defines options for the html editor
@@ -85,17 +86,33 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   ///
   GlobalKey toolbarKey = GlobalKey();
 
-  ///
-  ValueNotifier<double> contentHeight = ValueNotifier(64);
-  double get actualHeight => contentHeight.value;
-  set actualHeight(double height) => contentHeight.value = height;
+  /// The absolute minimum possible height including one line of text
+  /// plus top and bottom padding
+  double _contentHeight = 64;
 
-  double? _toolbarHeight;
-  double? get toolbarHeight => _toolbarHeight;
-  set toolbarHeight(double? height) {
-    _toolbarHeight = height;
+  /// height occupied by the content section of the editor
+  double get contentHeight => _contentHeight;
+  set contentHeight(double height) {
+    if (contentHeight != height && autoAdjustHeight) {
+      print('content height = $height');
+      _contentHeight = height;
+      recalculateTotalHeight();
+    }
+  }
+
+  ///
+  void recalculateTotalHeight() {
+    if (toolbarHeight != null) {
+      totalHeight.value = toolbarHeight! + _contentHeight;
+    }
     notifyListeners();
   }
+
+  /// toolbar widget height
+  double? get toolbarHeight => toolbar?.toolbarActualHeight;
+
+  /// total height of the editor = content height + toolbar height
+  ValueNotifier<double> totalHeight = ValueNotifier(115);
 
   /// The editor will automatically adjust its height once the page is loaded to
   /// ensure there is no vertical scrolling or empty space. It will only perform
@@ -192,7 +209,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     if (isDisabled) return;
     toolbar?.disable();
     await evaluateJavascript(data: {'type': 'toIframe: disable'});
-    await recalculateHeight();
+    await recalculateContentHeight();
     notifyListeners();
     isDisabled = true;
   }
@@ -201,7 +218,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   Future<void> enable() async {
     toolbar?.enable();
     await evaluateJavascript(data: {'type': 'toIframe: enable'});
-    await recalculateHeight();
+    await recalculateContentHeight();
     isDisabled = false;
     notifyListeners();
     setFocus();
@@ -218,7 +235,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   void setText(String text) {
     var html = _processHtml(html: text);
     evaluateJavascript(data: {'type': 'toIframe: setText', 'text': html});
-    recalculateHeight();
+    recalculateContentHeight();
   }
 
   /// Insert text at the end of the current HTML content in the editor
@@ -286,7 +303,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Recalculates the height of the editor to remove any vertical scrolling.
   /// This method will not do anything if [autoAdjustHeight] is turned off.
-  Future<void> recalculateHeight() async {
+  Future<void> recalculateContentHeight() async {
     await evaluateJavascript(data: {
       'type': 'toIframe: getHeight',
     });
@@ -298,6 +315,12 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
       'type': 'toIframe: execCommand',
       'command': command,
       'argument': argument
+    });
+  }
+
+  Future<void> updateToolbar() async {
+    await evaluateJavascript(data: {
+      'type': 'toIframe: updateToolbar',
     });
   }
 
@@ -378,9 +401,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// Initialization of native UI component
   /// the `init` method is pulle from platform-specific mixin
   /// and is different for each platform
-  Future<void> initEditor(BuildContext initBC, double initHeight) async {
+  Future<void> initEditor(BuildContext initBC) async {
     if (initialized) throw Exception('Already initialized');
-    await init(initBC, initHeight, this);
+    await init(initBC, _contentHeight, this);
     _initialized = true;
     notifyListeners();
   }

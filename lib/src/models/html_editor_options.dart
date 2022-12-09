@@ -29,8 +29,9 @@ class HtmlEditorOptions {
     this.spellCheck = false,
   }) {
     if (backgroundColor != null && backgroundDecoration != null) {
-      throw Exception(
-          'Can\'t have both backgroundColor and backgroundDecoration. Please choose one.');
+      throw Exception('HtmlEditorController configuration is invalid:\n\n'
+          'Can\'t have both backgroundColor and backgroundDecoration.\n'
+          'Please choose either one of those settings.');
     }
     hint ??= 'Your text here...';
   }

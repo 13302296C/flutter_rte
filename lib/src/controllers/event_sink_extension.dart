@@ -41,7 +41,7 @@ extension StreamProcessor on HtmlEditorController {
     switch (channelMethod) {
       case 'initEditor':
         if (response['result'] == 'Ok') {
-          await recalculateHeight();
+          await recalculateContentHeight();
           callbacks?.onInit?.call();
         } else {
           _initialized = false;
@@ -68,14 +68,11 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'setHeight':
-        contentHeight.value = response['height'] ?? 0;
+        contentHeight = response['height'] ?? 0;
         break;
 
       case 'htmlHeight':
-        if (contentHeight.value != response['height'] && autoAdjustHeight) {
-          contentHeight.value = response['height'].toDouble();
-          notifyListeners();
-        }
+        contentHeight = response['height'].toDouble();
         break;
 
       case 'updateToolbar':
@@ -92,7 +89,7 @@ extension StreamProcessor on HtmlEditorController {
         print(_buffer);
         callbacks?.onChangeContent?.call(response['contents']);
         maybeScrollIntoView();
-        if (autoAdjustHeight) unawaited(recalculateHeight());
+        if (autoAdjustHeight) unawaited(recalculateContentHeight());
         break;
 
       case 'onChangeCodeview':
@@ -109,10 +106,11 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onFocus':
         hasFocus = true;
-        //notifyListeners();
         focusNode?.requestFocus();
         maybeScrollIntoView();
         callbacks?.onFocus?.call();
+        notifyListeners();
+        unawaited(updateToolbar());
         break;
 
       case 'onBlur':
@@ -121,7 +119,7 @@ extension StreamProcessor on HtmlEditorController {
           _buffer = '';
           callbacks?.onChangeContent?.call(_buffer);
         }
-        notifyListeners();
+        //notifyListeners();
         callbacks?.onBlur?.call();
         break;
 
