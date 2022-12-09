@@ -22,7 +22,7 @@ ____
 
 
 ## Under the Hood
-This WYCIWYG HTML editor easy to use and provides **great flexibility and control over the generated HTML.**
+This easy to use WYCIWYG HTML editor provides great flexibility and control over the generated HTML.
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with the following key differences:
  * Vertical auto-sizing to content size with height change notifier
@@ -149,7 +149,7 @@ The code above should result in the following HTML being generated for each para
 
 ### Sizing and Constraints
 
-By default widget is trying to occupy all available width and sizes its height based on the height of its content, but not less than the value of `minHeight` attribute of [HtmlEditor] widget.
+By default, the widget occupies all available width and sizes its height based on the height of its content, but not less than the value of `minHeight` attribute of [HtmlEditor] widget.
 
 ```Dart
     // since explicit height is not provided - the editor will size itself
