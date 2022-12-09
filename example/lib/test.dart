@@ -25,14 +25,9 @@ class _TestState extends State<Test> {
           child: Column(
         children: [
           HtmlEditor(
+            expandFullHeight: true,
             controller: c,
           ),
-          ValueListenableBuilder(
-              valueListenable: c.totalHeight,
-              builder: (context, double text, __) {
-                return Text(
-                    'Content: ${c.contentHeight}, toolbar: ${c.toolbarHeight}, total: $text');
-              }),
         ],
       )),
     );

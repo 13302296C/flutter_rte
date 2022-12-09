@@ -13,6 +13,7 @@ class HtmlEditor extends StatefulWidget {
     Key? key,
     this.height,
     this.minHeight,
+    this.expandFullHeight = false,
     this.hint,
     this.initialValue,
     this.onChanged,
@@ -48,6 +49,9 @@ class HtmlEditor extends StatefulWidget {
   /// will be equal or greater than `minHeight`.
   final double? minHeight;
 
+  /// if set to `true` - the editor is trying to occupy all available space
+  final bool expandFullHeight;
+
   /// Initial text to load into the editor
   final String? initialValue;
 
@@ -75,6 +79,10 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   HtmlToolbarOptions get toolbarOptions => _controller.toolbarOptions!;
 
   double? get _height {
+    if (widget.expandFullHeight) {
+      return MediaQuery.of(context).size.height;
+    }
+
     // if no need to show toolbar - return the content height only
     if (toolbarOptions.toolbarPosition == ToolbarPosition.custom ||
         _controller.isDisabled ||
@@ -245,7 +253,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
       //
     } else if (!_controller.hasFocus ||
-        (kIsWeb && _controller.isContentEmpty)) {
+        (kIsWeb && _controller.contentIsEmpty)) {
       if (kIsWeb) {
         return Positioned.fill(
           child: Listener(
@@ -270,7 +278,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   ///
   Widget _hintTextWidget(BuildContext context) {
-    if (_controller.isContentEmpty &&
+    if (_controller.contentIsEmpty &&
         !_controller.hasFocus &&
         !_controller.isReadOnly) {
       return Positioned.fill(
@@ -305,12 +313,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   void _initializeController() {
     _controller = widget.controller ?? HtmlEditorController();
     _controller.context = context;
-    // if (initialValue != null &&
-    //     controller!.editorOptions!.initialText != null &&
-    //     !controller!.initialized) {
-    //   throw Exception(
-    //       'Cannot have both [initialValue] and [editorOptions.initialText]. Please choose one.');
-    // }
+    _controller.editorOptions!.expandFullHeight = widget.expandFullHeight;
     if (widget.initialValue != null) {
       _controller.setInitialText(widget.initialValue!);
     }

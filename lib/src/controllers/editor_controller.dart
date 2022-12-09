@@ -179,8 +179,10 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   // ignore: prefer_final_fields
   String _buffer = '';
+  String get content => _buffer;
 
-  bool get isContentEmpty => _buffer == '';
+  bool get contentIsEmpty => _buffer == '';
+  bool get contentIsNotEmpty => _buffer != '';
 
   void setInitialText(String text) {
     _buffer = text;
@@ -428,7 +430,9 @@ const isNativePlatform = true;
     /// container height will always adjust to the document height.
     /// If the height is set - add padding for the boxed layouts.
     var hideScrollbarCss = '';
-    if (editorOptions!.height == null) {
+    if (editorOptions!.height == null &&
+        !editorOptions!.expandFullHeight &&
+        !kIsWeb) {
       hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;

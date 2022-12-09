@@ -83,6 +83,9 @@ class HtmlEditorOptions {
   /// if the value is not provided.
   final double? minHeight;
 
+  /// if set to `true` - the editor is trying to occupy all available space
+  bool expandFullHeight = false;
+
   /// Box decoration of voice-to-text popover widget
   final BoxDecoration? dictationPreviewDecoration;
 

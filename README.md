@@ -26,8 +26,8 @@ This WYCIWYG HTML editor easy to use and provides **great flexibility and contro
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with the following key differences:
  * Vertical auto-sizing to content size with height change notifier
- * ***Summernote*** and ***jQuery*** **replaced** with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for HTML5 compatibility, features, performance and size.
- * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
+ * ***Summernote*** and ***jQuery*** **replaced** with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for stricter security, HTML5 compatibility, features, performance and size.
+ * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter) for stricter security and better handling.
 
 
 ____
@@ -36,13 +36,14 @@ ____
 
 Basic implementation of this editor doesn't require a controller. For simplicity and ease of use, [HtmlEditor] gives you access to the following top-level attributes:
 
-- height,
-- minHeight,
-- hint,   
-- initialValue,  
-- onChanged,
-- isReadOnly, 
-- enableDictation
+- `height` (`double`) - sets explicit height of the widget
+- `minHeight` (`double`) - sets minimum height of the widget
+- `expandFullHeight` (`bool`) - sizes widget to take all available height
+- `hint` (`String`) - Displays hint when the field is empty
+- `initialValue` (`String`) - initial HTML or text
+- `onChanged` (`String`) - top-level shortcut to `onChanged` callback
+- `isReadOnly` (`bool`) - locks the editor and removes the toolbar
+- `enableDictation` (`bool`) - yay or nay to voice-to-text feature
 
 
 ```Dart
@@ -74,6 +75,14 @@ To take advantage of the entire API you'll need to create and configure an insta
  * **Editor options** group (all things editor)
 
 
+When controller is provided, the contents of the editor could be tried and accessed syncronously via a dedicated getter:
+```dart
+
+    if(controller.contentIsNotEmpty){
+        Navigator.of(context).pop(controller.content);
+    }
+
+```
 ____
 
     
@@ -154,10 +163,12 @@ By default widget is trying to occupy all available width and sizes its height b
 
     // and here you can listen to changes in height of the editor
     ValueListenableBuilder<double>(
+        valueListenable: controller.totalHeight,
         builder: (BuildContext context, double value, Widget? child) {
-        return Text('Height changed to $value px');
-        },
-        valueListenable: controller.contentHeight);
+        return Text('Height changed to $value\n'
+            'Toolbar height is ${controller.toolbarHeight}\n'
+            'Content height is ${controller.contentHeight}\n' );
+        });
     
 ```
 
@@ -169,6 +180,16 @@ If explicit `height` is provided - the widget will size it's height precisely to
     // that height and the content will scroll if overflows the height.
     return HtmlEditor(
       height: 250,
+    );
+```
+
+<br />
+If `expandFullHeight` is set to `true` - the widget will take up all available height.
+
+```Dart
+
+    return HtmlEditor(
+      expandFullHeight: true,
     );
 ```
 
