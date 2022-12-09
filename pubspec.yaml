@@ -6,10 +6,10 @@ version: 0.1.0
 
 publish_to:
 
-repository: https://github.com/13302296-Canada/flutter_rich_text_editor
-issue_tracker: https://github.com/13302296-Canada/flutter_rich_text_editor/issues
+repository: https://github.com/13302296C/flutter_rich_text_editor
+issue_tracker: https://github.com/13302296C/flutter_rich_text_editor/issues
 homepage: https://flutter-rich-text.web.app
-documentation: https://github.com/13302296-Canada/flutter_rich_text_editor/blob/master/README.md
+documentation: https://github.com/13302296C/flutter_rich_text_editor/blob/master/README.md
 
 platforms:
   android:
@@ -22,8 +22,8 @@ HTML editors. Floating toolbar, fullscreen and boxed examples.'
     path: ./media/screen1.jpg
 
 environment:
-  sdk: ">=2.17.5 <3.0.0"
-  flutter: ">=3.0.0"
+  sdk: ">=2.18.5 <3.0.0"
+  flutter: ">=3.3.0"
 
 dependencies:
   flutter:
@@ -34,7 +34,7 @@ dependencies:
   flex_color_picker: ^2.5.0
   file_picker: ^5.2.0+1
   numberpicker: ^2.1.1
-  pointer_interceptor: 0.9.0+1  # version locked due to bugs 
+  pointer_interceptor: #0.9.0+1  # version locked due to bugs 
                                 # in Flutter 3.0
   pedantic: ^1.11.1
   speech_to_text: ^6.1.1
