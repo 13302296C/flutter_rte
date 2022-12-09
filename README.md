@@ -256,7 +256,7 @@ To disable voice-to-text feature - set the corresponding top-level `enableDictat
 
 ____
 
-## Special Considerations 
+## Special Considerations and Gotchas
 
 1. Due to some framework issues on ***Web***, this plugin is only compatible with Flutter 3.3. If you want to use this plugin with earlier versions of Flutter - downgrade pointer_interceptor in this dependency to __0.9.0+1__.
 

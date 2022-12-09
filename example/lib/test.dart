@@ -12,7 +12,7 @@ class _TestState extends State<Test> {
   final c = HtmlEditorController(
       toolbarOptions: HtmlToolbarOptions(
           backgroundColor: Colors.blueGrey[100],
-          initiallyExpanded: true,
+          initiallyExpanded: false,
           toolbarType: ToolbarType.nativeExpandable),
       editorOptions: HtmlEditorOptions(
         backgroundDecoration: BoxDecoration(color: Colors.green[100]),
@@ -21,14 +21,11 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Test')),
       body: SafeArea(
-          child: Column(
-        children: [
-          HtmlEditor(
-            expandFullHeight: true,
-            controller: c,
-          ),
-        ],
+          child: HtmlEditor(
+        expandFullHeight: true,
+        controller: c,
       )),
     );
   }
