@@ -22,7 +22,7 @@ extension StreamProcessor on HtmlEditorController {
       unawaited(Future.delayed(Duration(milliseconds: 300)).then((_) {
         unawaited(Scrollable.of(context!)!.position.ensureVisible(
             context!.findRenderObject()!,
-            alignment: 0.5,
+            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeIn));
       }));

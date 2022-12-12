@@ -22,12 +22,13 @@ part 'dictation_extension.dart';
 /// Controller for web
 class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   HtmlEditorController({
-    this.processInputHtml = true,
+    // this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
     this.editorOptions,
     this.toolbarOptions,
     this.stylingOpitons,
+    this.callbacks,
     this.context,
   }) {
     viewId = getRandString(10).substring(0, 14);
@@ -36,6 +37,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     stylingOpitons ??= HtmlStylingOptions(
         blockTagAttributes: HtmlTagAttributes(
             inlineStyle: 'text-indent:3.5em; text-align:justify;'));
+    callbacks ??= Callbacks();
   }
 
   /// This context is used __only__ if you need to provide a context other than
@@ -94,7 +96,6 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   double get contentHeight => _contentHeight;
   set contentHeight(double height) {
     if (contentHeight != height && autoAdjustHeight) {
-      print('content height = $height');
       _contentHeight = height;
       recalculateTotalHeight();
     }
@@ -130,7 +131,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// whether a new line should be converted to a <br>.
   ///
   /// The default value is true.
-  final bool processInputHtml;
+  // final bool processInputHtml;
 
   /// Determines whether newlines (\n) should be written as <br>. This is not
   /// recommended for HTML documents.
@@ -172,6 +173,10 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   // /// Dictation result buffer
   String sttBuffer = '';
 
+  @internal
+  Exception? fault;
+  bool get hasFault => fault != null;
+
   @override
   void dispose() {
     super.dispose();
@@ -184,6 +189,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   bool get contentIsEmpty => _buffer == '';
   bool get contentIsNotEmpty => _buffer != '';
 
+  ///
   void setInitialText(String text) {
     _buffer = text;
     editorOptions!.initialText = text;
@@ -234,10 +240,11 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Sets the text of the editor. Some pre-processing is applied to convert
   /// [String] elements like "\n" to HTML elements.
-  void setText(String text) {
-    var html = _processHtml(html: text);
-    evaluateJavascript(data: {'type': 'toIframe: setText', 'text': html});
-    recalculateContentHeight();
+  void setText(String text) async {
+    var html = text;
+    await evaluateJavascript(data: {'type': 'toIframe: setText', 'text': html});
+    await Future.delayed(Duration(milliseconds: 100));
+    await recalculateContentHeight();
   }
 
   /// Insert text at the end of the current HTML content in the editor
@@ -250,10 +257,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// Insert HTML at the position of the cursor in the editor
   /// Note: This method should not be used for plaintext strings
   Future<void> insertHtml(String html) async {
-    await evaluateJavascript(data: {
-      'type': 'toIframe: insertHtml',
-      'html': _processHtml(html: html)
-    });
+    await evaluateJavascript(
+        data: {'type': 'toIframe: insertHtml', 'html': _processHtml(html)});
   }
 
   /// Gets the text from the editor and returns it as a [String].
@@ -386,16 +391,17 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   // }
 
   /// Helper function to process input html
-  String _processHtml({required html}) {
-    if (processInputHtml) {
-      html = html.replaceAll('\r', '').replaceAll('\r\n', '');
-    }
+  String _processHtml(String html) {
+    // if (processInputHtml) {
+    //   html = html.replaceAll('\n', '').replaceAll('\r', '');
+    // }
     if (processNewLineAsBr) {
-      html = html.replaceAll('\n', '<br/>').replaceAll('\n\n', '<br/>');
+      html = html.replaceAll('\n', '<br />');
     } else {
-      html = html.replaceAll('\n', '').replaceAll('\n\n', '');
+      html = html.replaceAll('\n', '&#10;').replaceAll('\r', '&#13;');
     }
     html = html.replaceAll('<br>', '<br />');
+    html = html.replaceAll("'", "\\'");
     //return HtmlEscape().convert(html);
     return html;
   }
@@ -430,9 +436,7 @@ const isNativePlatform = true;
     /// container height will always adjust to the document height.
     /// If the height is set - add padding for the boxed layouts.
     var hideScrollbarCss = '';
-    if (editorOptions!.height == null &&
-        !editorOptions!.expandFullHeight &&
-        !kIsWeb) {
+    if (editorOptions!.height == null && !editorOptions!.expandFullHeight) {
       hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;
@@ -454,7 +458,7 @@ const isNativePlatform = true;
         '/*---- Root Stylesheet ----*/', stylingOpitons!.getRootStyleText);
 
     htmlString = htmlString.replaceFirst(
-        '<squirecontent>', '${editorOptions?.initialText ?? ''}');
+        '<squirecontent>', _processHtml(editorOptions?.initialText ?? ''));
 
     htmlString = htmlString.replaceFirst(
         '/*---- Squire Config ----*/', stylingOpitons!.options);

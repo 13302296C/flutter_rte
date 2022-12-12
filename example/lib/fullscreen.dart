@@ -68,23 +68,22 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           _demoType == DemoType.fullscreen) {
         editor = HtmlEditor(
           initialValue: strings[_sections.indexOf(e)],
-          onChanged: (s) {
-            strings[_sections.indexOf(e)] = s ?? '';
-          },
           controller: _controllers[_sections.indexOf(e)]
             ..toolbarOptions?.toolbarPosition = ToolbarPosition.custom
             ..toolbarOptions?.toolbarType = _demoType == DemoType.fullscreen
                 ? ToolbarType.nativeScrollable
                 : ToolbarType.nativeExpandable
-            ..toolbarOptions?.initiallyExpanded = true,
-          callbacks: Callbacks(onFocus: () {
-            setState(() {
-              resetTimeout();
-              _currentController = _controllers[_sections.indexOf(e)];
-            });
-          }, onBlur: () {
-            setTimeout();
-          }),
+            ..toolbarOptions?.initiallyExpanded = true
+            ..callbacks = Callbacks(onChangeContent: (s) {
+              strings[_sections.indexOf(e)] = s ?? '';
+            }, onFocus: () {
+              setState(() {
+                resetTimeout();
+                _currentController = _controllers[_sections.indexOf(e)];
+              });
+            }, onBlur: () {
+              setTimeout();
+            }),
         );
       } else if (_demoType == DemoType.boxed) {
         editor = ClipRRect(

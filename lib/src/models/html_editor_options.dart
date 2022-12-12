@@ -4,13 +4,14 @@ import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
 /// Options that modify the editor and its behavior
 class HtmlEditorOptions {
   HtmlEditorOptions({
-    this.androidUseHybridComposition = true,
-    this.adjustHeightForKeyboard = true,
-    this.characterLimit,
+    // this.androidUseHybridComposition = true,
+    // this.adjustHeightForKeyboard = true,
+    // this.characterLimit,
 //    this.customOptions = '',
-    this.darkMode,
+    // this.darkMode,
     this.height,
     this.minHeight,
+    this.padding,
     this.decoration,
     this.backgroundColor,
     this.backgroundDecoration,
@@ -20,13 +21,13 @@ class HtmlEditorOptions {
     this.hint,
     this.hintStyle,
     this.initialText,
-    this.inputType = HtmlInputType.text,
+    // this.inputType = HtmlInputType.text,
     // this.mobileContextMenu,
     // this.mobileLongPressDuration,
     // this.mobileInitialScripts,
     // this.webInitialScripts,
     this.shouldEnsureVisible = true,
-    this.spellCheck = false,
+    // this.spellCheck = false,
   }) {
     if (backgroundColor != null && backgroundDecoration != null) {
       throw Exception('HtmlEditorController configuration is invalid:\n\n'
@@ -41,18 +42,18 @@ class HtmlEditorOptions {
   ///
   /// The default value is true. It is recommended to leave this as true because
   /// it significantly improves the UX.
-  final bool adjustHeightForKeyboard;
+  // final bool adjustHeightForKeyboard;
 
   /// ALlows devs to set hybrid composition off in case they would like to
   /// prioritize animation smoothness over text input experience.
   ///
   /// The recommended value is `true`.
-  final bool androidUseHybridComposition;
+  // final bool androidUseHybridComposition;
 
   /// Adds a character limit to the editor.
   ///
   /// NOTE: ONLY WORKS ON iOS AND WEB PLATFORMS!!
-  final int? characterLimit;
+  // final int? characterLimit;
 
   /// Set custom options for the summernote editor by using their syntax.
   ///
@@ -64,12 +65,18 @@ class HtmlEditorOptions {
   /// always light, `true` - always dark.
   ///
   /// The default value is null (switches with system).
-  final bool? darkMode;
+  // final bool? darkMode;
 
+  /// Background layer container color
   final Color? backgroundColor;
+
+  /// Background layer container decoration
   final BoxDecoration? backgroundDecoration;
 
-  // The BoxDecoration to use around the Html editor.
+  /// Padding of the container wrapping the editor widget
+  EdgeInsets? padding;
+
+  /// The wrapper container BoxDecoration, that wraps around the Html editor.
   BoxDecoration? decoration;
 
   /// Sets the height of the Html editor widget. This takes the toolbar into
@@ -116,7 +123,7 @@ class HtmlEditorOptions {
   /// See [HtmlInputType] for the supported modes.
   ///
   /// The default value is [HtmlInputType.text] (the standard virtual keyboard)
-  final HtmlInputType inputType;
+  // final HtmlInputType inputType;
 
   // /// Customize the context menu for selected text on mobile
   // final ContextMenu? mobileContextMenu;
@@ -146,5 +153,5 @@ class HtmlEditorOptions {
   /// Specify whether or not the editor should spellcheck its contents.
   ///
   /// Default value is false.
-  final bool spellCheck;
+  // final bool spellCheck;
 }

@@ -10,16 +10,16 @@ extension DictationController on HtmlEditorController {
 
     await speechToText!
         .initialize(
-      onError: (SpeechRecognitionError? error) {
-        if (error == null) {
-          throw Exception('The error was thrown, but no details provided.');
+      onError: (SpeechRecognitionError? err) {
+        if (err == null) {
+          fault = Exception('The error was thrown, but no details provided.');
         }
         cancelRecording();
-        throw Exception(
-            'Speech-to-Text Error: ${error.errorMsg} - ${error.permanent}');
+        fault = Exception(
+            'Speech-to-Text Error: ${err?.errorMsg} - ${err?.permanent}');
       },
       onStatus: log,
-      debugLogging: true,
+      debugLogging: kDebugMode,
     )
         .then((value) async {
       sttAvailable = value;

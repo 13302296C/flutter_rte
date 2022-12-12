@@ -77,10 +77,6 @@ abstract class PlatformSpecificMixin {
         if (c.isReadOnly || c.isDisabled) {
           await c.disable();
         }
-        if (c.callbacks != null && c.callbacks!.onInit != null) {
-          c.callbacks!.onInit!.call();
-        }
-
         var data = <String, Object>{'type': 'toIframe: initEditor'};
         data['view'] = viewId;
         final jsonEncoder = JsonEncoder();

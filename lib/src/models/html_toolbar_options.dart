@@ -80,27 +80,28 @@ class HtmlToolbarOptions {
           help: false,
           copy: false,
           paste: false),
+
+      //StyleButtons(),
+      //FontSettingButtons(),
+      FontButtons(),
+      ColorButtons(),
+      ParagraphButtons(
+          textDirection: false, lineHeight: false, caseConverter: false),
+      ListButtons(listStyles: false),
+      InsertButtons(
+        video: false,
+        audio: false,
+        table: false,
+        otherFile: false,
+        picture: false,
+        hr: false,
+      ),
       OtherButtons(
           undo: false,
           redo: false,
           fullscreen: false,
           codeview: false,
           help: false),
-      StyleButtons(),
-      FontSettingButtons(),
-      FontButtons(
-          //strikethrough: false, subscript: false, superscript: false
-          ),
-      ColorButtons(),
-      ParagraphButtons(
-          textDirection: false, lineHeight: false, caseConverter: false),
-      ListButtons(listStyles: false),
-      InsertButtons(
-          video: false,
-          audio: false,
-          table: false,
-          otherFile: false,
-          picture: false),
     ],
     // this.otherFileExtensions,
     // this.imageExtensions,

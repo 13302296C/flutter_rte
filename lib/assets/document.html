@@ -102,7 +102,10 @@ https://github.com/neilj/Squire
             break;
 
           case 'getHeight':
-            var height = document.body.scrollHeight;
+            var b = document.body; 
+            var h = document.documentElement;
+            var height = Math.max( b.scrollHeight, b.offsetHeight, 
+                       h.clientHeight, h.scrollHeight, h.offsetHeight );
             var width = document.body.scrollWidth;
             postChannelMessage({
               "type": "toDart: htmlHeight", "height": height, "width": width});

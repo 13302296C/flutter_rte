@@ -126,48 +126,71 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     if (!_controller.initialized) {
       _controller.initEditor(context);
     }
+    var h = _height;
+    // account for conteiner padding, if one is provided
+    if (h != null) {
+      h = h +
+          (editorOptions.padding?.top ?? 0) +
+          (editorOptions.padding?.bottom ?? 0);
+    }
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
         return Container(
-          decoration: editorOptions.decoration,
-          height: _height,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            verticalDirection:
-                toolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor
-                    ? VerticalDirection.down
-                    : VerticalDirection.up,
-            children: <Widget>[
-              if (toolbarOptions.toolbarPosition != ToolbarPosition.custom)
-                ToolbarWidget(
-                  key: _controller.toolbarKey,
-                  controller: _controller,
-                ),
-              ..._controller.initialized
-                  ? [
-                      Expanded(
-                          child: Directionality(
-                        textDirection: TextDirection.ltr,
-                        child: Stack(
-                          children: [
-                            _backgroundWidget(context),
-                            _hintTextWidget(context),
-                            child!,
-                            _scrollPatch(context),
-                            _sttDictationPreview(),
-                          ],
-                        ),
-                      ))
-                    ]
-                  : [SizedBox()],
-            ],
-          ),
-        );
+            padding: editorOptions.padding,
+            decoration: editorOptions.decoration,
+            height: h,
+            child: _controller.hasFault ? _faultWidget : _editorWidget(child!));
       },
       child: _controller.view(_controller),
     );
   }
+
+  ///
+  Widget _editorWidget(Widget child) => Column(
+        mainAxisSize: MainAxisSize.min,
+        verticalDirection:
+            toolbarOptions.toolbarPosition == ToolbarPosition.aboveEditor
+                ? VerticalDirection.down
+                : VerticalDirection.up,
+        children: <Widget>[
+          if (toolbarOptions.toolbarPosition != ToolbarPosition.custom)
+            ToolbarWidget(
+              key: _controller.toolbarKey,
+              controller: _controller,
+            ),
+          ..._controller.initialized
+              ? [
+                  Expanded(
+                      child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Stack(
+                      children: [
+                        _backgroundWidget(context),
+                        _hintTextWidget(context),
+                        child,
+                        _scrollPatch(context),
+                        _sttDictationPreview(),
+                      ],
+                    ),
+                  ))
+                ]
+              : [SizedBox()],
+        ],
+      );
+
+  ///
+  Widget get _faultWidget => Center(
+          child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Text('Editor Error:'),
+            SizedBox(height: 16),
+            Text(_controller.fault.toString()),
+          ],
+        ),
+      ));
 
   ///STT popup
   Widget _sttDictationPreview() {
@@ -311,7 +334,28 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   /// If controller is provided to the editor - initialize its values
   /// otherwise create internal controller with the values provided
   void _initializeController() {
-    _controller = widget.controller ?? HtmlEditorController();
+    Exception? fault;
+    // redundancy fuse: can't set both controller and widget callbacks set
+    if (widget.controller != null) {
+      if (widget.callbacks != null) {
+        fault = Exception(
+            'Cannot have widget callbacks when controller is provided. Please use controller callbacks.');
+      }
+    }
+    // redundancy fuse: can't set both widget.onChanged and callbacks.onChanged set
+    if (widget.callbacks != null && widget.onChanged != null) {
+      fault = Exception(
+          'Cannot have both onChanged and Callbacks.onChangeContent. Please pick one.');
+    }
+
+    // if controller is not provided - initialize internal controller
+    // and assign it widget callbacks. but if they are null -
+    // init Callbacks with widget.onChanged callack set
+    _controller = widget.controller ??
+        HtmlEditorController(
+            callbacks: widget.callbacks ??
+                Callbacks(onChangeContent: widget.onChanged));
+
     _controller.context = context;
     _controller.editorOptions!.expandFullHeight = widget.expandFullHeight;
     if (widget.initialValue != null) {
@@ -337,20 +381,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
         //_controller.enable();
       }
     }
-
-    _controller.callbacks = widget.callbacks;
-    //_controller.plugins = plugins;
-    if (widget.callbacks == null) {
-      _controller.callbacks = Callbacks(onChangeContent: widget.onChanged);
-    } else {
-      if (_controller.callbacks!.onChangeContent != null &&
-          widget.onChanged != null) {
-        throw Exception(
-            'Cannot have both onChanged and Callbacks.onChangeContent. Please pick one.');
-      }
-      if (widget.onChanged != null) {
-        _controller.callbacks!.onChangeContent = widget.onChanged;
-      }
-    }
+    _controller.fault = fault;
   }
 }
