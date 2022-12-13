@@ -51,11 +51,7 @@ dev_dependencies:
 flutter:
   assets:
     - packages/flutter_rich_text_editor/document.html
-    - packages/flutter_rich_text_editor/squire.js
-    - packages/flutter_rich_text_editor/squire-raw.js
     - lib/assets/document.html
-    - lib/assets/squire.js
-    - lib/assets/squire-raw.js
 
   # To add assets to your package, add an assets section, like this:
   # assets:
