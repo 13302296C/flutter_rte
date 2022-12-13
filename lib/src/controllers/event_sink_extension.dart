@@ -40,10 +40,20 @@ extension StreamProcessor on HtmlEditorController {
     var channelMethod = (response['type'] as String).split(' ')[1];
     switch (channelMethod) {
       case 'initEditor':
+        // success
         if (response['result'] == 'Ok') {
+          // On native platform html injection is restricted, so we need
+          // to reload the page with new content in it. After the page is loaded,
+          // we need to prevent onInit callback and call onChaged instead.
+          if (_blockInitCallback) {
+            _blockInitCallback = false;
+            callbacks.onChangeContent?.call(_buffer);
+          } else {
+            callbacks.onInit?.call();
+          }
           await recalculateContentHeight();
-          callbacks.onInit?.call();
         } else {
+          // failß
           _initialized = false;
           notifyListeners();
           throw Exception('HTML Editor failed to load');
@@ -86,7 +96,6 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onChangeContent':
         _buffer = response['contents'];
-        print(_buffer);
         callbacks.onChangeContent?.call(response['contents']);
         maybeScrollIntoView();
         if (autoAdjustHeight) unawaited(recalculateContentHeight());

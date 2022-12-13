@@ -67,6 +67,11 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   // ignore: prefer_final_fields
   bool _initialized = false;
 
+  /// used internally to tell event sink
+  /// to ignore incoming onInit from the editor
+  /// and replace it with onChanged instead
+  bool _blockInitCallback = false;
+
   /// read only mode
   @internal
   bool isDisabled = false;
@@ -244,12 +249,25 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// Redoes the last action
   void redo() => evaluateJavascript(data: {'type': 'toIframe: redo'});
 
-  /// Sets the text of the editor. Some pre-processing is applied to convert
-  /// [String] elements like "\n" to HTML elements.
+  /// Sets the text of the editor.
   void setText(String text) async {
-    var html = text;
-    await evaluateJavascript(data: {'type': 'toIframe: setText', 'text': html});
-    await Future.delayed(Duration(milliseconds: 100));
+    if (!initialized) {
+      log('[HtmlEditor] controller.SetText() called before the editor component'
+          ' finished loading.\n\nThe content has not been loaded.\n\n'
+          'You must wait for onInit callback to shoot before you set content '
+          'or set content via initialValue argument.');
+      return;
+    }
+
+    if (kIsWeb) {
+      await evaluateJavascript(
+          data: {'type': 'toIframe: setText', 'text': text});
+      await recalculateContentHeight();
+    } else {
+      // on native platform - reload page with new value
+      setInitialText(text);
+      await reloadContent();
+    }
     await recalculateContentHeight();
   }
 
@@ -411,5 +429,13 @@ const isNativePlatform = true;
         '/*---- Squire Config ----*/', stylingOpitons.options);
 
     return htmlString;
+  }
+
+  /// On native platform html injection is restricted, so we need
+  /// to reload the page with new content in it. After the page is loaded,
+  /// we need to prevent onInit callback and call onChaged instead.
+  Future<void> reloadContent() async {
+    _blockInitCallback = true;
+    await editorController.loadHtmlString(await getInitialContent());
   }
 }

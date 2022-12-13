@@ -271,6 +271,10 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   /// This top overlay widget patches scrolling issues on iOS and Web
   Widget _scrollPatch() {
+    // when work fullscreen - don't block anything
+    if (_controller.editorOptions.expandFullHeight) {
+      return SizedBox();
+    }
     //if disabled or read-only - intercept all events
     if (_controller.isReadOnly || _controller.isDisabled) {
       if (kIsWeb) {
