@@ -1,7 +1,24 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Allows to set a pre-defined style for main componennts of the editor
 class HtmlStylingOptions {
+  /// body text color of the editor when Theme.brightness = `light`
+  Color textColorLight;
+
+  /// body text color of the editor when Theme.brightness = `dark`
+  Color textColorDark;
+
+  /// getter for body text color based on context (brightness)
+  Color textColor(BuildContext context) =>
+      Theme.of(context).brightness == Brightness.light
+          ? textColorLight
+          : textColorDark;
+
+  /// get CSS color of body text for injection into HTML style
+  String textColorCssString(BuildContext context) =>
+      '#${(textColor(context).value & 0xFFFFFF).toRadixString(16).padLeft(6, '0')}';
+
   /// Add contents of your **style.css** file to this variable
   /// to inject global style to the head of the document.
   /// (do NOT add `<style>` tags)
@@ -62,18 +79,21 @@ class HtmlStylingOptions {
   bool sanitizeOnPaste;
 
   ///
-  HtmlStylingOptions(
-      {this.globalStyleSheet,
-      this.blockTag = 'p',
-      this.blockTagAttributes,
-      HtmlTagAttributes? blockquote,
-      HtmlTagAttributes? code,
-      HtmlTagAttributes? pre,
-      HtmlTagAttributes? ul,
-      HtmlTagAttributes? ol,
-      HtmlTagAttributes? li,
-      HtmlTagAttributes? a,
-      this.sanitizeOnPaste = true}) {
+  HtmlStylingOptions({
+    this.globalStyleSheet,
+    this.blockTag = 'p',
+    this.blockTagAttributes,
+    HtmlTagAttributes? blockquote,
+    HtmlTagAttributes? code,
+    HtmlTagAttributes? pre,
+    HtmlTagAttributes? ul,
+    HtmlTagAttributes? ol,
+    HtmlTagAttributes? li,
+    HtmlTagAttributes? a,
+    this.sanitizeOnPaste = true,
+    this.textColorLight = const Color.fromRGBO(0, 0, 0, 1),
+    this.textColorDark = const Color.fromRGBO(0xea, 0xea, 0xea, 1),
+  }) {
     _tagSettings['blockquote'] = blockquote;
     _tagSettings['code'] = code;
     _tagSettings['pre'] = pre;

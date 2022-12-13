@@ -17,7 +17,7 @@ platforms:
   web:
 
 screenshots:
-  - description: 'Science Experiment form example built with multiple 
+  - description: 'Science Experiment example form built with multiple 
 HTML editors. Floating toolbar, fullscreen and boxed examples.'
     path: ./media/screen1.jpg
 

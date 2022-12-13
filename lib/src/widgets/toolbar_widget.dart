@@ -89,9 +89,9 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// Sets the selected item for the foreground color dialog
   Color _foreColorSelected = Colors.black;
 
-  /// to #2b2b2b on JS side
-  final Color _preferredBodyColor =
-      Colors.black; // Color.fromRGBO(0x2b, 0x2b, 0x2b, 1);
+  /// get body text color based on platform brightness
+  Color get _preferredBodyColor =>
+      widget.controller.stylingOpitons.textColor(context);
 
   /// Sets the selected item for the background color dialog
   Color _backColorSelected = Colors.yellow;

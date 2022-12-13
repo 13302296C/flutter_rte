@@ -368,6 +368,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// This method compiles HTML document based on various controller settings
   Future<String> getInitialContent() async {
+    var textColor = stylingOpitons.textColorCssString(context!);
     var initScript = 'const viewId = \'$viewId\';';
     if (kIsWeb) {
       initScript += '''
@@ -388,16 +389,12 @@ const isNativePlatform = true;
     var hideScrollbarCss = '';
     if (editorOptions.height == null && !editorOptions.expandFullHeight) {
       hideScrollbarCss = '''
-  ::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-  }
+  ::-webkit-scrollbar { width: 0px; height: 0px; }
+  body { color: $textColor; }
 ''';
     } else {
       hideScrollbarCss = '''
-  body {
-    padding: .5em 1em;
-  }
+  body { padding: .5em 1em; color: $textColor; }
 ''';
     }
 
