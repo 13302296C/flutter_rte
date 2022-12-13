@@ -22,7 +22,7 @@ ____
 
 
 ## Under the Hood
-This easy to use WYCIWYG HTML editor provides great flexibility and control over the generated HTML.
+Easy to use WYCIWYG HTML editor with flexibility and control over the generated HTML.
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with the following key differences:
  * Vertical auto-sizing to content size with height change notifier

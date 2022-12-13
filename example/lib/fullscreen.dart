@@ -28,6 +28,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
     'Conclusion'
   ];
 
+  bool get isDark => Theme.of(context).brightness == Brightness.dark;
+
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: 350),
     vsync: this,
@@ -36,23 +38,23 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
     parent: _controller,
     curve: Curves.fastOutSlowIn,
   );
-  final Color? _tbBgd = Colors.blueGrey[50];
+  Color? get _tbBgd => isDark ? Colors.blueGrey[600] : Colors.blueGrey[50];
   final List<HtmlEditorController> _controllers = [];
   HtmlEditorController? _currentController;
 
   @override
   void initState() {
+    super.initState();
     _demoType = widget.demoType ?? DemoType.floatingToolbar;
     // ignore: unused_local_variable
     for (var s in _sections) {
       _controllers.add(HtmlEditorController(
         toolbarOptions: HtmlToolbarOptions(
             toolbarType: ToolbarType.nativeScrollable,
-            backgroundColor: _tbBgd!,
+            backgroundColor: Colors.transparent,
             toolbarPosition: ToolbarPosition.custom),
       ));
     }
-    super.initState();
   }
 
   @override
@@ -73,7 +75,8 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
             ..toolbarOptions.toolbarType = _demoType == DemoType.fullscreen
                 ? ToolbarType.nativeScrollable
                 : ToolbarType.nativeExpandable
-            ..toolbarOptions.initiallyExpanded = true
+            ..toolbarOptions.initiallyExpanded = false
+            ..toolbarOptions.backgroundColor = _tbBgd
             ..callbacks = Callbacks(onChangeContent: (s) {
               strings[_sections.indexOf(e)] = s ?? '';
             }, onFocus: () {
@@ -201,7 +204,9 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
                       decoration: BoxDecoration(
                           color: _demoType == DemoType.fullscreen
                               ? null
-                              : Colors.white,
+                              : isDark
+                                  ? Theme.of(context).canvasColor
+                                  : Colors.white,
                           boxShadow: _demoType == DemoType.fullscreen
                               ? null
                               : [

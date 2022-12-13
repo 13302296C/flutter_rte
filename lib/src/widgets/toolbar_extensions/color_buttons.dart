@@ -90,18 +90,23 @@ extension ToolbarColorButtons on ToolbarWidgetState {
             } else {
               newColor = _backColorSelected;
             }
+            // fold keyboard on mobile before opening color picker dialogue
+            //FocusManager.instance.primaryFocus?.unfocus();
+            FocusScope.of(widget.controller.context!).unfocus();
+            // display
             await showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return PointerInterceptor(
                     child: AlertDialog(
                       scrollable: true,
+                      insetPadding: EdgeInsets.all(8),
                       content: ColorPicker(
                         color: newColor,
                         onColorChanged: (color) {
                           newColor = color;
                         },
-                        title: Text('Choose a Color',
+                        title: Text('Pick a color:',
                             style: Theme.of(context).textTheme.headline6),
                         width: 40,
                         height: 40,
@@ -122,6 +127,9 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                           dialogActionButtons: true,
                         ),
                       ),
+                      actionsAlignment: kIsWeb
+                          ? MainAxisAlignment.end
+                          : MainAxisAlignment.spaceEvenly,
                       actions: <Widget>[
                         TextButton(
                           onPressed: () {

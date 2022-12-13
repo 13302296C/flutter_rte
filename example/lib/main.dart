@@ -23,7 +23,7 @@ class HtmlEditorExampleApp extends StatelessWidget {
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.light,
-      home: const Fullscreen(),
+      home: const Test(), //const Fullscreen(),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:html' as html;
-import 'package:flutter_rich_text_editor/src/utils/shims/dart_ui.dart' as ui;
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -83,6 +83,7 @@ abstract class PlatformSpecificMixin {
         var jsonStr = jsonEncoder.convert(data);
         html.window.postMessage(jsonStr, '*');
       });
+    // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(viewId, (int viewId) => iframe);
   }
 

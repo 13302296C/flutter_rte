@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rich_text_editor/src/utils/shims/dart_ui.dart';
 
 /// Sets the direction the dropdown menu opens
 enum DropdownMenuDirection { down, up }
@@ -910,13 +909,13 @@ class _DropdownButtonState<T> extends State<CustomDropdownButton<T>>
 
   Orientation _getOrientation(BuildContext context) {
     var result = MediaQuery.maybeOf(context)?.orientation;
-    if (result == null) {
-      final Size size = window.physicalSize;
-      result = size.width > size.height
-          ? Orientation.landscape
-          : Orientation.portrait;
-    }
-    return result;
+    // if (result == null) {
+    //   final Size size = window.physicalSize;
+    //   result = size.width > size.height
+    //       ? Orientation.landscape
+    //       : Orientation.portrait;
+    // }
+    return result ?? (kIsWeb ? Orientation.landscape : Orientation.portrait);
   }
 
   bool get _showHighlight {
