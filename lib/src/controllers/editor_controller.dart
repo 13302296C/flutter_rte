@@ -88,6 +88,11 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   ///
   GlobalKey toolbarKey = GlobalKey();
 
+  @internal
+  double get verticalPadding =>
+      (editorOptions?.padding?.top ?? 0) +
+      (editorOptions?.padding?.bottom ?? 0);
+
   /// The absolute minimum possible height including one line of text
   /// plus top and bottom padding
   double _contentHeight = 64;
@@ -96,7 +101,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   double get contentHeight => _contentHeight;
   set contentHeight(double height) {
     if (contentHeight != height && autoAdjustHeight) {
-      _contentHeight = height;
+      _contentHeight = height + verticalPadding;
       recalculateTotalHeight();
     }
   }
@@ -105,6 +110,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   void recalculateTotalHeight() {
     if (toolbarHeight != null) {
       totalHeight.value = toolbarHeight! + _contentHeight;
+    } else {
+      totalHeight.value = _contentHeight + verticalPadding;
     }
     notifyListeners();
   }

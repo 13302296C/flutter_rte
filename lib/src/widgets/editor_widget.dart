@@ -126,16 +126,15 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     if (!_controller.initialized) {
       _controller.initEditor(context);
     }
-    var h = _height;
-    // account for conteiner padding, if one is provided
-    if (h != null) {
-      h = h +
-          (editorOptions.padding?.top ?? 0) +
-          (editorOptions.padding?.bottom ?? 0);
-    }
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
+        var h = _height;
+        // account for conteiner padding, if one is provided
+        if (h != null) {
+          h = h + _controller.verticalPadding;
+        }
         return Container(
             padding: editorOptions.padding,
             decoration: editorOptions.decoration,
