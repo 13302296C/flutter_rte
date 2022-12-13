@@ -16,7 +16,7 @@ extension StreamProcessor on HtmlEditorController {
   /// checks scroll settings and scrolls if needed
   void maybeScrollIntoView() {
     if (context == null) return;
-    if (editorOptions!.shouldEnsureVisible && Scrollable.of(context!) != null) {
+    if (editorOptions.shouldEnsureVisible && Scrollable.of(context!) != null) {
       // scroll into view with a short delay, to let the keyboard unfold
       // and make experience more smooth
       unawaited(Future.delayed(Duration(milliseconds: 300)).then((_) {
@@ -42,7 +42,7 @@ extension StreamProcessor on HtmlEditorController {
       case 'initEditor':
         if (response['result'] == 'Ok') {
           await recalculateContentHeight();
-          callbacks?.onInit?.call();
+          callbacks.onInit?.call();
         } else {
           _initialized = false;
           notifyListeners();
@@ -81,34 +81,34 @@ extension StreamProcessor on HtmlEditorController {
 
       // Callbacks = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
       case 'onBeforeCommand':
-        callbacks?.onBeforeCommand?.call(response['contents']);
+        callbacks.onBeforeCommand?.call(response['contents']);
         break;
 
       case 'onChangeContent':
         _buffer = response['contents'];
         print(_buffer);
-        callbacks?.onChangeContent?.call(response['contents']);
+        callbacks.onChangeContent?.call(response['contents']);
         maybeScrollIntoView();
         if (autoAdjustHeight) unawaited(recalculateContentHeight());
         break;
 
       case 'onChangeCodeview':
-        callbacks?.onChangeCodeview?.call(response['contents']);
+        callbacks.onChangeCodeview?.call(response['contents']);
         break;
 
       case 'onDialogShown':
-        callbacks?.onDialogShown?.call();
+        callbacks.onDialogShown?.call();
         break;
 
       case 'onEnter':
-        callbacks?.onEnter?.call();
+        callbacks.onEnter?.call();
         break;
 
       case 'onFocus':
         hasFocus = true;
         focusNode?.requestFocus();
         maybeScrollIntoView();
-        callbacks?.onFocus?.call();
+        callbacks.onFocus?.call();
         notifyListeners();
         unawaited(updateToolbar());
         break;
@@ -117,18 +117,18 @@ extension StreamProcessor on HtmlEditorController {
         hasFocus = false;
         if (textHasNoValue(_buffer)) {
           _buffer = '';
-          callbacks?.onChangeContent?.call(_buffer);
+          callbacks.onChangeContent?.call(_buffer);
         }
         //notifyListeners();
-        callbacks?.onBlur?.call();
+        callbacks.onBlur?.call();
         break;
 
       case 'onBlurCodeview':
-        callbacks?.onBlurCodeview?.call();
+        callbacks.onBlurCodeview?.call();
         break;
 
       // case 'onImageLinkInsert':
-      //   callbacks?.onImageLinkInsert?.call(response['url']);
+      //   callbacks.onImageLinkInsert?.call(response['url']);
       //   break;
 
       // case 'onImageUpload':
@@ -142,12 +142,12 @@ extension StreamProcessor on HtmlEditorController {
       //   };
       //   var jsonStr = json.encode(map);
       //   var file = fileUploadFromJson(jsonStr);
-      //   callbacks?.onImageUpload?.call(file);
+      //   callbacks.onImageUpload?.call(file);
       //   break;
 
       // case 'onImageUploadError':
       //   if (response['base64'] != null) {
-      //     callbacks?.onImageUploadError?.call(
+      //     callbacks.onImageUploadError?.call(
       //         null,
       //         response['base64'],
       //         response['error'].contains('base64')
@@ -165,7 +165,7 @@ extension StreamProcessor on HtmlEditorController {
       //     };
       //     var jsonStr = json.encode(map);
       //     var file = fileUploadFromJson(jsonStr);
-      //     callbacks?.onImageUploadError?.call(
+      //     callbacks.onImageUploadError?.call(
       //         file,
       //         null,
       //         response['error'].contains('base64')
@@ -178,37 +178,37 @@ extension StreamProcessor on HtmlEditorController {
 
       case 'onKeyDown':
       case 'onKeyPress':
-        callbacks?.onKeyDown?.call(response['keyCode']);
+        callbacks.onKeyDown?.call(response['keyCode']);
         break;
 
       case 'onKeyUp':
-        callbacks?.onKeyUp?.call(response['keyCode']);
+        callbacks.onKeyUp?.call(response['keyCode']);
         //await recalculateHeight();
         break;
 
       case 'onMouseDown':
       case 'mouseClick':
-        callbacks?.onMouseDown?.call();
+        callbacks.onMouseDown?.call();
         break;
 
       case 'onMouseUp':
-        callbacks?.onMouseUp?.call();
+        callbacks.onMouseUp?.call();
         break;
 
       case 'mouseIn':
-        callbacks?.onMouseIn?.call();
+        callbacks.onMouseIn?.call();
         break;
 
       case 'mouseOut':
-        callbacks?.onMouseOut?.call();
+        callbacks.onMouseOut?.call();
         break;
 
       case 'onPaste':
-        callbacks?.onPaste?.call();
+        callbacks.onPaste?.call();
         break;
 
       case 'onScroll':
-        callbacks?.onScroll?.call();
+        callbacks.onScroll?.call();
         break;
 
       case 'characterCount':

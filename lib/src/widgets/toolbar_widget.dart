@@ -25,7 +25,7 @@ part 'toolbar_extensions/style_buttons.dart';
 class ToolbarWidget extends StatefulWidget {
   /// The [HtmlEditorController] is mainly used to call the [execCommand] method
   final HtmlEditorController controller;
-  HtmlToolbarOptions get toolbarOptions => controller.toolbarOptions!;
+  HtmlToolbarOptions get toolbarOptions => controller.toolbarOptions;
   Callbacks? get callbacks => controller.callbacks;
 
   const ToolbarWidget({
@@ -423,17 +423,16 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
               child: AbsorbPointer(
                 absorbing: !_enabled,
                 child: _enabled &&
-                            widget.controller.toolbarOptions!.toolbarPosition ==
+                            widget.controller.toolbarOptions.toolbarPosition ==
                                 ToolbarPosition.custom ||
                         (_enabled &&
-                            widget.controller.toolbarOptions!.fixedToolbar &&
-                            (widget.controller.toolbarOptions!
-                                    .toolbarPosition !=
+                            widget.controller.toolbarOptions.fixedToolbar &&
+                            (widget.controller.toolbarOptions.toolbarPosition !=
                                 ToolbarPosition.custom)) ||
                         (_enabled &&
-                            widget.controller.toolbarOptions!.toolbarPosition !=
+                            widget.controller.toolbarOptions.toolbarPosition !=
                                 ToolbarPosition.custom &&
-                            !widget.controller.toolbarOptions!.fixedToolbar)
+                            !widget.controller.toolbarOptions.fixedToolbar)
                     ? child
                     : SizedBox(),
               ),

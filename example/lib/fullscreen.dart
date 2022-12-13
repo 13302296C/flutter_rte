@@ -69,11 +69,11 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
         editor = HtmlEditor(
           initialValue: strings[_sections.indexOf(e)],
           controller: _controllers[_sections.indexOf(e)]
-            ..toolbarOptions?.toolbarPosition = ToolbarPosition.custom
-            ..toolbarOptions?.toolbarType = _demoType == DemoType.fullscreen
+            ..toolbarOptions.toolbarPosition = ToolbarPosition.custom
+            ..toolbarOptions.toolbarType = _demoType == DemoType.fullscreen
                 ? ToolbarType.nativeScrollable
                 : ToolbarType.nativeExpandable
-            ..toolbarOptions?.initiallyExpanded = true
+            ..toolbarOptions.initiallyExpanded = true
             ..callbacks = Callbacks(onChangeContent: (s) {
               strings[_sections.indexOf(e)] = s ?? '';
             }, onFocus: () {
@@ -94,11 +94,11 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
               strings[_sections.indexOf(e)] = s ?? '';
             },
             controller: _controllers[_sections.indexOf(e)]
-              ..toolbarOptions?.toolbarPosition = ToolbarPosition.aboveEditor
-              ..toolbarOptions?.toolbarType = ToolbarType.nativeExpandable
-              ..toolbarOptions?.initiallyExpanded = false
-              ..toolbarOptions?.backgroundColor = _tbBgd
-              ..editorOptions?.decoration = BoxDecoration(
+              ..toolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
+              ..toolbarOptions.toolbarType = ToolbarType.nativeExpandable
+              ..toolbarOptions.initiallyExpanded = false
+              ..toolbarOptions.backgroundColor = _tbBgd
+              ..editorOptions.decoration = BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
                   border: Border.all(color: _tbBgd!, width: 2)),
             height: 250,

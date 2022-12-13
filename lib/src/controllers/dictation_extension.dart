@@ -37,8 +37,8 @@ extension DictationController on HtmlEditorController {
   Future<void> convertSpeechToText(Function(String v) onResult) async {
     if (!await _initSpeechToText()) return;
     isRecording = true;
-    notifyListeners();
     contentHeight += 100;
+    notifyListeners();
     await speechToText?.listen(
         onResult: (SpeechRecognitionResult result) {
           if (!result.finalResult) {

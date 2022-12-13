@@ -74,30 +74,40 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   //List<Plugins> get plugins => widget.controller.plugins;
 
-  HtmlEditorOptions get editorOptions => _controller.editorOptions!;
+  HtmlEditorOptions get editorOptions => _controller.editorOptions;
 
-  HtmlToolbarOptions get toolbarOptions => _controller.toolbarOptions!;
+  HtmlToolbarOptions get toolbarOptions => _controller.toolbarOptions;
 
+  /// logic that calculates and sets the explicit height of the container.
   double? get _height {
+    double? h;
+
     if (widget.expandFullHeight) {
-      return MediaQuery.of(context).size.height;
-    }
+      h = MediaQuery.of(context).size.height;
+    } else
 
     // if no need to show toolbar - return the content height only
     if (toolbarOptions.toolbarPosition == ToolbarPosition.custom ||
         _controller.isDisabled ||
         _controller.isReadOnly) {
-      return editorOptions.height ??
+      h = editorOptions.height ??
           math.max(widget.minHeight ?? 0, _controller.contentHeight);
+    } else {
+      // if height if fixed = return fixed height, otherwise return
+      // greatest of `minHeight` and `contentHeight`.
+      h = editorOptions.height ??
+          (_controller.toolbarHeight == null
+              ? null
+              : math.max(widget.minHeight ?? 0,
+                  _controller.contentHeight + _controller.toolbarHeight!));
     }
 
-    // if height if fixed = return fixed height, otherwise return
-    // greatest of `minHeight` and `contentHeight`.
-    return editorOptions.height ??
-        (_controller.toolbarHeight == null
-            ? null
-            : math.max(widget.minHeight ?? 0,
-                _controller.contentHeight + _controller.toolbarHeight!));
+    // account for conteiner padding, if one is provided
+    if (h != null) {
+      h = h + _controller.verticalPadding;
+    }
+
+    return h;
   }
 
   ///
@@ -130,16 +140,12 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        var h = _height;
-        // account for conteiner padding, if one is provided
-        if (h != null) {
-          h = h + _controller.verticalPadding;
-        }
         return Container(
-            padding: editorOptions.padding,
-            decoration: editorOptions.decoration,
-            height: h,
-            child: _controller.hasFault ? _faultWidget : _editorWidget(child!));
+          padding: editorOptions.padding,
+          decoration: editorOptions.decoration,
+          height: _height,
+          child: _controller.hasFault ? _faultWidget : _editorWidget(child!),
+        );
       },
       child: _controller.view(_controller),
     );
@@ -158,23 +164,22 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
               key: _controller.toolbarKey,
               controller: _controller,
             ),
-          ..._controller.initialized
-              ? [
-                  Expanded(
-                      child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: Stack(
-                      children: [
-                        _backgroundWidget(context),
-                        _hintTextWidget(context),
-                        child,
-                        _scrollPatch(context),
-                        _sttDictationPreview(),
-                      ],
-                    ),
-                  ))
-                ]
-              : [SizedBox()],
+          if (_controller.initialized)
+            Expanded(
+              child: Directionality(
+                textDirection: TextDirection.ltr,
+                child: Stack(
+                  children: [
+                    _backgroundWidget(),
+                    _hintTextWidget(),
+                    child,
+                    _scrollPatch(),
+                    _sttDictationPreview(),
+                  ],
+                ),
+              ),
+            ),
+          if (!_controller.initialized) SizedBox(),
         ],
       );
 
@@ -265,7 +270,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   }
 
   /// This top overlay widget patches scrolling issues on iOS and Web
-  Widget _scrollPatch(BuildContext context) {
+  Widget _scrollPatch() {
     //if disabled or read-only - intercept all events
     if (_controller.isReadOnly || _controller.isDisabled) {
       if (kIsWeb) {
@@ -299,7 +304,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   }
 
   ///
-  Widget _hintTextWidget(BuildContext context) {
+  Widget _hintTextWidget() {
     if (_controller.contentIsEmpty &&
         !_controller.hasFocus &&
         !_controller.isReadOnly) {
@@ -323,7 +328,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   }
 
   ///
-  Widget _backgroundWidget(BuildContext context) {
+  Widget _backgroundWidget() {
     return Positioned.fill(
         child: Container(
             decoration: editorOptions.backgroundDecoration,
@@ -356,16 +361,16 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                 Callbacks(onChangeContent: widget.onChanged));
 
     _controller.context = context;
-    _controller.editorOptions!.expandFullHeight = widget.expandFullHeight;
+    _controller.editorOptions.expandFullHeight = widget.expandFullHeight;
     if (widget.initialValue != null) {
       _controller.setInitialText(widget.initialValue!);
     }
     if (widget.hint != null) {
-      _controller.editorOptions!.hint = widget.hint;
+      _controller.editorOptions.hint = widget.hint;
     }
 
     if (widget.height != null) {
-      _controller.editorOptions!.height = widget.height;
+      _controller.editorOptions.height = widget.height;
     }
 
     if (widget.enableDictation != null) {

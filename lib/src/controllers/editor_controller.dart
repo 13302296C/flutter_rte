@@ -25,19 +25,19 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     // this.processInputHtml = true,
     this.processNewLineAsBr = false,
     this.processOutputHtml = true,
-    this.editorOptions,
-    this.toolbarOptions,
-    this.stylingOpitons,
-    this.callbacks,
+    HtmlEditorOptions? editorOptions,
+    HtmlToolbarOptions? toolbarOptions,
+    HtmlStylingOptions? stylingOpitons,
+    Callbacks? callbacks,
     this.context,
-  }) {
+  })  : callbacks = callbacks ?? Callbacks(),
+        editorOptions = editorOptions ?? HtmlEditorOptions(),
+        toolbarOptions = toolbarOptions ?? HtmlToolbarOptions(),
+        stylingOpitons = stylingOpitons ??
+            HtmlStylingOptions(
+                blockTagAttributes: HtmlTagAttributes(
+                    inlineStyle: 'text-indent:3.5em; text-align:justify;')) {
     viewId = getRandString(10).substring(0, 14);
-    editorOptions ??= HtmlEditorOptions();
-    toolbarOptions ??= HtmlToolbarOptions();
-    stylingOpitons ??= HtmlStylingOptions(
-        blockTagAttributes: HtmlTagAttributes(
-            inlineStyle: 'text-indent:3.5em; text-align:justify;'));
-    callbacks ??= Callbacks();
   }
 
   /// This context is used __only__ if you need to provide a context other than
@@ -45,13 +45,13 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   BuildContext? context;
 
   /// Defines options for the html editor
-  HtmlEditorOptions? editorOptions;
+  HtmlEditorOptions editorOptions;
 
   /// Defines options for the editor toolbar
-  HtmlToolbarOptions? toolbarOptions;
+  HtmlToolbarOptions toolbarOptions;
 
   /// Defines CSS styles for various components and whe
-  HtmlStylingOptions? stylingOpitons;
+  HtmlStylingOptions stylingOpitons;
 
   //late List<Plugins> plugins;
 
@@ -83,15 +83,14 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Sets & activates Summernote's callbacks. See the functions available in
   /// [Callbacks] for more details.
-  Callbacks? callbacks;
+  Callbacks callbacks;
 
   ///
   GlobalKey toolbarKey = GlobalKey();
 
   @internal
   double get verticalPadding =>
-      (editorOptions?.padding?.top ?? 0) +
-      (editorOptions?.padding?.bottom ?? 0);
+      (editorOptions.padding?.top ?? 0) + (editorOptions.padding?.bottom ?? 0);
 
   /// The absolute minimum possible height including one line of text
   /// plus top and bottom padding
@@ -132,7 +131,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   ///
   /// The default value is true. It is recommended to leave this as true because
   /// it significantly improves the UX.
-  bool get autoAdjustHeight => editorOptions!.height == null;
+  bool get autoAdjustHeight => editorOptions.height == null;
 
   /// Determines whether text processing should happen on input HTML, e.g.
   /// whether a new line should be converted to a <br>.
@@ -199,7 +198,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   ///
   void setInitialText(String text) {
     _buffer = text;
-    editorOptions!.initialText = text;
+    editorOptions.initialText = text;
     //
   }
 
@@ -341,62 +340,6 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
   // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - //
 
-  /// A function to execute JS passed as a [WebScript] to the editor. This should
-  /// only be used on Flutter Web.
-  // Future<dynamic> evaluateJavascriptWeb(String name,
-  //     {bool hasReturnValue = false}) async {
-  //   if (hasReturnValue) {
-  //     if (_openRequests.keys.contains('toDart: $name') &&
-  //         !_openRequests['toDart: $name']!.isCompleted) {
-  //       _openRequests['toDart: $name']
-  //           ?.completeError('duplicate request on $name');
-  //       _openRequests.remove('toDart: $name');
-  //     }
-  //     _openRequests.addEntries({'toDart: $name': Completer()}.entries);
-  //     unawaited(_evaluateJavascriptWeb(data: {'type': 'toIframe: $name'}));
-  //     return _openRequests['toDart: $name']!.future;
-  //   } else {
-  //     unawaited(_evaluateJavascriptWeb(data: {'type': 'toIframe: $name'}));
-  //   }
-  // }
-
-  /// Internal function to change list style on Web
-
-  // void changeListStyle(String changed) {
-  //   _evaluateJavascriptWeb(
-  //       data: {'type': 'toIframe: changeListStyle', 'changed': changed});
-  // }
-
-  /// Internal function to change line height on Web
-
-  // void changeLineHeight(String changed) {
-  //   _evaluateJavascriptWeb(
-  //       data: {'type': 'toIframe: changeLineHeight', 'changed': changed});
-  // }
-
-  /// Internal function to change text direction on Web
-
-  // void changeTextDirection(String direction) {
-  //   _evaluateJavascriptWeb(data: {
-  //     'type': 'toIframe: changeTextDirection',
-  //     'direction': direction
-  //   });
-  // }
-
-  // /// Internal function to change case on Web
-
-  // void changeCase(String changed) {
-  //   _evaluateJavascriptWeb(
-  //       data: {'type': 'toIframe: changeCase', 'case': changed});
-  // }
-
-  // /// Internal function to insert table on Web
-
-  // void insertTable(String dimensions) {
-  //   _evaluateJavascriptWeb(
-  //       data: {'type': 'toIframe: insertTable', 'dimensions': dimensions});
-  // }
-
   /// Helper function to process input html
   String _processHtml(String html) {
     // if (processInputHtml) {
@@ -443,7 +386,7 @@ const isNativePlatform = true;
     /// container height will always adjust to the document height.
     /// If the height is set - add padding for the boxed layouts.
     var hideScrollbarCss = '';
-    if (editorOptions!.height == null && !editorOptions!.expandFullHeight) {
+    if (editorOptions.height == null && !editorOptions.expandFullHeight) {
       hideScrollbarCss = '''
   ::-webkit-scrollbar {
     width: 0px;
@@ -462,13 +405,13 @@ const isNativePlatform = true;
         '/*---- Hide Scrollbar ----*/', hideScrollbarCss);
 
     htmlString = htmlString.replaceFirst(
-        '/*---- Root Stylesheet ----*/', stylingOpitons!.getRootStyleText);
+        '/*---- Root Stylesheet ----*/', stylingOpitons.getRootStyleText);
 
     htmlString = htmlString.replaceFirst(
-        '<squirecontent>', _processHtml(editorOptions?.initialText ?? ''));
+        '<squirecontent>', _processHtml(editorOptions.initialText ?? ''));
 
     htmlString = htmlString.replaceFirst(
-        '/*---- Squire Config ----*/', stylingOpitons!.options);
+        '/*---- Squire Config ----*/', stylingOpitons.options);
 
     return htmlString;
   }
