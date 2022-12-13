@@ -8,16 +8,16 @@ class Callbacks {
   Callbacks({
     this.onBeforeCommand,
     this.onChangeContent,
-    this.onChangeCodeview,
+    //this.onChangeCodeview,
     this.onChangeSelection,
-    this.onDialogShown,
-    this.onEnter,
+    //this.onDialogShown,
+    //this.onEnter,
     this.onFocus,
     this.onBlur,
-    this.onBlurCodeview,
-    this.onImageLinkInsert,
-    this.onImageUpload,
-    this.onImageUploadError,
+    //this.onBlurCodeview,
+    //this.onImageLinkInsert,
+    //this.onImageUpload,
+    //this.onImageUploadError,
     this.onInit,
     this.onKeyUp,
     this.onKeyDown,
@@ -57,7 +57,7 @@ class Callbacks {
   /// will also trigger this callback.
   ///
   /// This function will return the current code in the codeview as an argument.
-  void Function(String?)? onChangeCodeview;
+  //void Function(String?)? onChangeCodeview;
 
   /// Called whenever the selection area of the editor is changed.
   ///
@@ -68,7 +68,7 @@ class Callbacks {
 
   /// Called whenever a dialog is shown in the editor. The dialogs will be either
   /// the link, image, video, or help dialogs.
-  void Function()? onDialogShown;
+  //void Function()? onDialogShown;
 
   /// Called whenever the enter/return key is pressed and the editor
   /// is in rich text view. There is currently no way to detect enter/return
@@ -102,7 +102,7 @@ class Callbacks {
   /// the webview or dismissing the keyboard does not trigger this callback.
   /// This callback will only be triggered if the user taps on an empty space
   /// in the toolbar or switches the view mode of the editor.
-  void Function()? onBlurCodeview;
+  //void Function()? onBlurCodeview;
 
   /// Called whenever an image is inserted via a link. The function passes the
   /// URL of the image inserted into the editor.
@@ -111,7 +111,7 @@ class Callbacks {
   /// insertion handler! This means you must manually insert the image using
   /// [controller.insertNetworkImage] in your callback function, otherwise
   /// nothing will be inserted into the editor!
-  void Function(String?)? onImageLinkInsert;
+  //void Function(String?)? onImageLinkInsert;
 
   /// Called whenever an image is inserted via upload. The function passes the
   /// [FileUpload] class, containing the filename, size, MIME type, base64 data,
@@ -122,12 +122,12 @@ class Callbacks {
   /// the image using [controller.insertNetworkImage] (for uploaded images) or
   /// [controller.insertHtml] (for base64 data) in your callback function,
   /// otherwise nothing will be inserted into the editor!
-  void Function(FileUpload)? onImageUpload;
+  //void Function(FileUpload)? onImageUpload;
 
   /// Called whenever an image is failed to be inserted via upload. The function
   /// passes the [FileUpload] class, containing the filename, size, MIME type,
   /// base64 data, and last modified information so you can do error handling.
-  void Function(FileUpload?, String?, UploadError)? onImageUploadError;
+  //void Function(FileUpload?, String?, UploadError)? onImageUploadError;
 
   /// Called whenever [WebViewController.onLoadStop] is fired on mobile
   /// or when the [IFrameElement.onLoad] stream is fired on web. Note that this

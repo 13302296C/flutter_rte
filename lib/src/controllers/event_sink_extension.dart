@@ -92,13 +92,13 @@ extension StreamProcessor on HtmlEditorController {
         if (autoAdjustHeight) unawaited(recalculateContentHeight());
         break;
 
-      case 'onChangeCodeview':
-        callbacks.onChangeCodeview?.call(response['contents']);
-        break;
+      // case 'onChangeCodeview':
+      //   callbacks.onChangeCodeview?.call(response['contents']);
+      //   break;
 
-      case 'onDialogShown':
-        callbacks.onDialogShown?.call();
-        break;
+      // case 'onDialogShown':
+      //   callbacks.onDialogShown?.call();
+      //   break;
 
       case 'onEnter':
         callbacks.onEnter?.call();
@@ -123,9 +123,9 @@ extension StreamProcessor on HtmlEditorController {
         callbacks.onBlur?.call();
         break;
 
-      case 'onBlurCodeview':
-        callbacks.onBlurCodeview?.call();
-        break;
+      // case 'onBlurCodeview':
+      //   callbacks.onBlurCodeview?.call();
+      //   break;
 
       // case 'onImageLinkInsert':
       //   callbacks.onImageLinkInsert?.call(response['url']);
