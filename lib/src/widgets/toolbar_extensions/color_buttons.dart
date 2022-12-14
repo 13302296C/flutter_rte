@@ -91,9 +91,8 @@ extension ToolbarColorButtons on ToolbarWidgetState {
               newColor = _backColorSelected;
             }
             // fold keyboard on mobile before opening color picker dialogue
-            //FocusManager.instance.primaryFocus?.unfocus();
-            FocusScope.of(widget.controller.context!).unfocus();
-            // display
+            FocusManager.instance.primaryFocus?.unfocus();
+            // display picker
             await showDialog(
                 context: context,
                 builder: (BuildContext context) {
