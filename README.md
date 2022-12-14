@@ -230,7 +230,7 @@ Adding your own button groups to the toolbar is very simple - just provide a lis
 ```Dart
 HtmlEditor(
     controller: HtmlEditorController()
-        ..toolbarOptions!.customButtonGroups = [
+        ..toolbarOptions.customButtonGroups = [
         CustomButtonGroup(
             index: 0, // place first
             buttons: [
