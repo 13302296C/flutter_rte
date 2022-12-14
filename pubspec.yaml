@@ -6,10 +6,10 @@ version: 0.1.0
 
 publish_to:
 
-repository: https://github.com/Fort-Reef/flutter_rich_text_editor
-issue_tracker: https://github.com/Fort-Reef/flutter_rich_text_editor/issues
+repository: https://github.com/13302296C/flutter_rich_text_editor
+issue_tracker: https://github.com/13302296C/flutter_rich_text_editor/issues
 homepage: https://flutter-rich-text.web.app
-documentation: https://github.com/Fort-Reef/flutter_rich_text_editor/blob/master/README.md
+documentation: https://github.com/13302296C/flutter_rich_text_editor/blob/master/README.md
 
 platforms:
   android:
