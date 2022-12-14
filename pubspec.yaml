@@ -28,14 +28,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flex_color_picker: ^2.5.0
-  numberpicker: ^2.1.1
-  pointer_interceptor: 0.9.0+1  # version locked due to bugs 
-                                # in Flutter 3.0
-  pedantic: ^1.11.1
-  speech_to_text: ^6.1.1
+  flex_color_picker: 
+  numberpicker: 
+  pointer_interceptor:  # in Flutter 3.0 and below
+                        # use 0.9.0+1 due to bugs in framework
+  pedantic: ^1.0.0
+  speech_to_text: ^6.0.0
   webview_flutter: ^3.0.4
-  meta: ^1.7.0
+  meta:
 
 dev_dependencies:
   flutter_test:

@@ -91,7 +91,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
 
   /// get body text color based on platform brightness
   Color get _preferredBodyColor =>
-      widget.controller.stylingOpitons.textColor(context);
+      widget.controller.stylingOptions.textColor(context);
 
   /// Sets the selected item for the background color dialog
   Color _backColorSelected = Colors.yellow;

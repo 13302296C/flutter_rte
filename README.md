@@ -26,8 +26,8 @@ Easy to use WYCIWYG HTML editor with flexibility and control over the generated 
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with the following key differences:
  * Vertical auto-sizing to content size with height change notifier
- * ***Summernote*** and ***jQuery*** **replaced** with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for stricter security, HTML5 compatibility, features, performance and size.
- * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter) for stricter security and better handling.
+ * ***Summernote*** and ***jQuery*** replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for stricter security, HTML5 compatibility, features, performance and size.
+ * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter) for stricter security.
 
 
 ____
@@ -133,7 +133,7 @@ var stylingOptions = HtmlStylingOptions(
 
     // Now create the editor passing the styling options
     return HtmlEditor(
-      controller: HtmlEditorController(stylingOpitons: stylingOptions),
+      controller: HtmlEditorController(stylingOptions: stylingOptions),
       onChanged: (p0) => (p0) {/* TODO */},
       initialValue: '' /* TODO */,
     );

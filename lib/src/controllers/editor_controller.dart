@@ -27,13 +27,13 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     this.processOutputHtml = true,
     HtmlEditorOptions? editorOptions,
     HtmlToolbarOptions? toolbarOptions,
-    HtmlStylingOptions? stylingOpitons,
+    HtmlStylingOptions? stylingOptions,
     Callbacks? callbacks,
     this.context,
   })  : callbacks = callbacks ?? Callbacks(),
         editorOptions = editorOptions ?? HtmlEditorOptions(),
         toolbarOptions = toolbarOptions ?? HtmlToolbarOptions(),
-        stylingOpitons = stylingOpitons ??
+        stylingOptions = stylingOptions ??
             HtmlStylingOptions(
                 blockTagAttributes: HtmlTagAttributes(
                     inlineStyle: 'text-indent:3.5em; text-align:justify;')) {
@@ -51,7 +51,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   HtmlToolbarOptions toolbarOptions;
 
   /// Defines CSS styles for various components and whe
-  HtmlStylingOptions stylingOpitons;
+  HtmlStylingOptions stylingOptions;
 
   //late List<Plugins> plugins;
 
@@ -386,7 +386,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// This method compiles HTML document based on various controller settings
   Future<String> getInitialContent() async {
-    var textColor = stylingOpitons.textColorCssString(context!);
+    var textColor = stylingOptions.textColorCssString(context!);
     var initScript = 'const viewId = \'$viewId\';';
     if (kIsWeb) {
       initScript += '''
@@ -420,13 +420,13 @@ const isNativePlatform = true;
         '/*---- Hide Scrollbar ----*/', hideScrollbarCss);
 
     htmlString = htmlString.replaceFirst(
-        '/*---- Root Stylesheet ----*/', stylingOpitons.getRootStyleText);
+        '/*---- Root Stylesheet ----*/', stylingOptions.getRootStyleText);
 
     htmlString = htmlString.replaceFirst(
         '<squirecontent>', _processHtml(editorOptions.initialText ?? ''));
 
     htmlString = htmlString.replaceFirst(
-        '/*---- Squire Config ----*/', stylingOpitons.options);
+        '/*---- Squire Config ----*/', stylingOptions.options);
 
     return htmlString;
   }
