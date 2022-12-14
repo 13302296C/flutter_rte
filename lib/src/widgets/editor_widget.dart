@@ -128,6 +128,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   void dispose() {
     _controller.focusNode?.dispose();
     _controller.focusNode = null;
+    _controller.deinitialize();
     super.dispose();
   }
 
@@ -277,11 +278,11 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     }
     //if disabled or read-only - intercept all events
     if (_controller.isReadOnly || _controller.isDisabled) {
-      if (kIsWeb) {
-        return Positioned.fill(
-            child: PointerInterceptor(child: SizedBox.expand()));
-      }
-      return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
+      // if (kIsWeb) {
+      //   return Positioned.fill(
+      //       child: PointerInterceptor(child: SizedBox.expand()));
+      // }
+      // return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
       //
     } else if (!_controller.hasFocus ||
         (kIsWeb && _controller.contentIsEmpty)) {
@@ -383,11 +384,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
     if (widget.isReadOnly != null) {
       _controller.isReadOnly = widget.isReadOnly!;
-      if (_controller.isReadOnly) {
-        _controller.disable();
-      } else {
-        //_controller.enable();
-      }
     }
     _controller.fault = fault;
   }

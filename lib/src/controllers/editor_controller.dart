@@ -67,6 +67,16 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   // ignore: prefer_final_fields
   bool _initialized = false;
 
+  /// Sometimes, when using MVVM/MVC design patterns, you may want to
+  /// keep your controller in the root provider or notifier.
+  /// In this case, when UI component gets destroyed you will want
+  /// your controlller to be aware of that.
+  /// This `deinitialize` method does just that.
+  ///
+  /// It's called automatically when the editor widget is being disposed,
+  /// so there's no need to call it explicitly outside.
+  void deinitialize() => _initialized = false;
+
   /// used internally to tell event sink
   /// to ignore incoming onInit from the editor
   /// and replace it with onChanged instead
@@ -228,9 +238,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     if (isDisabled) return;
     toolbar?.disable();
     await evaluateJavascript(data: {'type': 'toIframe: disable'});
-    await recalculateContentHeight();
-    notifyListeners();
+    //await recalculateContentHeight();
     isDisabled = true;
+    notifyListeners();
   }
 
   /// enables the Html editor
@@ -397,9 +407,15 @@ const isNativePlatform = false;
 const isNativePlatform = true;
 ''';
     }
+
     var htmlString = await rootBundle.loadString(filePath);
     htmlString =
         htmlString.replaceFirst('/*---- Init Script ----*/', initScript);
+
+    var readonly =
+        'richTextBox.spellcheck = ${isDisabled || isReadOnly ? 'false' : 'true'};\n'
+        'richTextBox.contentEditable = ${isDisabled || isReadOnly ? 'false' : 'true'};\n';
+    htmlString = htmlString.replaceFirst('/*---- Read Only ----*/', readonly);
 
     /// if no explicit `height` is provided - hide the scrollbar as the
     /// container height will always adjust to the document height.

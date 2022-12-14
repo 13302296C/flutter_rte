@@ -165,7 +165,7 @@ class HtmlTagAttributes {
       a += '\'class\':\'$cssClass\'';
     }
     if (inlineStyle != null) {
-      if (a.isNotEmpty) a.padRight(2, ', ');
+      if (a.isNotEmpty) a = '$a, ';
       a += '\'style\':\'$inlineStyle\'';
     }
     return '{ $a }';

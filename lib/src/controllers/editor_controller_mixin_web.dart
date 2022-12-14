@@ -27,8 +27,22 @@ abstract class PlatformSpecificMixin {
   StreamSubscription<html.MessageEvent>? _eventSub;
 
   ///
+  HtmlEditorController? _c;
+
+  ///
   /// Helper function to run javascript and check current environment
   Future<void> evaluateJavascript({required Map<String, Object?> data}) async {
+    if (_c == null) return;
+    if (!(_c?.initialized ?? false)) {
+      log('HtmlEditorController error:',
+          error:
+              'HtmlEditorController called an editor widget that\n does not exist.\n'
+              'This may happen because the widget\n'
+              'initialization has been called but not completed,\n'
+              'or because the editor widget was destroyed.\n'
+              'Method called: [${data['type']}]');
+      return;
+    }
     data['view'] = viewId;
     final jsonEncoder = JsonEncoder();
     var json = jsonEncoder.convert(data);
@@ -48,23 +62,6 @@ abstract class PlatformSpecificMixin {
       log('Event stream done.');
     });
 
-    // summernoteCallbacks = summernoteCallbacks + '}';
-    // if ((Theme.of(initBC).brightness == Brightness.dark ||
-    //         editorOptions!.darkMode == true) &&
-    //     editorOptions!.darkMode != false) {}
-    // var userScripts = '';
-    // if (editorOptions!.webInitialScripts != null) {
-    //   editorOptions!.webInitialScripts!.forEach((element) {
-    //     userScripts = userScripts +
-    //         '''
-    //       if (data["type"].includes("${element.name}")) {
-    //         ${element.script}
-    //       }
-    //     ''' +
-    //         '\n';
-    //   });
-    // }
-
     final iframe = html.IFrameElement()
       ..width = MediaQuery.of(initBC).size.width.toString() //'800'
       ..height = '100%'
@@ -74,9 +71,6 @@ abstract class PlatformSpecificMixin {
       ..style.overflow = 'hidden'
       ..id = viewId
       ..onLoad.listen((event) async {
-        if (c.isReadOnly || c.isDisabled) {
-          await c.disable();
-        }
         var data = <String, Object>{'type': 'toIframe: initEditor'};
         data['view'] = viewId;
         final jsonEncoder = JsonEncoder();
@@ -93,6 +87,8 @@ abstract class PlatformSpecificMixin {
   }
 
   ///
-  Widget view(HtmlEditorController controller) =>
-      HtmlElementView(viewType: viewId);
+  Widget view(HtmlEditorController controller) {
+    _c = controller;
+    return HtmlElementView(viewType: viewId);
+  }
 }

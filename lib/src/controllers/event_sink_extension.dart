@@ -53,7 +53,7 @@ extension StreamProcessor on HtmlEditorController {
           }
           await recalculateContentHeight();
         } else {
-          // failß
+          // fail
           _initialized = false;
           notifyListeners();
           throw Exception('HTML Editor failed to load');
@@ -101,14 +101,6 @@ extension StreamProcessor on HtmlEditorController {
         if (autoAdjustHeight) unawaited(recalculateContentHeight());
         break;
 
-      // case 'onChangeCodeview':
-      //   callbacks.onChangeCodeview?.call(response['contents']);
-      //   break;
-
-      // case 'onDialogShown':
-      //   callbacks.onDialogShown?.call();
-      //   break;
-
       case 'onEnter':
         callbacks.onEnter?.call();
         break;
@@ -128,62 +120,8 @@ extension StreamProcessor on HtmlEditorController {
           _buffer = '';
           callbacks.onChangeContent?.call(_buffer);
         }
-        //notifyListeners();
         callbacks.onBlur?.call();
         break;
-
-      // case 'onBlurCodeview':
-      //   callbacks.onBlurCodeview?.call();
-      //   break;
-
-      // case 'onImageLinkInsert':
-      //   callbacks.onImageLinkInsert?.call(response['url']);
-      //   break;
-
-      // case 'onImageUpload':
-      //   var map = <String, dynamic>{
-      //     'lastModified': response['lastModified'],
-      //     'lastModifiedDate': response['lastModifiedDate'],
-      //     'name': response['name'],
-      //     'size': response['size'],
-      //     'type': response['mimeType'],
-      //     'base64': response['base64']
-      //   };
-      //   var jsonStr = json.encode(map);
-      //   var file = fileUploadFromJson(jsonStr);
-      //   callbacks.onImageUpload?.call(file);
-      //   break;
-
-      // case 'onImageUploadError':
-      //   if (response['base64'] != null) {
-      //     callbacks.onImageUploadError?.call(
-      //         null,
-      //         response['base64'],
-      //         response['error'].contains('base64')
-      //             ? UploadError.jsException
-      //             : response['error'].contains('unsupported')
-      //                 ? UploadError.unsupportedFile
-      //                 : UploadError.exceededMaxSize);
-      //   } else {
-      //     var map = <String, dynamic>{
-      //       'lastModified': response['lastModified'],
-      //       'lastModifiedDate': response['lastModifiedDate'],
-      //       'name': response['name'],
-      //       'size': response['size'],
-      //       'type': response['mimeType']
-      //     };
-      //     var jsonStr = json.encode(map);
-      //     var file = fileUploadFromJson(jsonStr);
-      //     callbacks.onImageUploadError?.call(
-      //         file,
-      //         null,
-      //         response['error'].contains('base64')
-      //             ? UploadError.jsException
-      //             : response['error'].contains('unsupported')
-      //                 ? UploadError.unsupportedFile
-      //                 : UploadError.exceededMaxSize);
-      //   }
-      //   break;
 
       case 'onKeyDown':
       case 'onKeyPress':

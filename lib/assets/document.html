@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<base target="_blank" />
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title></title>
@@ -82,7 +83,7 @@ https://github.com/neilj/Squire
       if (data["view"].includes(viewId)) {
 
         let command = data["type"].split(' ')[1];
-        if(command == 'execCommand')command = data['command'];
+        if(command == 'execCommand') command = data['command'];
         switch(command){
 
           // init
@@ -92,6 +93,8 @@ https://github.com/neilj/Squire
               editor = new Squire( document.getElementsByTagName(rteTagName)[0], {
                 /*---- Squire Config ----*/ 
               });
+              
+              /*---- Read Only ----*/
               initCallbacks();
               postChannelMessage({"type": "toDart: initEditor", "result": "Ok"});
 
@@ -135,19 +138,24 @@ https://github.com/neilj/Squire
             break;
 
           case 'disable':
-            richTextBox.setAttribute("contenteditable", "false");
+            richTextBox.contentEditable = false;
+            richTextBox.spellcheck = false;
+            richTextBox.focus();
+            richTextBox.blur();
             break;
 
           case 'enable':
-            richTextBox.setAttribute("contenteditable", "true");
+            richTextBox.contentEditable = true;
+            richTextBox.spellcheck = true;
+            richTextBox.focus();
             break;
 
           case 'setFocus':
-            editor.focus();
+            richTextBox.focus();
             break;
 
           case 'clearFocus':
-            editor.blur();
+            richTextBox.blur();
             break;
           
           case 'getSelectedText':
@@ -469,52 +477,6 @@ https://github.com/neilj/Squire
       document.addEventListener('click', function(e){
         postChannelMessage({"view": viewId, "type": "toDart: mouseClick"});
       });
-
-      // scroll
-      // window.onScroll = function(e){
-      //   console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
-      // }
-      // window.addEventListener('scroll', function(e){
-      //   console.log(`scrollY: ${window.scrollY}, pageYOffset: ${window.pageYOffset}`);
-      //   window.toDart.postMessage(JSON.stringify({"view": viewId, 
-      //     "type": "toDart: scroll"}), "*");
-      // });
-    
-
-    //   if (c.onBeforeCommand != null) {
-    //   callbacks = callbacks +
-    //       """
-    //       \$('#summernote-2').on('summernote.before.command', function(_, contents, \$editable) {
-    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBeforeCommand", "contents": contents}), "*");
-    //       });\n
-    //     """;
-    // }
-    // if (c.onChangeCodeview != null) {
-    //   callbacks = callbacks +
-    //       """
-    //       \$('#summernote-2').on('summernote.change.codeview', function(_, contents, \$editable) {
-    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onChangeCodeview", "contents": contents}), "*");
-    //       });\n
-    //     """;
-    // }
-
-    // if (c.onEnter != null) {
-    //   callbacks = callbacks +
-    //       """
-    //       \$('#summernote-2').on('summernote.enter', function() {
-    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onEnter"}), "*");
-    //       });\n
-    //     """;
-    // }
-
-    // if (c.onBlurCodeview != null) {
-    //   callbacks = callbacks +
-    //       """
-    //       \$('#summernote-2').on('summernote.blur.codeview', function() {
-    //         window.toDart.postMessage(JSON.stringify({"view": viewId, "type": "toDart: onBlurCodeview"}), "*");
-    //       });\n
-    //     """;
-    // }
   }
 }());
 </script>
