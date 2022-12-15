@@ -13,7 +13,7 @@ and the Flutter guide for
 
 # Flutter Rich Text Editor
 
-Rich text editor for Flutter with built-in voice-to-text.
+Easy to use WYCIWYG HTML for Flutter with built-in voice-to-text.
 Try it [here](https://flutter-rich-text.web.app/).
 
 ![Flutter Rich Text Editor Web](./media/screen1.jpg)
@@ -22,10 +22,9 @@ ____
 
 
 ## Under the Hood
-Easy to use WYCIWYG HTML editor with flexibility and control over the generated HTML.
 
-This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with the following key differences:
- * Vertical auto-sizing to content size with height change notifier
+This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with a few differences:
+ * Widget height: wrap content, expand or explicit, with content height ChangeNotifier.
  * ***Summernote*** and ***jQuery*** replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for stricter security, HTML5 compatibility, features, performance and size.
  * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter) for stricter security.
 

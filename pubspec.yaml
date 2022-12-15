@@ -2,7 +2,7 @@ name: flutter_rich_text_editor
 description: >-
   HTML WYSIWYG rich text editor for Flutter with built-in speech to text.
 
-version: 0.1.0
+version: 0.1.0-dev.1
 
 publish_to:
 
