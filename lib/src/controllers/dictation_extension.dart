@@ -36,11 +36,11 @@ extension DictationController on HtmlEditorController {
   /// Starts dictation
   Future<void> convertSpeechToText(Function(String v) onResult) async {
     if (!await _initSpeechToText()) return;
+    sttBuffer = '';
     isRecording = true;
-    contentHeight += 100;
     notifyListeners();
     await speechToText?.listen(
-        onResult: (SpeechRecognitionResult result) {
+        onResult: (SpeechRecognitionResult result) async {
           if (!result.finalResult) {
             sttBuffer = result.recognizedWords;
             notifyListeners();
@@ -49,8 +49,12 @@ extension DictationController on HtmlEditorController {
             onResult(result.recognizedWords);
             if (isRecording) {
               isRecording = false;
-              notifyListeners();
             }
+            if (result.recognizedWords.isNotEmpty) {
+              sttBuffer = result.recognizedWords;
+              await insertHtml(sttBuffer);
+            }
+            notifyListeners();
           }
         },
         listenFor: const Duration(seconds: 300),
@@ -64,7 +68,7 @@ extension DictationController on HtmlEditorController {
   Future<void> stopRecording() async {
     await speechToText?.stop();
     isRecording = false;
-    await recalculateContentHeight();
+    //await recalculateContentHeight();
     notifyListeners();
   }
 

@@ -107,6 +107,13 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       h = h + _controller.verticalPadding;
     }
 
+    // finally, check if we are recording.
+    // If we are - make sure that the container height is not to small
+    // to prevent the recorder widget from overflowing the editor
+    if (_controller.isRecording && (h ?? 150) < 150) {
+      h = 150;
+    }
+
     return h;
   }
 

@@ -117,7 +117,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                         showColorCode: true,
                         colorCodeHasColor: true,
                         pickersEnabled: <ColorPickerType, bool>{
-                          ColorPickerType.wheel: true,
+                          ColorPickerType.accent: false,
                         },
                         copyPasteBehavior: const ColorPickerCopyPasteBehavior(
                           parseShortHexCode: true,

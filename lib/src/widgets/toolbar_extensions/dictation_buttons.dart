@@ -23,12 +23,7 @@ extension DictationButtons on ToolbarWidgetState {
       onPressed: (int index) async {
         if (t.getIcons()[index].icon == Icons.mic_outlined) {
           if (!widget.controller.isRecording) {
-            await widget.controller.convertSpeechToText((result) async {
-              if (result.isNotEmpty) {
-                widget.controller.sttBuffer = result;
-                await widget.controller.insertHtml(widget.controller.sttBuffer);
-              }
-            });
+            await widget.controller.convertSpeechToText((result) async {});
           } else {
             await widget.controller.cancelRecording();
           }
