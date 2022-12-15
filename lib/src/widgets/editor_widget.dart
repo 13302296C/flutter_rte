@@ -2,7 +2,7 @@ import 'dart:io' as io;
 import 'dart:math' as math;
 import 'dart:async';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rte/flutter_rte.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/material.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';

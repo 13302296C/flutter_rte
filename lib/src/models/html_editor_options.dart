@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rte/flutter_rte.dart';
 
 /// Options that modify the editor and its behavior
 class HtmlEditorOptions {

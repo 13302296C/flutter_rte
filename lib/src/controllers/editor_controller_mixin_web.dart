@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'dart:html' as html;
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
+import 'package:flutter_rte/src/controllers/editor_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 abstract class PlatformSpecificMixin {
@@ -12,8 +12,7 @@ abstract class PlatformSpecificMixin {
   String viewId = '';
 
   ///
-  final String filePath =
-      'packages/flutter_rich_text_editor/lib/assets/document.html';
+  final String filePath = 'packages/flutter_rte/lib/assets/document.html';
 
   ///
   WebViewController get editorController =>

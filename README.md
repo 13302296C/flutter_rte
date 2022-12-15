@@ -33,7 +33,7 @@ Basic implementation of this editor doesn't require a controller. For simplicity
 
 
 ```Dart
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
+import 'package:flutter_rte/flutter_rte.dart';
 
 // ...
 

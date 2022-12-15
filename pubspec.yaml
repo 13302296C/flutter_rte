@@ -1,15 +1,15 @@
-name: flutter_rich_text_editor
+name: flutter_rte
 description: >-
-  HTML WYSIWYG rich text editor for Flutter with built-in speech to text.
+  HTML WYSIWYG rich text editor for Flutter with built-in speech-to-text.
 
 version: 0.1.0-dev.1
 
 publish_to:
 
-repository: https://github.com/13302296C/flutter_rich_text_editor
-issue_tracker: https://github.com/13302296C/flutter_rich_text_editor/issues
+repository: https://github.com/13302296C/flutter_rte
+issue_tracker: https://github.com/13302296C/flutter_rte/issues
 homepage: https://flutter-rich-text.web.app
-documentation: https://github.com/13302296C/flutter_rich_text_editor/blob/master/README.md
+documentation: https://github.com/13302296C/flutter_rte/blob/master/README.md
 
 platforms:
   android:
@@ -47,7 +47,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-    - packages/flutter_rich_text_editor/document.html
+    - packages/flutter_rte/document.html
     - lib/assets/document.html
 
   # To add assets to your package, add an assets section, like this:

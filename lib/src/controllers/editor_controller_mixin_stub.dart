@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
+import 'package:flutter_rte/src/controllers/editor_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 abstract class PlatformSpecificMixin {

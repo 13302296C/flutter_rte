@@ -4,17 +4,17 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_rich_text_editor/flutter_rich_text_editor.dart';
-import 'package:flutter_rich_text_editor/src/utils/utils.dart';
+import 'package:flutter_rte/flutter_rte.dart';
+import 'package:flutter_rte/src/utils/utils.dart';
 import 'package:meta/meta.dart';
 
 import 'package:speech_to_text/speech_recognition_error.dart';
 import 'package:speech_to_text/speech_recognition_result.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_stub.dart'
-    if (dart.library.io) 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_native.dart'
-    if (dart.library.html) 'package:flutter_rich_text_editor/src/controllers/editor_controller_mixin_web.dart';
+import 'package:flutter_rte/src/controllers/editor_controller_mixin_stub.dart'
+    if (dart.library.io) 'package:flutter_rte/src/controllers/editor_controller_mixin_native.dart'
+    if (dart.library.html) 'package:flutter_rte/src/controllers/editor_controller_mixin_web.dart';
 
 part 'event_sink_extension.dart';
 part 'dictation_extension.dart';

@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
+import 'package:flutter_rte/src/controllers/editor_controller.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 abstract class PlatformSpecificMixin {
@@ -22,8 +22,7 @@ abstract class PlatformSpecificMixin {
   }
 
   /// path to asset html file
-  final String filePath =
-      'packages/flutter_rich_text_editor/lib/assets/document.html';
+  final String filePath = 'packages/flutter_rte/lib/assets/document.html';
 
   HtmlEditorController? _c;
 

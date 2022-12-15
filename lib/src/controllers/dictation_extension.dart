@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_use_of_protected_member, invalid_use_of_visible_for_testing_member
 
-part of 'package:flutter_rich_text_editor/src/controllers/editor_controller.dart';
+part of 'package:flutter_rte/src/controllers/editor_controller.dart';
 
 extension DictationController on HtmlEditorController {
   ///
