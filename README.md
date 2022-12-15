@@ -13,8 +13,8 @@ and the Flutter guide for
 
 # Flutter Rich Text Editor
 
-Easy to use WYCIWYG HTML for Flutter with built-in voice-to-text.
-Try it [here](https://flutter-rich-text.web.app/).
+Easy to use WYSIWYG HTML editor for Flutter with built-in voice-to-text.
+Try it [here](https://flutter-rich-text.web.app/){:target="_blank"}.
 
 ![Flutter Rich Text Editor Web](./media/screen1.jpg)
 
@@ -24,9 +24,9 @@ ____
 ## Under the Hood
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with a few differences:
- * Widget height: wrap content, expand or explicit, with content height ChangeNotifier.
+ * Widget height: wrap content, expand, or explicit, with height ChangeNotifier.
  * ***Summernote*** and ***jQuery*** replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for stricter security, HTML5 compatibility, features, performance and size.
- * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter) for stricter security.
+ * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
 
 
 ____
@@ -74,7 +74,7 @@ To take advantage of the entire API you'll need to create and configure an insta
  * **Editor options** group (all things editor)
 
 
-When controller is provided, the contents of the editor could be tried and accessed syncronously via a dedicated getter:
+When controller is provided, contents of the editor could be tried and accessed syncronously via a getter:
 ```dart
 
     if(controller.contentIsNotEmpty){
@@ -252,6 +252,8 @@ ____
 
 Voice-to-text feature is powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package and comes enabled by default with this package.
 To disable voice-to-text feature - set the corresponding top-level `enableDictation` attribute within [HtmlEditor] constructor to `false`.
+
+Overriding `controller.toolbarOptions.defaultToolbarButtons` value also overrides `enableDictation` flag (obviously), so you need to add `const VoiceToTextButtons()` in order to keep seeing the voice-to-text button.
 
 ____
 
