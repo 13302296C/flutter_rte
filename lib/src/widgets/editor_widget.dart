@@ -282,8 +282,9 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       //   return Positioned.fill(
       //       child: PointerInterceptor(child: SizedBox.expand()));
       // }
-      // return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
-      //
+      if (!kIsWeb) {
+        return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
+      }
     } else if (!_controller.hasFocus ||
         (kIsWeb && _controller.contentIsEmpty)) {
       if (kIsWeb) {
@@ -355,6 +356,12 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     if (widget.callbacks != null && widget.onChanged != null) {
       fault = Exception(
           'Cannot have both onChanged and Callbacks.onChangeContent. Please pick one.');
+    }
+
+    // redundancy fuse: can't set both widget.onChanged and callbacks.onChanged set
+    if (widget.controller != null && widget.onChanged != null) {
+      fault = Exception(
+          'Cannot have both onChanged and controller. Please use constroller callbacks.');
     }
 
     // if controller is not provided - initialize internal controller

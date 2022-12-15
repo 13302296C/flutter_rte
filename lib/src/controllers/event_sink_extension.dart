@@ -15,7 +15,7 @@ extension StreamProcessor on HtmlEditorController {
 
   /// checks scroll settings and scrolls if needed
   void maybeScrollIntoView() {
-    if (context == null) return;
+    if (context == null || isDisabled || isReadOnly) return;
     if (editorOptions.shouldEnsureVisible && Scrollable.of(context!) != null) {
       // scroll into view with a short delay, to let the keyboard unfold
       // and make experience more smooth
