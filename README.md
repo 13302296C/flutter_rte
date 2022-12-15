@@ -14,7 +14,7 @@ and the Flutter guide for
 # Flutter Rich Text Editor
 
 Easy to use WYSIWYG HTML editor for Flutter with built-in voice-to-text.
-Try it [here](https://flutter-rich-text.web.app/){:target="_blank"}.
+Try it [here](https://flutter-rich-text.web.app/)
 
 ![Flutter Rich Text Editor Web](./media/screen1.jpg)
 
