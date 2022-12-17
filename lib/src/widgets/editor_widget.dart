@@ -128,6 +128,12 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   void initState() {
     _initializeController();
     _controller.focusNode = FocusNode();
+    //if (!_controller.initialized) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _controller.initEditor(context);
+    });
+
+    //}
     super.initState();
   }
 
@@ -141,10 +147,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    if (!_controller.initialized) {
-      _controller.initEditor(context);
-    }
-
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -172,7 +174,9 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
               key: _controller.toolbarKey,
               controller: _controller,
             ),
-          if (_controller.initialized)
+          // on native - sow editor right away,
+          // on web - wait intil initialized
+          if (kIsWeb && _controller.initialized || !kIsWeb)
             Expanded(
               child: Directionality(
                 textDirection: TextDirection.ltr,
@@ -187,7 +191,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                 ),
               ),
             ),
-          if (!_controller.initialized) SizedBox(),
         ],
       );
 

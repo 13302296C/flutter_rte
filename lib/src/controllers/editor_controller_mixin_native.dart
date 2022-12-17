@@ -30,7 +30,7 @@ abstract class PlatformSpecificMixin {
   Future<void> evaluateJavascript({required Map<String, Object?> data}) async {
     if (_ec == null) return;
     if (_c == null) return;
-    if (!(_c?.initialized ?? false)) {
+    if (!(_c?.initialized ?? false) && data['type'] != 'toIframe: initEditor') {
       log('HtmlEditorController error:',
           error:
               'HtmlEditorController called an editor widget that doesn\'t exist.'
@@ -61,7 +61,7 @@ abstract class PlatformSpecificMixin {
     _c = controller;
     return WebView(
       javascriptMode: JavascriptMode.unrestricted,
-      debuggingEnabled: true,
+      debuggingEnabled: kDebugMode,
       onWebViewCreated: (c) async {
         editorController = c;
         var st = await controller.getInitialContent();
@@ -81,9 +81,6 @@ abstract class PlatformSpecificMixin {
       },
       onPageFinished: (_) async {
         await evaluateJavascript(data: {'type': 'toIframe: initEditor'});
-        if (controller.isReadOnly || controller.isDisabled) {
-          await controller.disable();
-        }
       },
       navigationDelegate: (NavigationRequest request) {
         if (request.url != 'about:blank') return NavigationDecision.prevent;

@@ -33,7 +33,7 @@ abstract class PlatformSpecificMixin {
   /// Helper function to run javascript and check current environment
   Future<void> evaluateJavascript({required Map<String, Object?> data}) async {
     if (_c == null) return;
-    if (!(_c?.initialized ?? false)) {
+    if (!(_c?.initialized ?? false) && data['type'] != 'toIframe: initEditor') {
       log('HtmlEditorController error:',
           error:
               'HtmlEditorController called an editor widget that\n does not exist.\n'
@@ -61,9 +61,8 @@ abstract class PlatformSpecificMixin {
     }, onDone: () {
       log('Event stream done.');
     });
-
     final iframe = html.IFrameElement()
-      ..width = MediaQuery.of(initBC).size.width.toString() //'800'
+      ..width = '100%'
       ..height = '100%'
       // ignore: unsafe_html, necessary to load HTML string
       ..srcdoc = await c.getInitialContent()

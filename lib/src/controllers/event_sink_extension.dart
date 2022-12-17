@@ -49,6 +49,11 @@ extension StreamProcessor on HtmlEditorController {
             _blockInitCallback = false;
             callbacks.onChangeContent?.call(_buffer);
           } else {
+            if (isReadOnly || isDisabled) {
+              await disable();
+            }
+            _initialized = true;
+            notifyListeners();
             callbacks.onInit?.call();
           }
           await recalculateContentHeight();
@@ -58,7 +63,6 @@ extension StreamProcessor on HtmlEditorController {
           notifyListeners();
           throw Exception('HTML Editor failed to load');
         }
-        notifyListeners();
         break;
 
       case 'getSelectedText':

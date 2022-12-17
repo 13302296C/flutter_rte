@@ -155,63 +155,63 @@ class ParagraphButtons extends Toolbar {
 /// Insert group
 class InsertButtons extends Toolbar {
   final bool link;
-  final bool picture;
-  final bool audio;
-  final bool video;
-  final bool otherFile;
-  final bool table;
-  final bool hr;
+  //final bool picture;
+  //final bool audio;
+  //final bool video;
+  //final bool otherFile;
+  //final bool table;
+  //final bool hr;
 
   const InsertButtons({
     this.link = true,
-    this.picture = true,
-    this.audio = true,
-    this.video = true,
-    this.otherFile = false,
-    this.table = true,
-    this.hr = true,
+    //this.picture = true,
+    //this.audio = true,
+    //this.video = true,
+    //this.otherFile = false,
+    //this.table = true,
+    //this.hr = true,
   });
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
     if (link) icons.add(Icon(Icons.link));
-    if (picture) icons.add(Icon(Icons.image_outlined));
-    if (audio) icons.add(Icon(Icons.audiotrack_outlined));
-    if (video) icons.add(Icon(Icons.videocam_outlined));
-    if (otherFile) icons.add(Icon(Icons.attach_file));
-    if (table) icons.add(Icon(Icons.table_chart_outlined));
-    if (hr) icons.add(Icon(Icons.horizontal_rule));
+    //if (picture) icons.add(Icon(Icons.image_outlined));
+    //if (audio) icons.add(Icon(Icons.audiotrack_outlined));
+    //if (video) icons.add(Icon(Icons.videocam_outlined));
+    //if (otherFile) icons.add(Icon(Icons.attach_file));
+    //if (table) icons.add(Icon(Icons.table_chart_outlined));
+    //if (hr) icons.add(Icon(Icons.horizontal_rule));
     return icons;
   }
 }
 
 /// Miscellaneous group
 class OtherButtons extends Toolbar {
-  final bool fullscreen;
-  final bool codeview;
+  //final bool fullscreen;
+  //final bool codeview;
   final bool undo;
   final bool redo;
-  final bool help;
+  //final bool help;
   final bool copy;
   final bool paste;
 
   const OtherButtons({
-    this.fullscreen = true,
-    this.codeview = true,
+    //this.fullscreen = true,
+    //this.codeview = true,
     this.undo = true,
     this.redo = true,
-    this.help = true,
+    //this.help = true,
     this.copy = true,
     this.paste = true,
   });
 
   List<Icon> getIcons1() {
     var icons = <Icon>[];
-    if (fullscreen) icons.add(Icon(Icons.fullscreen));
-    if (codeview) icons.add(Icon(Icons.code));
+    //if (fullscreen) icons.add(Icon(Icons.fullscreen));
+    //if (codeview) icons.add(Icon(Icons.code));
     if (undo) icons.add(Icon(Icons.undo));
     if (redo) icons.add(Icon(Icons.redo));
-    if (help) icons.add(Icon(Icons.help_outline));
+    //if (help) icons.add(Icon(Icons.help_outline));
     return icons;
   }
 

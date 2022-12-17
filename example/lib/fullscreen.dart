@@ -93,9 +93,6 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
           borderRadius: const BorderRadius.all(Radius.circular(7)),
           child: HtmlEditor(
             initialValue: strings[_sections.indexOf(e)],
-            onChanged: (s) {
-              strings[_sections.indexOf(e)] = s ?? '';
-            },
             controller: _controllers[_sections.indexOf(e)]
               ..toolbarOptions.toolbarPosition = ToolbarPosition.aboveEditor
               ..toolbarOptions.toolbarType = ToolbarType.nativeExpandable
@@ -103,7 +100,10 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
               ..toolbarOptions.backgroundColor = _tbBgd
               ..editorOptions.decoration = BoxDecoration(
                   borderRadius: const BorderRadius.all(Radius.circular(10)),
-                  border: Border.all(color: _tbBgd!, width: 2)),
+                  border: Border.all(color: _tbBgd!, width: 2))
+              ..callbacks.onChangeContent = (s) {
+                strings[_sections.indexOf(e)] = s ?? '';
+              },
             height: 250,
           ),
         );

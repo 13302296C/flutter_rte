@@ -17,9 +17,10 @@ part 'toolbar_extensions/font_buttons.dart';
 part 'toolbar_extensions/font_settings_buttons.dart';
 part 'toolbar_extensions/media_buttons.dart';
 part 'toolbar_extensions/list_buttons.dart';
-part 'toolbar_extensions/other_buttons.dart';
 part 'toolbar_extensions/paragraph_buttons.dart';
 part 'toolbar_extensions/style_buttons.dart';
+part 'toolbar_extensions/undo_redo_buttons.dart';
+part 'toolbar_extensions/copy_paste_buttons.dart';
 
 /// Toolbar widget class
 class ToolbarWidget extends StatefulWidget {
@@ -62,7 +63,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
   /// List that controls which [ToggleButtons] are selected for
   /// fullscreen, codeview, undo, redo, and help. Fullscreen and codeview
   /// are the only buttons that will ever be selected.
-  List<bool> _miscSelected = List<bool>.filled(7, false);
+  //List<bool> _miscSelected = List<bool>.filled(4, false);
 
   /// List that controls which [ToggleButtons] are selected for
   /// justify left/right/center/full.
@@ -140,10 +141,10 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
       if (t is InsertButtons) {
         _insertSelected = List<bool>.filled(t.getIcons().length, false);
       }
-      if (t is OtherButtons) {
-        _miscSelected = List<bool>.filled(
-            t.getIcons1().length + t.getIcons2().length, false);
-      }
+      // if (t is OtherButtons) {
+      //   _miscSelected = List<bool>.filled(
+      //       t.getIcons1().length + t.getIcons2().length, false);
+      // }
       if (t is ParagraphButtons) {
         _alignSelected = List<bool>.filled(t.getIcons1().length, false);
       }
@@ -635,19 +636,20 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
           toolbarChildren.add(_caseConverter(t));
         }
       }
-      if (t is InsertButtons &&
+      if (t is InsertButtons && /*
           (t.audio ||
               t.video ||
               t.otherFile ||
-              t.picture ||
-              t.link ||
+              t.picture ||*/
+              t.link /*||
               t.hr ||
-              t.table)) {
+              t.table)*/
+          ) {
         toolbarChildren.add(_mediaButtons(t));
       }
       if (t is OtherButtons) {
-        if (t.fullscreen || t.codeview || t.undo || t.redo || t.help) {
-          toolbarChildren.add(_otherButtons(t));
+        if (/*t.fullscreen || t.codeview ||*/ t.undo || t.redo /*|| t.help*/) {
+          toolbarChildren.add(_undoRedoButtons(t));
         }
         if (t.copy || t.paste) {
           toolbarChildren.add(_copyPaste(t));
