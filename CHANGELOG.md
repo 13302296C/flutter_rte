@@ -1,3 +1,6 @@
+## 0.1.0-dev.5
+* minor refactorings
+
 ## 0.1.0-dev.4
 * debug VTT injection and UI
 
