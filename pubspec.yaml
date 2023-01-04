@@ -2,7 +2,7 @@ name: flutter_rte
 description: >-
   HTML WYSIWYG rich text editor for Flutter with built-in speech-to-text.
 
-version: 0.1.0-dev.5
+version: 0.2.0
 
 publish_to:
 
@@ -34,7 +34,7 @@ dependencies:
                         # use 0.9.0+1 due to bugs in framework
   pedantic: ^1.0.0
   speech_to_text: ^6.0.0
-  webview_flutter: ^3.0.4
+  webview_flutter: ^4.0.1
   meta:
 
 dev_dependencies:

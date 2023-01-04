@@ -42,13 +42,33 @@ abstract class PlatformSpecificMixin {
     }
     var js =
         'window.postMessage(\'${JsonEncoder().convert(data..['view'] = viewId)}\')';
-    await editorController.runJavascript(js);
+    await editorController.runJavaScript(js);
   }
 
   ///
   Future<void> init(
       BuildContext initBC, double initHeight, HtmlEditorController c) async {
     _c = c;
+    _ec = WebViewController();
+    await _ec!.addJavaScriptChannel('toDart',
+        onMessageReceived: (message) => _c!.processEvent(message.message));
+    await _ec!.setJavaScriptMode(JavaScriptMode.unrestricted);
+    await _ec!.setNavigationDelegate(
+      NavigationDelegate(
+        onNavigationRequest: (NavigationRequest request) {
+          if (request.url != 'about:blank') return NavigationDecision.prevent;
+          return NavigationDecision.navigate;
+        },
+        onPageFinished: (_) async {
+          await evaluateJavascript(data: {'type': 'toIframe: initEditor'});
+        },
+        onWebResourceError: (err) {
+          throw Exception('${err.errorCode}: ${err.description}');
+        },
+      ),
+    );
+    await _ec!.setBackgroundColor(Colors.transparent);
+    await _ec!.loadHtmlString(await c.getInitialContent());
   }
 
   ///
@@ -59,37 +79,14 @@ abstract class PlatformSpecificMixin {
   ///
   Widget view(HtmlEditorController controller) {
     _c = controller;
-    return WebView(
-      javascriptMode: JavascriptMode.unrestricted,
-      debuggingEnabled: kDebugMode,
-      onWebViewCreated: (c) async {
-        editorController = c;
-        var st = await controller.getInitialContent();
-        await c.loadHtmlString(st);
-      },
-      javascriptChannels: {
-        JavascriptChannel(
-            name: 'toDart',
-            onMessageReceived: (message) =>
-                controller.processEvent(message.message))
-      },
+    return WebViewWidget(
+      controller: _ec!,
       gestureRecognizers: {
         Factory<VerticalDragGestureRecognizer>(
             () => VerticalDragGestureRecognizer()),
         Factory<LongPressGestureRecognizer>(
             () => LongPressGestureRecognizer(duration: Duration(seconds: 1))),
       },
-      onPageFinished: (_) async {
-        await evaluateJavascript(data: {'type': 'toIframe: initEditor'});
-      },
-      navigationDelegate: (NavigationRequest request) {
-        if (request.url != 'about:blank') return NavigationDecision.prevent;
-        return NavigationDecision.navigate;
-      },
-      onWebResourceError: (err) {
-        throw Exception('${err.errorCode}: ${err.description}');
-      },
-      backgroundColor: Colors.transparent,
     );
   }
 }
