@@ -79,6 +79,7 @@ abstract class PlatformSpecificMixin {
   ///
   Widget view(HtmlEditorController controller) {
     _c = controller;
+    if (_ec == null) return SizedBox();
     return WebViewWidget(
       controller: _ec!,
       gestureRecognizers: {

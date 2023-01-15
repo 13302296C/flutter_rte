@@ -130,7 +130,9 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     _controller.focusNode = FocusNode();
     //if (!_controller.initialized) {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      _controller.initEditor(context);
+      _controller.initEditor(context).then((value) {
+        if (mounted && !kIsWeb) setState(() {});
+      });
     });
 
     //}

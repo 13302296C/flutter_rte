@@ -390,10 +390,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   Future<void> initEditor(BuildContext initBC) async {
     if (initialized) throw Exception('Already initialized');
     await init(initBC, _contentHeight, this);
-    if (kIsWeb) {
-      _initialized = true;
-      notifyListeners();
-    }
+    _initialized = true;
+    notifyListeners();
   }
 
   /// This method compiles HTML document based on various controller settings
