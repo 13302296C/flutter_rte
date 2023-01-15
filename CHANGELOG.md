@@ -1,3 +1,6 @@
+## 0.2.1
+* Fix null pointer exception on native
+
 ## 0.2.0
 * migrate `webview_flutter` package from `^3.0.4` to `^4.0.1`
 
