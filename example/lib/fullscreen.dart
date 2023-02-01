@@ -144,13 +144,6 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
         floatingActionButton: ExpandableFabClass(
           distanceBetween: 112.0,
           subChildren: [
-            // ActionButton(
-            //   onPressed: () => setState(() {
-            //     _demoType = DemoType.autoHideToolbar;
-            //   }),
-            //   label: 'Auto-hide toolbar',
-            //   icon: const Icon(Icons.center_focus_strong_outlined),
-            // ),
             ActionButton(
               onPressed: () =>
                   Navigator.of(context).pushReplacement(MaterialPageRoute<void>(
@@ -231,7 +224,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
                             Text('Science Experiment',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline5!
+                                    .headlineSmall!
                                     .copyWith(fontWeight: FontWeight.bold)),
                             const SizedBox(height: 32),
                             Row(

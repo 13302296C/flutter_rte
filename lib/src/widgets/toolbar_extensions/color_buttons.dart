@@ -106,7 +106,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                           newColor = color;
                         },
                         title: Text('Pick a color:',
-                            style: Theme.of(context).textTheme.headline6),
+                            style: Theme.of(context).textTheme.titleSmall),
                         width: 40,
                         height: 40,
                         spacing: 0,

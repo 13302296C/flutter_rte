@@ -213,7 +213,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   Widget _sttDictationPreview() {
     if (!_controller.isRecording) return SizedBox();
     var textColor = editorOptions.dictationPreviewTextColor ??
-        Theme.of(context).textTheme.bodyText1?.color;
+        Theme.of(context).textTheme.bodyMedium?.color;
     return PointerInterceptor(
       child: Positioned(
           left: 10,
@@ -336,7 +336,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                     fontStyle: FontStyle.italic,
                     color: Theme.of(context)
                         .textTheme
-                        .bodyText1
+                        .bodyMedium
                         ?.color
                         ?.withOpacity(.3))),
       ));
