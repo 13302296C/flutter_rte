@@ -1,3 +1,7 @@
+## 0.2.2
+* Improve HTML escaping
+
+
 ## 0.2.1
 * Fix null pointer exception on native
 

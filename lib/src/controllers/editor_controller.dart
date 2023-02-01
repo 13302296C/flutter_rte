@@ -379,7 +379,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
       html = html.replaceAll('\n', '&#10;').replaceAll('\r', '&#13;');
     }
     html = html.replaceAll('<br>', '<br />');
-    html = html.replaceAll("'", "\\'");
+    html = html.replaceAll("'", '&quot;');
     //return HtmlEscape().convert(html);
     return html;
   }
