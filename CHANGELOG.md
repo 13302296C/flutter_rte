@@ -1,3 +1,6 @@
+## 0.2.3
+* add assets subfolder
+
 ## 0.2.2
 * Improve HTML escaping
 
