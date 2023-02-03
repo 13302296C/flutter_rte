@@ -35,7 +35,7 @@ extension ToolbarFontSettingsButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: const [
+          items: [
             CustomDropdownMenuItem(
               value: 'pt',
               child: PointerInterceptor(child: Text('pt')),
@@ -228,7 +228,7 @@ extension ToolbarFontSettingsButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: const [
+          items: [
             CustomDropdownMenuItem(
               value: 'Courier New',
               child: PointerInterceptor(

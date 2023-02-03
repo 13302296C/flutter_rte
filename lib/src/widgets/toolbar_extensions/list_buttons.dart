@@ -35,7 +35,7 @@ extension ToolbarListButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: const [
+          items: [
             CustomDropdownMenuItem(
               value: 'decimal',
               child: PointerInterceptor(child: Text('1. Numbered')),

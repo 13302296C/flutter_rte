@@ -35,7 +35,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: const [
+          items: [
             CustomDropdownMenuItem(
               value: 'lower',
               child: PointerInterceptor(child: Text('lowercase')),
@@ -192,7 +192,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: const [
+          items: [
             CustomDropdownMenuItem(
                 value: 1, child: PointerInterceptor(child: Text('1.0'))),
             CustomDropdownMenuItem(

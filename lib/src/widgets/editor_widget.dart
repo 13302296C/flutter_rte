@@ -306,7 +306,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
               onPointerUp: (e) {
                 _controller.setFocus();
               },
-              child: const PointerInterceptor(child: SizedBox.expand())),
+              child: PointerInterceptor(child: const SizedBox.expand())),
         );
       } else if (io.Platform.isIOS) {
         return Positioned.fill(
