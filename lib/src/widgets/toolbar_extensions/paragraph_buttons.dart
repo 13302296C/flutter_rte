@@ -35,7 +35,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: [
+          items: const [
             CustomDropdownMenuItem(
               value: 'lower',
               child: PointerInterceptor(child: Text('lowercase')),
@@ -53,7 +53,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
               child: PointerInterceptor(child: Text('UPPERCASE')),
             ),
           ],
-          hint: Text('Change case'),
+          hint: const Text('Change case'),
           value: null,
           onChanged: (String? changed) async {
             if (changed != null) {
@@ -153,7 +153,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
         }
       },
       isSelected: _textDirectionSelected,
-      children: [
+      children: const [
         Icon(Icons.format_textdirection_l_to_r),
         Icon(Icons.format_textdirection_r_to_l),
       ],
@@ -192,7 +192,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: [
+          items: const [
             CustomDropdownMenuItem(
                 value: 1, child: PointerInterceptor(child: Text('1.0'))),
             CustomDropdownMenuItem(

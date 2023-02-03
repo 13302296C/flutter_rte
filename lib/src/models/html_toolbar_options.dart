@@ -276,7 +276,7 @@ class HtmlToolbarOptions {
   bool fixedToolbar = true;
 
   /// Delay before the toolbar becomes hidden.
-  final Duration collapseDelay = Duration(seconds: 2);
+  final Duration collapseDelay = const Duration(seconds: 2);
 
   /// Allows you to set the allowed extensions when a user inserts a video.
   ///

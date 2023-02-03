@@ -51,7 +51,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
                     child: StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
                       return AlertDialog(
-                        title: Text('Insert Link'),
+                        title: const Text('Insert Link'),
                         scrollable: true,
                         content: Form(
                           key: formKey,
@@ -76,15 +76,15 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
                                 //   },
                                 // ),
                                 // SizedBox(height: 20),
-                                Text('URL',
+                                const Text('URL',
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold)),
-                                SizedBox(height: 10),
+                                const SizedBox(height: 10),
                                 TextFormField(
                                   controller: url,
                                   focusNode: urlFocus,
                                   textInputAction: TextInputAction.done,
-                                  decoration: InputDecoration(
+                                  decoration: const InputDecoration(
                                     border: OutlineInputBorder(),
                                     hintText: 'URL',
                                   ),
@@ -138,7 +138,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('Cancel'),
+                            child: const Text('Cancel'),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -162,7 +162,7 @@ extension ToolbarMediaButtons on ToolbarWidgetState {
                                 Navigator.of(context).pop();
                               }
                             },
-                            child: Text('OK'),
+                            child: const Text('OK'),
                           )
                         ],
                       );

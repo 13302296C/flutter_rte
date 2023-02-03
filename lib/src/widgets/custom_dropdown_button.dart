@@ -699,7 +699,7 @@ class CustomDropdownButton<T> extends StatefulWidget {
   final double? menuMaxHeight;
 
   @override
-  _DropdownButtonState<T> createState() => _DropdownButtonState<T>();
+  State<CustomDropdownButton<T>> createState() => _DropdownButtonState<T>();
 }
 
 class _DropdownButtonState<T> extends State<CustomDropdownButton<T>>

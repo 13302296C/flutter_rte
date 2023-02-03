@@ -9,7 +9,7 @@ import 'package:pointer_interceptor/pointer_interceptor.dart';
 
 /// HTML rich text editor
 class HtmlEditor extends StatefulWidget {
-  HtmlEditor({
+  const HtmlEditor({
     Key? key,
     this.height,
     this.minHeight,
@@ -202,8 +202,8 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Text('Editor Error:'),
-            SizedBox(height: 16),
+            const Text('Editor Error:'),
+            const SizedBox(height: 16),
             Text(_controller.fault.toString()),
           ],
         ),
@@ -211,7 +211,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   ///STT popup
   Widget _sttDictationPreview() {
-    if (!_controller.isRecording) return SizedBox();
+    if (!_controller.isRecording) return const SizedBox();
     var textColor = editorOptions.dictationPreviewTextColor ??
         Theme.of(context).textTheme.bodyMedium?.color;
     return PointerInterceptor(
@@ -224,7 +224,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                 BoxDecoration(
                     color: Theme.of(context).canvasColor,
                     borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                           blurRadius: 10,
                           spreadRadius: 0,
@@ -244,7 +244,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                           style: TextStyle(
                             color: textColor,
                           )),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Expanded(
                         child: Text(_controller.sttBuffer,
                             style: TextStyle(
@@ -266,7 +266,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                               style: TextStyle(
                                 color: textColor,
                               ))),
-                      SizedBox(width: 24),
+                      const SizedBox(width: 24),
                       TextButton(
                           onPressed: _controller.stopRecording,
                           child: Text('Insert',
@@ -286,7 +286,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   Widget _scrollPatch() {
     // when work fullscreen - don't block anything
     if (_controller.editorOptions.expandFullHeight) {
-      return SizedBox();
+      return const SizedBox();
     }
     //if disabled or read-only - intercept all events
     if (_controller.isReadOnly || _controller.isDisabled) {
@@ -295,7 +295,8 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       //       child: PointerInterceptor(child: SizedBox.expand()));
       // }
       if (!kIsWeb) {
-        return Positioned.fill(child: AbsorbPointer(child: SizedBox.expand()));
+        return const Positioned.fill(
+            child: AbsorbPointer(child: SizedBox.expand()));
       }
     } else if (!_controller.hasFocus ||
         (kIsWeb && _controller.contentIsEmpty)) {
@@ -305,7 +306,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
               onPointerUp: (e) {
                 _controller.setFocus();
               },
-              child: PointerInterceptor(child: SizedBox.expand())),
+              child: const PointerInterceptor(child: SizedBox.expand())),
         );
       } else if (io.Platform.isIOS) {
         return Positioned.fill(
@@ -313,12 +314,12 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
               onTap: () {
                 _controller.setFocus();
               },
-              child: AbsorbPointer(child: SizedBox.expand())),
+              child: const AbsorbPointer(child: SizedBox.expand())),
         );
       }
     }
     // Android doesn't need special treatment :)
-    return SizedBox();
+    return const SizedBox();
   }
 
   ///
@@ -341,7 +342,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                         ?.withOpacity(.3))),
       ));
     } else {
-      return SizedBox();
+      return const SizedBox();
     }
   }
 

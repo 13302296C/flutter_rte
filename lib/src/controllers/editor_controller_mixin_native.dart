@@ -41,7 +41,7 @@ abstract class PlatformSpecificMixin {
       return;
     }
     var js =
-        'window.postMessage(\'${JsonEncoder().convert(data..['view'] = viewId)}\')';
+        'window.postMessage(\'${const JsonEncoder().convert(data..['view'] = viewId)}\')';
     await editorController.runJavaScript(js);
   }
 
@@ -79,14 +79,14 @@ abstract class PlatformSpecificMixin {
   ///
   Widget view(HtmlEditorController controller) {
     _c = controller;
-    if (_ec == null) return SizedBox();
+    if (_ec == null) return const SizedBox();
     return WebViewWidget(
       controller: _ec!,
       gestureRecognizers: {
         Factory<VerticalDragGestureRecognizer>(
             () => VerticalDragGestureRecognizer()),
-        Factory<LongPressGestureRecognizer>(
-            () => LongPressGestureRecognizer(duration: Duration(seconds: 1))),
+        Factory<LongPressGestureRecognizer>(() =>
+            LongPressGestureRecognizer(duration: const Duration(seconds: 1))),
       },
     );
   }

@@ -36,18 +36,18 @@ extension ToolbarStyleButtons on ToolbarWidgetState {
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
           items: [
-            CustomDropdownMenuItem(
+            const CustomDropdownMenuItem(
                 value: 'p', child: PointerInterceptor(child: Text('Normal'))),
             CustomDropdownMenuItem(
                 value: 'blockquote',
                 child: PointerInterceptor(
                   child: Container(
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                           border: Border(
                               left:
                                   BorderSide(color: Colors.grey, width: 3.0))),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text('Quote',
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: const Text('Quote',
                           style: TextStyle(
                               fontFamily: 'times', color: Colors.grey))),
                 )),
@@ -58,47 +58,47 @@ extension ToolbarStyleButtons on ToolbarWidgetState {
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           color: Colors.grey),
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text('Code',
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: const Text('Code',
                           style: TextStyle(
                               fontFamily: 'courier', color: Colors.white))),
                 )),
-            CustomDropdownMenuItem(
+            const CustomDropdownMenuItem(
               value: 'h1',
               child: PointerInterceptor(
                   child: Text('Header 1',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 32))),
             ),
-            CustomDropdownMenuItem(
+            const CustomDropdownMenuItem(
               value: 'h2',
               child: PointerInterceptor(
                   child: Text('Header 2',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 24))),
             ),
-            CustomDropdownMenuItem(
+            const CustomDropdownMenuItem(
               value: 'h3',
               child: PointerInterceptor(
                   child: Text('Header 3',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 18))),
             ),
-            CustomDropdownMenuItem(
+            const CustomDropdownMenuItem(
               value: 'h4',
               child: PointerInterceptor(
                   child: Text('Header 4',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 16))),
             ),
-            CustomDropdownMenuItem(
+            const CustomDropdownMenuItem(
               value: 'h5',
               child: PointerInterceptor(
                   child: Text('Header 5',
                       style: TextStyle(
                           fontWeight: FontWeight.bold, fontSize: 13))),
             ),
-            CustomDropdownMenuItem(
+            const CustomDropdownMenuItem(
               value: 'h6',
               child: PointerInterceptor(
                   child: Text('Header 6',

@@ -35,7 +35,7 @@ extension ToolbarListButtons on ToolbarWidgetState {
           menuMaxHeight: widget.toolbarOptions.dropdownMenuMaxHeight ??
               MediaQuery.of(context).size.height / 3,
           style: widget.toolbarOptions.textStyle,
-          items: [
+          items: const [
             CustomDropdownMenuItem(
               value: 'decimal',
               child: PointerInterceptor(child: Text('1. Numbered')),
@@ -69,7 +69,7 @@ extension ToolbarListButtons on ToolbarWidgetState {
               child: PointerInterceptor(child: Text('■ Square')),
             ),
           ],
-          hint: Text('Select list style'),
+          hint: const Text('Select list style'),
           value: _listStyleSelectedItem,
           onChanged: (String? changed) async {
             void updateSelectedItem(dynamic changed) {

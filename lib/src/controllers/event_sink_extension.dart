@@ -19,7 +19,7 @@ extension StreamProcessor on HtmlEditorController {
     if (editorOptions.shouldEnsureVisible) {
       // scroll into view with a short delay, to let the keyboard unfold
       // and make experience more smooth
-      unawaited(Future.delayed(Duration(milliseconds: 300)).then((_) {
+      unawaited(Future.delayed(const Duration(milliseconds: 300)).then((_) {
         unawaited(Scrollable.of(context!).position.ensureVisible(
             context!.findRenderObject()!,
             alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,

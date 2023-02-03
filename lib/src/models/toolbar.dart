@@ -7,7 +7,7 @@ abstract class Toolbar {
 
 class VoiceToTextButtons extends Toolbar {
   List<Icon> getIcons() {
-    return <Icon>[Icon(Icons.mic_outlined)];
+    return <Icon>[const Icon(Icons.mic_outlined)];
   }
 
   const VoiceToTextButtons();
@@ -57,18 +57,18 @@ class FontButtons extends Toolbar {
 
   List<Icon> getIcons1() {
     var icons = <Icon>[];
-    if (bold) icons.add(Icon(Icons.format_bold));
-    if (italic) icons.add(Icon(Icons.format_italic));
-    if (underline) icons.add(Icon(Icons.format_underline));
-    if (clearAll) icons.add(Icon(Icons.format_clear));
+    if (bold) icons.add(const Icon(Icons.format_bold));
+    if (italic) icons.add(const Icon(Icons.format_italic));
+    if (underline) icons.add(const Icon(Icons.format_underline));
+    if (clearAll) icons.add(const Icon(Icons.format_clear));
     return icons;
   }
 
   List<Icon> getIcons2() {
     var icons = <Icon>[];
-    if (strikethrough) icons.add(Icon(Icons.format_strikethrough));
-    if (superscript) icons.add(Icon(Icons.superscript));
-    if (subscript) icons.add(Icon(Icons.subscript));
+    if (strikethrough) icons.add(const Icon(Icons.format_strikethrough));
+    if (superscript) icons.add(const Icon(Icons.superscript));
+    if (subscript) icons.add(const Icon(Icons.subscript));
     return icons;
   }
 }
@@ -85,8 +85,8 @@ class ColorButtons extends Toolbar {
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
-    if (foregroundColor) icons.add(Icon(Icons.format_color_text));
-    if (highlightColor) icons.add(Icon(Icons.format_color_fill));
+    if (foregroundColor) icons.add(const Icon(Icons.format_color_text));
+    if (highlightColor) icons.add(const Icon(Icons.format_color_fill));
     return icons;
   }
 }
@@ -105,8 +105,8 @@ class ListButtons extends Toolbar {
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
-    if (ul) icons.add(Icon(Icons.format_list_bulleted));
-    if (ol) icons.add(Icon(Icons.format_list_numbered));
+    if (ul) icons.add(const Icon(Icons.format_list_bulleted));
+    if (ol) icons.add(const Icon(Icons.format_list_numbered));
     return icons;
   }
 }
@@ -137,17 +137,17 @@ class ParagraphButtons extends Toolbar {
 
   List<Icon> getIcons1() {
     var icons = <Icon>[];
-    if (alignLeft) icons.add(Icon(Icons.format_align_left));
-    if (alignCenter) icons.add(Icon(Icons.format_align_center));
-    if (alignRight) icons.add(Icon(Icons.format_align_right));
-    if (alignJustify) icons.add(Icon(Icons.format_align_justify));
+    if (alignLeft) icons.add(const Icon(Icons.format_align_left));
+    if (alignCenter) icons.add(const Icon(Icons.format_align_center));
+    if (alignRight) icons.add(const Icon(Icons.format_align_right));
+    if (alignJustify) icons.add(const Icon(Icons.format_align_justify));
     return icons;
   }
 
   List<Icon> getIcons2() {
     var icons = <Icon>[];
-    if (increaseIndent) icons.add(Icon(Icons.format_indent_increase));
-    if (decreaseIndent) icons.add(Icon(Icons.format_indent_decrease));
+    if (increaseIndent) icons.add(const Icon(Icons.format_indent_increase));
+    if (decreaseIndent) icons.add(const Icon(Icons.format_indent_decrease));
     return icons;
   }
 }
@@ -174,7 +174,7 @@ class InsertButtons extends Toolbar {
 
   List<Icon> getIcons() {
     var icons = <Icon>[];
-    if (link) icons.add(Icon(Icons.link));
+    if (link) icons.add(const Icon(Icons.link));
     //if (picture) icons.add(Icon(Icons.image_outlined));
     //if (audio) icons.add(Icon(Icons.audiotrack_outlined));
     //if (video) icons.add(Icon(Icons.videocam_outlined));
@@ -209,16 +209,16 @@ class OtherButtons extends Toolbar {
     var icons = <Icon>[];
     //if (fullscreen) icons.add(Icon(Icons.fullscreen));
     //if (codeview) icons.add(Icon(Icons.code));
-    if (undo) icons.add(Icon(Icons.undo));
-    if (redo) icons.add(Icon(Icons.redo));
+    if (undo) icons.add(const Icon(Icons.undo));
+    if (redo) icons.add(const Icon(Icons.redo));
     //if (help) icons.add(Icon(Icons.help_outline));
     return icons;
   }
 
   List<Icon> getIcons2() {
     var icons = <Icon>[];
-    if (copy) icons.add(Icon(Icons.copy));
-    if (paste) icons.add(Icon(Icons.paste));
+    if (copy) icons.add(const Icon(Icons.copy));
+    if (paste) icons.add(const Icon(Icons.paste));
     return icons;
   }
 }

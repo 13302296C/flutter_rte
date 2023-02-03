@@ -256,7 +256,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                 int.parse(rgbaList[1]),
                 int.parse(rgbaList[2]));
           } catch (e) {
-            _backColorSelected = Color.fromARGB(0, 0, 0, 0);
+            _backColorSelected = const Color.fromARGB(0, 0, 0, 0);
           }
         } else if (colorList[1]!.contains('rgb(')) {
           _colorSelected[1] = true;
@@ -435,7 +435,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                 ToolbarPosition.custom &&
                             !widget.controller.toolbarOptions.fixedToolbar)
                     ? child
-                    : SizedBox(),
+                    : const SizedBox(),
               ),
             ),
           ),
@@ -478,7 +478,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     } else if (widget.toolbarOptions.toolbarType ==
         ToolbarType.nativeScrollable) {
       return _toolbarWrapper(
-        child: Container(
+        child: SizedBox(
           height: getHeightConstraint,
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 8.0),
@@ -514,7 +514,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                     children: _buildChildren()
                       ..insert(
                           0,
-                          Container(
+                          SizedBox(
                             height: widget.toolbarOptions.toolbarItemHeight,
                             child: IconButton(
                               icon: Icon(
@@ -528,7 +528,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                                   _isExpanded = !_isExpanded;
                                 });
                                 await Future.delayed(
-                                    Duration(milliseconds: 100));
+                                    const Duration(milliseconds: 100));
                                 WidgetsBinding.instance
                                     .addPostFrameCallback((timeStamp) {
                                   toolbarActualHeight = context.size!.height;
@@ -553,7 +553,8 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
                           setState(mounted, this.setState, () {
                             _isExpanded = !_isExpanded;
                           });
-                          await Future.delayed(Duration(milliseconds: 100));
+                          await Future.delayed(
+                              const Duration(milliseconds: 100));
                           WidgetsBinding.instance
                               .addPostFrameCallback((timeStamp) {
                             toolbarActualHeight = context.size!.height;
@@ -574,7 +575,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         ),
       );
     }
-    return SizedBox();
+    return const SizedBox();
   }
 
   ///

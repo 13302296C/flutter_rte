@@ -76,9 +76,9 @@ extension ToolbarUndoRedoButtons on ToolbarWidgetState {
                     child: StatefulBuilder(
                         builder: (BuildContext context, StateSetter setState) {
                       return AlertDialog(
-                        title: Text('Help'),
+                        title: const Text('Help'),
                         scrollable: true,
-                        content: Container(
+                        content: SizedBox(
                           height: MediaQuery.of(context).size.height / 2,
                           child: SingleChildScrollView(
                             child: _table(),
@@ -89,7 +89,7 @@ extension ToolbarUndoRedoButtons on ToolbarWidgetState {
                             onPressed: () async {
                               Navigator.of(context).pop();
                             },
-                            child: Text('Close'),
+                            child: const Text('Close'),
                           )
                         ],
                       );

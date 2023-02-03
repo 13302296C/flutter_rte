@@ -30,6 +30,9 @@ abstract class PlatformSpecificMixin {
   HtmlEditorController? _c;
 
   ///
+  final jsonEncoder = const JsonEncoder();
+
+  ///
   /// Helper function to run javascript and check current environment
   Future<void> evaluateJavascript({required Map<String, Object?> data}) async {
     if (_c == null) return;
@@ -44,7 +47,6 @@ abstract class PlatformSpecificMixin {
       return;
     }
     data['view'] = viewId;
-    final jsonEncoder = JsonEncoder();
     var json = jsonEncoder.convert(data);
     html.window.postMessage(json, '*');
   }
@@ -72,7 +74,6 @@ abstract class PlatformSpecificMixin {
       ..onLoad.listen((event) async {
         var data = <String, Object>{'type': 'toIframe: initEditor'};
         data['view'] = viewId;
-        final jsonEncoder = JsonEncoder();
         var jsonStr = jsonEncoder.convert(data);
         html.window.postMessage(jsonStr, '*');
       });

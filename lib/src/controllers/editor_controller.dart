@@ -198,11 +198,6 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   Exception? fault;
   bool get hasFault => fault != null;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   // ignore: prefer_final_fields
   String _buffer = '';
   String get content => _buffer;
