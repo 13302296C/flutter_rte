@@ -59,6 +59,7 @@ abstract class PlatformSpecificMixin {
   ///
   Widget view(HtmlEditorController controller) {
     _c = controller;
+    // TODO: if (_ec == null) return SizedBox();
     return WebView(
       javascriptMode: JavascriptMode.unrestricted,
       debuggingEnabled: kDebugMode,

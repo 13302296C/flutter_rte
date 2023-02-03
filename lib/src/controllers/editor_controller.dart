@@ -379,7 +379,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
       html = html.replaceAll('\n', '&#10;').replaceAll('\r', '&#13;');
     }
     html = html.replaceAll('<br>', '<br />');
-    html = html.replaceAll("'", "\\'");
+    html = html.replaceAll("'", '&amp;');
     //return HtmlEscape().convert(html);
     return html;
   }
@@ -390,10 +390,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   Future<void> initEditor(BuildContext initBC) async {
     if (initialized) throw Exception('Already initialized');
     await init(initBC, _contentHeight, this);
-    if (kIsWeb) {
-      _initialized = true;
-      notifyListeners();
-    }
+
+    _initialized = true;
+    notifyListeners();
   }
 
   /// This method compiles HTML document based on various controller settings

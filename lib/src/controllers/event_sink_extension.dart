@@ -16,17 +16,15 @@ extension StreamProcessor on HtmlEditorController {
   /// checks scroll settings and scrolls if needed
   void maybeScrollIntoView() {
     if (context == null || isDisabled || isReadOnly) return;
-    if (editorOptions.shouldEnsureVisible && Scrollable.of(context!) != null) {
-      // scroll into view with a short delay, to let the keyboard unfold
-      // and make experience more smooth
-      unawaited(Future.delayed(Duration(milliseconds: 300)).then((_) {
-        unawaited(Scrollable.of(context!)!.position.ensureVisible(
-            context!.findRenderObject()!,
-            alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeIn));
-      }));
-    }
+    // scroll into view with a short delay, to let the keyboard unfold
+    // and make experience more smooth
+    unawaited(Future.delayed(Duration(milliseconds: 300)).then((_) {
+      unawaited(Scrollable.of(context!).position.ensureVisible(
+          context!.findRenderObject()!,
+          alignmentPolicy: ScrollPositionAlignmentPolicy.keepVisibleAtEnd,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn));
+    }));
   }
 
   /// Process events coming from the iframe
