@@ -47,7 +47,7 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
   assets:
-    #- packages/flutter_rte/document.html
+    - packages/flutter_rte/assets/document.html
     - lib/assets/document.html
 
   # To add assets to your package, add an assets section, like this:

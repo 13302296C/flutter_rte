@@ -296,10 +296,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_android
-      sha256: "9d97fa2bae0f1900553c48a2ef0aaa3864367fd7bb625d683c460754b691312c"
+      sha256: "5f49a6e5fc59e21fcec5e1bbcd401afbee9792a24a4f3d9cef9b5bb0cd1e3767"
       url: "https://pub.dev"
     source: hosted
-    version: "3.2.1"
+    version: "3.2.4"
   webview_flutter_platform_interface:
     dependency: transitive
     description:
@@ -312,10 +312,10 @@ packages:
     dependency: transitive
     description:
       name: webview_flutter_wkwebview
-      sha256: "523aff9168af9bb2170e4809e0499d7dee065c3919799fd3341d3e616c137960"
+      sha256: "92e7e7fa468f1df597fb9d37bcf1f303175cbe147c4dbdf06ecc323d950116eb"
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.2"
+    version: "3.0.5"
 sdks:
   dart: ">=2.19.0 <3.0.0"
   flutter: ">=3.7.0"
