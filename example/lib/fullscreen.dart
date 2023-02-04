@@ -231,7 +231,7 @@ class _FullscreenState extends State<Fullscreen> with TickerProviderStateMixin {
                             Text('Science Experiment',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .headline5!
+                                    .headlineSmall!
                                     .copyWith(fontWeight: FontWeight.bold)),
                             const SizedBox(height: 32),
                             Row(
