@@ -62,8 +62,8 @@ abstract class PlatformSpecificMixin {
       log('Event stream done.');
     });
     final iframe = html.IFrameElement()
-      ..width = '100%'
-      ..height = '100%'
+      ..style.width = '100%'
+      ..style.height = '100%'
       // ignore: unsafe_html, necessary to load HTML string
       ..srcdoc = await c.getInitialContent()
       ..style.border = 'none'
