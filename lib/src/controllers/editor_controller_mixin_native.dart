@@ -77,8 +77,8 @@ abstract class PlatformSpecificMixin {
       gestureRecognizers: {
         Factory<VerticalDragGestureRecognizer>(
             () => VerticalDragGestureRecognizer()),
-        Factory<LongPressGestureRecognizer>(
-            () => LongPressGestureRecognizer(duration: Duration(seconds: 1))),
+        Factory<LongPressGestureRecognizer>(() =>
+            LongPressGestureRecognizer(duration: const Duration(seconds: 1))),
       },
       onPageFinished: (_) async {
         await evaluateJavascript(data: {'type': 'toIframe: initEditor'});

@@ -99,7 +99,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                   return PointerInterceptor(
                     child: AlertDialog(
                       scrollable: true,
-                      insetPadding: EdgeInsets.all(8),
+                      insetPadding: const EdgeInsets.all(8),
                       content: ColorPicker(
                         color: newColor,
                         onColorChanged: (color) {
@@ -116,7 +116,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                         enableOpacity: false,
                         showColorCode: true,
                         colorCodeHasColor: true,
-                        pickersEnabled: <ColorPickerType, bool>{
+                        pickersEnabled: const <ColorPickerType, bool>{
                           ColorPickerType.accent: false,
                         },
                         copyPasteBehavior: const ColorPickerCopyPasteBehavior(
@@ -134,7 +134,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: Text('Cancel'),
+                          child: const Text('Cancel'),
                         ),
                         TextButton(
                             onPressed: () {
@@ -160,7 +160,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                               }
                               Navigator.of(context).pop();
                             },
-                            child: Text('Reset to default color')),
+                            child: const Text('Reset to default color')),
                         TextButton(
                           onPressed: () {
                             if (t.getIcons()[index].icon ==
@@ -190,7 +190,7 @@ extension ToolbarColorButtons on ToolbarWidgetState {
                             });
                             Navigator.of(context).pop();
                           },
-                          child: Text('Set color'),
+                          child: const Text('Set color'),
                         )
                       ],
                     ),

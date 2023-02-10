@@ -44,7 +44,7 @@ abstract class PlatformSpecificMixin {
       return;
     }
     data['view'] = viewId;
-    final jsonEncoder = JsonEncoder();
+    var jsonEncoder = const JsonEncoder();
     var json = jsonEncoder.convert(data);
     html.window.postMessage(json, '*');
   }

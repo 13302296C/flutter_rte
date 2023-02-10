@@ -38,11 +38,11 @@ extension ToolbarFontSettingsButtons on ToolbarWidgetState {
           items: [
             CustomDropdownMenuItem(
               value: 'pt',
-              child: PointerInterceptor(child: Text('pt')),
+              child: PointerInterceptor(child: const Text('pt')),
             ),
             CustomDropdownMenuItem(
               value: 'px',
-              child: PointerInterceptor(child: Text('px')),
+              child: PointerInterceptor(child: const Text('px')),
             ),
           ],
           value: _fontSizeUnitSelectedItem,
@@ -232,19 +232,19 @@ extension ToolbarFontSettingsButtons on ToolbarWidgetState {
             CustomDropdownMenuItem(
               value: 'Courier New',
               child: PointerInterceptor(
-                  child: Text('Courier New',
+                  child: const Text('Courier New',
                       style: TextStyle(fontFamily: 'Courier'))),
             ),
             CustomDropdownMenuItem(
               value: 'Helvetica',
               child: PointerInterceptor(
-                  child: Text('Helvetica',
+                  child: const Text('Helvetica',
                       style: TextStyle(fontFamily: 'Helvetica'))),
             ),
             CustomDropdownMenuItem(
               value: 'Times New Roman',
               child: PointerInterceptor(
-                  child: Text('Times New Roman',
+                  child: const Text('Times New Roman',
                       style: TextStyle(fontFamily: 'Times'))),
             ),
           ],

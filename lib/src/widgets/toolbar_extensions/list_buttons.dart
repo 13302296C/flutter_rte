@@ -38,35 +38,35 @@ extension ToolbarListButtons on ToolbarWidgetState {
           items: [
             CustomDropdownMenuItem(
               value: 'decimal',
-              child: PointerInterceptor(child: Text('1. Numbered')),
+              child: PointerInterceptor(child: const Text('1. Numbered')),
             ),
             CustomDropdownMenuItem(
               value: 'lower-alpha',
-              child: PointerInterceptor(child: Text('a. Lower Alpha')),
+              child: PointerInterceptor(child: const Text('a. Lower Alpha')),
             ),
             CustomDropdownMenuItem(
               value: 'upper-alpha',
-              child: PointerInterceptor(child: Text('A. Upper Alpha')),
+              child: PointerInterceptor(child: const Text('A. Upper Alpha')),
             ),
             CustomDropdownMenuItem(
               value: 'lower-roman',
-              child: PointerInterceptor(child: Text('i. Lower Roman')),
+              child: PointerInterceptor(child: const Text('i. Lower Roman')),
             ),
             CustomDropdownMenuItem(
               value: 'upper-roman',
-              child: PointerInterceptor(child: Text('I. Upper Roman')),
+              child: PointerInterceptor(child: const Text('I. Upper Roman')),
             ),
             CustomDropdownMenuItem(
               value: 'disc',
-              child: PointerInterceptor(child: Text('• Disc')),
+              child: PointerInterceptor(child: const Text('• Disc')),
             ),
             CustomDropdownMenuItem(
               value: 'circle',
-              child: PointerInterceptor(child: Text('○ Circle')),
+              child: PointerInterceptor(child: const Text('○ Circle')),
             ),
             CustomDropdownMenuItem(
               value: 'square',
-              child: PointerInterceptor(child: Text('■ Square')),
+              child: PointerInterceptor(child: const Text('■ Square')),
             ),
           ],
           hint: Text('Select list style'),

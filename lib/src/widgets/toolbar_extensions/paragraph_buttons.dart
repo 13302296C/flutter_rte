@@ -38,19 +38,19 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           items: [
             CustomDropdownMenuItem(
               value: 'lower',
-              child: PointerInterceptor(child: Text('lowercase')),
+              child: PointerInterceptor(child: const Text('lowercase')),
             ),
             CustomDropdownMenuItem(
               value: 'sentence',
-              child: PointerInterceptor(child: Text('Sentence case')),
+              child: PointerInterceptor(child: const Text('Sentence case')),
             ),
             CustomDropdownMenuItem(
               value: 'title',
-              child: PointerInterceptor(child: Text('Title Case')),
+              child: PointerInterceptor(child: const Text('Title Case')),
             ),
             CustomDropdownMenuItem(
               value: 'upper',
-              child: PointerInterceptor(child: Text('UPPERCASE')),
+              child: PointerInterceptor(child: const Text('UPPERCASE')),
             ),
           ],
           hint: Text('Change case'),
@@ -153,7 +153,7 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
         }
       },
       isSelected: _textDirectionSelected,
-      children: [
+      children: const [
         Icon(Icons.format_textdirection_l_to_r),
         Icon(Icons.format_textdirection_r_to_l),
       ],
@@ -194,33 +194,33 @@ extension ToolbarParagraphButtons on ToolbarWidgetState {
           style: widget.toolbarOptions.textStyle,
           items: [
             CustomDropdownMenuItem(
-                value: 1, child: PointerInterceptor(child: Text('1.0'))),
+                value: 1, child: PointerInterceptor(child: const Text('1.0'))),
             CustomDropdownMenuItem(
               value: 1.2,
-              child: PointerInterceptor(child: Text('1.2')),
+              child: PointerInterceptor(child: const Text('1.2')),
             ),
             CustomDropdownMenuItem(
               value: 1.4,
-              child: PointerInterceptor(child: Text('1.4')),
+              child: PointerInterceptor(child: const Text('1.4')),
             ),
             CustomDropdownMenuItem(
               value: 1.5,
-              child: PointerInterceptor(child: Text('1.5')),
+              child: PointerInterceptor(child: const Text('1.5')),
             ),
             CustomDropdownMenuItem(
               value: 1.6,
-              child: PointerInterceptor(child: Text('1.6')),
+              child: PointerInterceptor(child: const Text('1.6')),
             ),
             CustomDropdownMenuItem(
               value: 1.8,
-              child: PointerInterceptor(child: Text('1.8')),
+              child: PointerInterceptor(child: const Text('1.8')),
             ),
             CustomDropdownMenuItem(
               value: 2,
-              child: PointerInterceptor(child: Text('2.0')),
+              child: PointerInterceptor(child: const Text('2.0')),
             ),
             CustomDropdownMenuItem(
-                value: 3, child: PointerInterceptor(child: Text('3.0'))),
+                value: 3, child: PointerInterceptor(child: const Text('3.0'))),
           ],
           value: _lineHeightSelectedItem,
           onChanged: (double? changed) async {
