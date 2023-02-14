@@ -220,7 +220,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   void setFocus() {
     if (!isDisabled && !isReadOnly) {
       evaluateJavascript(data: {'type': 'toIframe: setFocus'});
-      if (!kIsWeb) focusNode?.requestFocus();
+      focusNode?.requestFocus();
     }
   }
 
