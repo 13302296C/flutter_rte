@@ -200,11 +200,17 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   Widget get _faultWidget => Center(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Editor Error:'),
-            const SizedBox(height: 16),
             Text(_controller.fault.toString()),
+            const SizedBox(width: 16),
+            TextButton(
+                onPressed: () {
+                  _controller.resetFault();
+                },
+                child: const Text('Ok'))
           ],
         ),
       ));
