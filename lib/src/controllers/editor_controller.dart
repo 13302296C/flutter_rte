@@ -211,10 +211,14 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   String _buffer = '';
   String get content => _buffer;
 
-  bool get contentIsEmpty => _buffer == '';
-  bool get contentIsNotEmpty => _buffer != '';
+  /// Checks if the editor is empty
+  bool get contentIsEmpty => _buffer.isEmpty;
 
-  ///
+  /// Checks if the editor is not empty
+  bool get contentIsNotEmpty => _buffer.isNotEmpty;
+
+  /// Sets the initial text of the editor. This is useful when you want to
+  /// initialize the editor with some text.
   void setInitialText(String text) {
     _buffer = text;
     editorOptions.initialText = text;
@@ -264,12 +268,11 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   void redo() => evaluateJavascript(data: {'type': 'toIframe: redo'});
 
   /// Sets the text of the editor.
-  void setText(String text) async {
+  Future<void> setText(String text) async {
     if (!initialized) {
-      log('[HtmlEditor] controller.SetText() called before the editor component'
-          ' finished loading.\n\nThe content has not been loaded.\n\n'
-          'You must wait for onInit callback to shoot before you set content '
-          'or set content via initialValue argument.');
+      // if the editor is not initialized yet, set the _buffer value
+      // and return
+      _buffer = text;
       return;
     }
     setInitialText(text);

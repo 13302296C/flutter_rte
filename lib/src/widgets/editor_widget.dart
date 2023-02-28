@@ -400,9 +400,13 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
     _controller.context = context;
     _controller.editorOptions.expandFullHeight = widget.expandFullHeight;
-    if (widget.initialValue != null) {
+
+    // if initial value is provided and controller content is empty -
+    // set controller content to initial value
+    if (widget.initialValue != null && _controller.contentIsEmpty) {
       _controller.setInitialText(widget.initialValue!);
     }
+
     if (widget.hint != null) {
       _controller.editorOptions.hint = widget.hint;
     }
