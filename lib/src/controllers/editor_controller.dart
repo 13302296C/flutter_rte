@@ -263,14 +263,12 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
           'or set content via initialValue argument.');
       return;
     }
-
+    setInitialText(text);
     if (kIsWeb) {
       await evaluateJavascript(
           data: {'type': 'toIframe: setText', 'text': text});
-      await recalculateContentHeight();
     } else {
       // on native platform - reload page with new value
-      setInitialText(text);
       await reloadContent();
     }
     await recalculateContentHeight();
