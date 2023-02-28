@@ -200,11 +200,17 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   Widget get _faultWidget => Center(
           child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Column(
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text('Editor Error:'),
-            const SizedBox(height: 16),
             Text(_controller.fault.toString()),
+            const SizedBox(width: 16),
+            TextButton(
+                onPressed: () {
+                  _controller.resetFault();
+                },
+                child: const Text('Ok'))
           ],
         ),
       ));
@@ -284,30 +290,37 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
 
   /// This top overlay widget patches scrolling issues on iOS and Web
   Widget _scrollPatch() {
+    Size? patchSize;
     // when work fullscreen - don't block anything
     if (_controller.editorOptions.expandFullHeight) {
       return const SizedBox();
     }
     //if disabled or read-only - intercept all events
     if (_controller.isReadOnly || _controller.isDisabled) {
-      // if (kIsWeb) {
-      //   return Positioned.fill(
-      //       child: PointerInterceptor(child: SizedBox.expand()));
-      // }
       if (!kIsWeb) {
         return const Positioned.fill(
             child: AbsorbPointer(child: SizedBox.expand()));
       }
-    } else if (!_controller.hasFocus ||
-        (kIsWeb && _controller.contentIsEmpty)) {
+    } else if (!_controller.hasFocus || kIsWeb) {
       if (kIsWeb) {
-        return Positioned.fill(
-          child: Listener(
-              onPointerUp: (e) {
-                _controller.setFocus();
-              },
-              child: PointerInterceptor(child: const SizedBox.expand())),
-        );
+        if (!_controller.hasFocus) {
+          var scrollPatchKey = GlobalKey();
+          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+            patchSize = scrollPatchKey.currentContext!
+                .findRenderObject()!
+                .paintBounds
+                .size;
+          });
+          return Positioned.fill(
+            key: scrollPatchKey,
+            child: Listener(
+                onPointerUp: (e) {
+                  _controller.setFocus();
+                },
+                child: PointerInterceptor(
+                    child: SizedBox.fromSize(size: patchSize))),
+          );
+        }
       } else if (io.Platform.isIOS) {
         return Positioned.fill(
           child: GestureDetector(
@@ -319,7 +332,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       }
     }
     // Android doesn't need special treatment :)
-    return const SizedBox();
+    return SizedBox.fromSize(size: patchSize);
   }
 
   ///

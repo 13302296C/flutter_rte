@@ -417,26 +417,24 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
     return Row(
       children: [
         Expanded(
-          child: Container(
-            color: widget.toolbarOptions.backgroundColor,
-            decoration: widget.toolbarOptions.toolbarDecoration,
-            child: PointerInterceptor(
-              child: AbsorbPointer(
-                absorbing: !_enabled,
-                child: _enabled &&
-                            widget.controller.toolbarOptions.toolbarPosition ==
-                                ToolbarPosition.custom ||
-                        (_enabled &&
-                            widget.controller.toolbarOptions.fixedToolbar &&
-                            (widget.controller.toolbarOptions.toolbarPosition !=
-                                ToolbarPosition.custom)) ||
-                        (_enabled &&
-                            widget.controller.toolbarOptions.toolbarPosition !=
-                                ToolbarPosition.custom &&
-                            !widget.controller.toolbarOptions.fixedToolbar)
-                    ? child
-                    : const SizedBox(),
-              ),
+          child: AbsorbPointer(
+            absorbing: !_enabled,
+            child: Container(
+              color: widget.toolbarOptions.backgroundColor,
+              decoration: widget.toolbarOptions.toolbarDecoration,
+              child: _enabled &&
+                          widget.controller.toolbarOptions.toolbarPosition ==
+                              ToolbarPosition.custom ||
+                      (_enabled &&
+                          widget.controller.toolbarOptions.fixedToolbar &&
+                          (widget.controller.toolbarOptions.toolbarPosition !=
+                              ToolbarPosition.custom)) ||
+                      (_enabled &&
+                          widget.controller.toolbarOptions.toolbarPosition !=
+                              ToolbarPosition.custom &&
+                          !widget.controller.toolbarOptions.fixedToolbar)
+                  ? child
+                  : const SizedBox(),
             ),
           ),
         ),

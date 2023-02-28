@@ -1,3 +1,16 @@
+## 0.4.1
+* Adds "Ok" (reset) button to clear controller faults, without having to re-init.
+* Exposes the `fault` field of type [Exception?]
+* Adds `clearFault` method to clear the fault programmatically 
+
+## 0.4.0 - Stable
+* Upgrade to `webview_flutter: ^4.0.1`
+* Fix `PointerInterceptor` causing incorrect rendering on web platform.
+
+## 0.3.0 - Stable
+* revert to webview 3.0.4
+* lints
+
 ## 0.2.3
 * add assets subfolder
 

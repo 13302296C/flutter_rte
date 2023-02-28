@@ -188,15 +188,24 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// is dictation available
   bool sttAvailable = false;
 
-  // /// is dictation running
+  /// is dictation running?
   bool isRecording = false;
 
-  // /// Dictation result buffer
+  /// Dictation result buffer
   String sttBuffer = '';
 
-  @internal
+  /// Fault thrown by the editor. Null if there is no fault.
   Exception? fault;
+
+  /// is there a fault? If there is, the editor will show an error message
+  /// instead of the editor itself. The "Ok" button will reset the fault.
   bool get hasFault => fault != null;
+
+  /// resets the fault and hides the error message if there is one
+  void resetFault() {
+    fault = null;
+    notifyListeners();
+  }
 
   // ignore: prefer_final_fields
   String _buffer = '';
@@ -220,7 +229,7 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   void setFocus() {
     if (!isDisabled && !isReadOnly) {
       evaluateJavascript(data: {'type': 'toIframe: setFocus'});
-      if (!kIsWeb) focusNode?.requestFocus();
+      focusNode?.requestFocus();
     }
   }
 
