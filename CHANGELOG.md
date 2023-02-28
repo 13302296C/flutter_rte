@@ -1,3 +1,6 @@
+## 0.4.2
+* Fixes bug: on web the hint text doesn't disappear when `setText()` is called
+
 ## 0.4.1
 * Adds "Ok" (reset) button to clear controller faults, without having to re-init.
 * Exposes the `fault` field of type [Exception?]
