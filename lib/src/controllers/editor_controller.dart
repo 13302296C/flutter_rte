@@ -35,8 +35,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
         toolbarOptions = toolbarOptions ?? HtmlToolbarOptions(),
         stylingOptions = stylingOptions ??
             HtmlStylingOptions(
-                blockTagAttributes: HtmlTagAttributes(
-                    inlineStyle: 'text-indent:3.5em; text-align:justify;')) {
+                blockTagAttributes:
+                    HtmlTagAttributes(inlineStyle: 'text-align:justify;')) {
     viewId = getRandString(10).substring(0, 14);
   }
 
