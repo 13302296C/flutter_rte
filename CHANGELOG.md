@@ -1,3 +1,6 @@
+## 0.4.3
+* Allow to call `setText()` on headless controller (when detached from UI, i.e.: inside `initState()` method).
+
 ## 0.4.2
 * Fixes bug: on web the hint text doesn't disappear when `setText()` is called
 
