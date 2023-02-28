@@ -1,3 +1,6 @@
+## 0.4.4
+* Removes default paragraph indent of 3.5em
+
 ## 0.4.3
 * Allow to call `setText()` on headless controller (when detached from UI, i.e.: inside `initState()` method).
 

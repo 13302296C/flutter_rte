@@ -342,7 +342,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
         !_controller.isReadOnly) {
       return Positioned.fill(
           child: Padding(
-        padding: const EdgeInsets.only(top: 24.0, left: 56),
+        padding: const EdgeInsets.only(top: 24.0, left: 24),
         child: Text(editorOptions.hint ?? '',
             style: editorOptions.hintStyle ??
                 TextStyle(
