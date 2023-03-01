@@ -334,16 +334,7 @@ https://github.com/neilj/Squire
             break;
 
           case 'scrollToCursor':
-            // get cursor position with respect to the viewport.
-            // if cursor is not visible, scroll to it.
-            var range = window.getSelection().getRangeAt(0);
-            var rect = range.getBoundingClientRect();
-            var y = rect.top;
-            var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-            var caretVisible = ( y >= 0 && y <= viewportHeight );
-            if (!caretVisible) {
-              range.startContainer.parentElement.scrollIntoView({ behavior: "smooth", block: "center" });
-            }
+          scrollToCursor();
             break;
 
           default:
@@ -351,6 +342,21 @@ https://github.com/neilj/Squire
             break;
         }
       }
+    }
+  }
+
+  function scrollToCursor(){
+    // get cursor position with respect to the viewport.
+    // if cursor is not visible, scroll to it.
+    var selection = window.getSelection();
+    if(selection.rangeCount == 0) return;
+    var range = selection.getRangeAt(0);
+    var rect = range.getBoundingClientRect();
+    var y = rect.top;
+    var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+    var caretVisible = ( y >= 0 && y <= viewportHeight );
+    if (!caretVisible) {
+      range.startContainer.parentElement.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }
 

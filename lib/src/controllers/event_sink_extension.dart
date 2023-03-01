@@ -49,14 +49,10 @@ extension StreamProcessor on HtmlEditorController {
               await disable();
             }
             _initialized = true;
-            // if we have some content in the buffer on init,
-            // we need to set it to the editor.
-            if (_buffer.isNotEmpty) {
-              await setText(_buffer);
-            }
             notifyListeners();
             callbacks.onInit?.call();
           }
+
           await recalculateContentHeight();
         } else {
           // fail

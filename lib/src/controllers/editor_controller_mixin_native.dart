@@ -53,6 +53,8 @@ abstract class PlatformSpecificMixin {
     await _ec!.addJavaScriptChannel('toDart',
         onMessageReceived: (message) => _c!.processEvent(message.message));
     await _ec!.setJavaScriptMode(JavaScriptMode.unrestricted);
+    await _ec!.setBackgroundColor(Colors.transparent);
+    await _ec!.loadHtmlString(await c.getInitialContent());
     await _ec!.setNavigationDelegate(
       NavigationDelegate(
         onNavigationRequest: (NavigationRequest request) {
@@ -67,8 +69,6 @@ abstract class PlatformSpecificMixin {
         },
       ),
     );
-    await _ec!.setBackgroundColor(Colors.transparent);
-    await _ec!.loadHtmlString(await c.getInitialContent());
   }
 
   ///

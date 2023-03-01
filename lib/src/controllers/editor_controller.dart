@@ -394,13 +394,18 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   }
 
   /// Initialization of native UI component
-  /// the `init` method is pulle from platform-specific mixin
+  /// the `init` method is pulled from platform-specific mixin
   /// and is different for each platform
   Future<void> initEditor(BuildContext initBC) async {
     if (initialized) throw Exception('Already initialized');
     await init(initBC, _contentHeight, this);
-    _initialized = true;
-    notifyListeners();
+
+    // on web - we need to set the `_initialized` flag here
+    // and notify listeners
+    if (kIsWeb) {
+      _initialized = true;
+      notifyListeners();
+    }
   }
 
   /// This method compiles HTML document based on various controller settings
@@ -447,8 +452,13 @@ const isNativePlatform = true;
     htmlString = htmlString.replaceFirst(
         '/*---- Root Stylesheet ----*/', stylingOptions.getRootStyleText);
 
+    // if `_buffer` is not empty during init ( `setText()` called headlessly )
+    // - use `_buffer` as initial content,
+    // otherwise use the `initialText` from the options, or empty string
     htmlString = htmlString.replaceFirst(
-        '<squirecontent>', _processHtml(editorOptions.initialText ?? ''));
+        '<squirecontent>',
+        _processHtml(
+            _buffer.isNotEmpty ? _buffer : editorOptions.initialText ?? ''));
 
     htmlString = htmlString.replaceFirst(
         '/*---- Squire Config ----*/', stylingOptions.options);
