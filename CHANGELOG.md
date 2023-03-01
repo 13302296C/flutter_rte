@@ -1,3 +1,6 @@
+## 0.4.5
+* Fix `Scrollable.of()` bug in Flutter 3.7.
+
 ## 0.4.4
 * Removes default paragraph indent of 3.5em
 
