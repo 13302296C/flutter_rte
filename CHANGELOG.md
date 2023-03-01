@@ -1,3 +1,6 @@
+## 0.4.6
+* Fix flicker during load on native
+
 ## 0.4.5
 * Fix `Scrollable.of()` bug in Flutter 3.7.
 
