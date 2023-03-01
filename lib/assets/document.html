@@ -333,6 +333,19 @@ https://github.com/neilj/Squire
             onSelectionChange();
             break;
 
+          case 'scrollToCursor':
+            // get cursor position with respect to the viewport.
+            // if cursor is not visible, scroll to it.
+            var range = window.getSelection().getRangeAt(0);
+            var rect = range.getBoundingClientRect();
+            var y = rect.top;
+            var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+            var caretVisible = ( y >= 0 && y <= viewportHeight );
+            if (!caretVisible) {
+              range.startContainer.parentElement.scrollIntoView({ behavior: "smooth", block: "center" });
+            }
+            break;
+
           default:
             console.log(`Not implemented: ${command}`);
             break;

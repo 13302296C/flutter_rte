@@ -3,6 +3,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rte/flutter_rte.dart';
 import 'fullscreen.dart';
+import 'test.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ class HtmlEditorExampleApp extends StatelessWidget {
       theme: ThemeData(),
       darkTheme: ThemeData.dark(),
       themeMode: ThemeMode.light,
-      home: const Fullscreen(),
+      home: const Test(),
     );
   }
 }
