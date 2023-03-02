@@ -38,18 +38,27 @@ extension StreamProcessor on HtmlEditorController {
       case 'initEditor':
         // success
         if (response['result'] == 'Ok') {
-          // On native platform html injection is restricted, so we need
-          // to reload the page with new content in it. After the page is loaded,
-          // we need to prevent onInit callback and call onChaged instead.
+          // success
+          _initialized = true;
+
+          // when `setText()` is called on native platform,
+          // the html injection is prohibited, so we need
+          // to reload the entire page with the new content in it.
+          // When that happens, we need to prevent `onInit` callback
+          // and call `onChaged` instead. This is done by setting
+          // `_blockInitCallback` flag to true during `setText()` call.
           if (_blockInitCallback) {
             _blockInitCallback = false;
             callbacks.onChangeContent?.call(_buffer);
           } else {
-            if (isReadOnly || isDisabled) {
+            // if `isReadOnly` flag is set on init - we need to
+            // disable the editor, otherwise notify listeners
+            // that the editor is ready to use
+            if (isReadOnly) {
               await disable();
+            } else {
+              notifyListeners();
             }
-            _initialized = true;
-            notifyListeners();
             callbacks.onInit?.call();
           }
 
