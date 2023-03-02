@@ -1,3 +1,6 @@
+## 0.4.7
+* Fix console warning "disable() called to early" for read-only widgets
+
 ## 0.4.6
 * Fix flicker during load on native
 
