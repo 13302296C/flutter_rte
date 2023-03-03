@@ -105,12 +105,13 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'onChangeContent':
-        var previouslyEmpty = _buffer.isEmpty;
+        //var previouslyEmpty = _buffer.isEmpty;
         _buffer = response['contents'];
         callbacks.onChangeContent?.call(response['contents']);
         maybeScrollIntoView();
         if (autoAdjustHeight) unawaited(recalculateContentHeight());
-        if (previouslyEmpty) notifyListeners();
+        //if (previouslyEmpty)
+        notifyListeners();
         break;
 
       case 'onEnter':

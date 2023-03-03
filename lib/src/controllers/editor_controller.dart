@@ -273,13 +273,12 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Sets the text of the editor.
   Future<void> setText(String text) async {
+    _buffer = text;
     if (!initialized) {
       // if the editor is not initialized yet, set the _buffer value
       // and return
-      _buffer = text;
       return;
     }
-    setInitialText(text);
     if (kIsWeb) {
       await evaluateJavascript(
           data: {'type': 'toIframe: setText', 'text': text});
