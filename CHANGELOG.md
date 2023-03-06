@@ -1,3 +1,6 @@
+## 0.4.8
+* [WEB] Bug fix: `setText()` to and from empty string doesn't update the UI
+
 ## 0.4.7
 * Fix console warning "disable() called to early" for read-only widgets
 
