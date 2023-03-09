@@ -12,22 +12,37 @@ extension DictationController on HtmlEditorController {
         .initialize(
       onError: (SpeechRecognitionError? err) {
         if (err == null) {
-          fault = Exception('The error was thrown, but no details provided.');
+          fault = Exception('Speech-to-Text Error: no details provided.');
         }
         cancelRecording();
         fault = Exception(
-            'Speech-to-Text Error: ${err?.errorMsg} - ${err?.permanent}');
+            'Speech-to-Text Error: ${err?.errorMsg}'); // - ${err?.permanent}
+        sttAvailable = false;
+        notifyListeners();
       },
-      onStatus: log,
+      onStatus: (String? status) {
+        log('Speech-to-Text Status: $status');
+        if (status == 'notListening' || status == 'done') {
+          if (isRecording) {
+            isRecording = false;
+            notifyListeners();
+          }
+        } else if (status == 'listening') {
+          if (!isRecording) {
+            isRecording = true;
+            notifyListeners();
+          }
+        }
+      },
       debugLogging: kDebugMode,
     )
         .then((value) async {
       sttAvailable = value;
       notifyListeners();
     }).onError((error, stackTrace) {
+      log("Speech to text init error:", error: error, stackTrace: stackTrace);
       sttAvailable = false;
       notifyListeners();
-
       return Future.error(error.toString());
     });
     return sttAvailable;
@@ -37,8 +52,6 @@ extension DictationController on HtmlEditorController {
   Future<void> convertSpeechToText(Function(String v) onResult) async {
     if (!await _initSpeechToText()) return;
     sttBuffer = '';
-    isRecording = true;
-    notifyListeners();
     await speechToText?.listen(
         onResult: (SpeechRecognitionResult result) async {
           if (!result.finalResult) {
@@ -46,15 +59,11 @@ extension DictationController on HtmlEditorController {
             notifyListeners();
             return;
           } else {
-            onResult(result.recognizedWords);
-            if (isRecording) {
-              isRecording = false;
-            }
             if (result.recognizedWords.isNotEmpty) {
-              sttBuffer = result.recognizedWords;
-              await insertHtml(sttBuffer);
+              await insertHtml(result.recognizedWords);
             }
-            notifyListeners();
+            onResult(result.recognizedWords);
+            sttBuffer = '';
           }
         },
         listenFor: const Duration(seconds: 300),
@@ -67,16 +76,12 @@ extension DictationController on HtmlEditorController {
   /// Triggers result from recognition
   Future<void> stopRecording() async {
     await speechToText?.stop();
-    isRecording = false;
-    //await recalculateContentHeight();
-    notifyListeners();
+    await recalculateContentHeight();
   }
 
   /// Does not trigger result from recognition
   Future<void> cancelRecording() async {
     await speechToText?.cancel();
-    isRecording = false;
     await recalculateContentHeight();
-    notifyListeners();
   }
 }
