@@ -28,7 +28,19 @@ extension StreamProcessor on HtmlEditorController {
   /// Process events coming from the iframe
   Future<void> processEvent(String data) async {
     // full response
-    Map<String, dynamic> response = json.decode(data);
+    Map<String, dynamic> response;
+
+    // edge cases
+    try {
+      response = json.decode(data);
+      if (response['view'] == null) {
+        throw 'HtmlEditorController: received data with no view id.';
+      }
+    } catch (e) {
+      log(e.toString());
+      return;
+    }
+
     if (response['view'] != viewId || response['type'] == null) return;
     if ((response['type'] as String).split(' ')[0] != 'toDart:') return;
 

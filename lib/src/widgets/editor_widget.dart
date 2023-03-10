@@ -176,7 +176,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
               key: _controller.toolbarKey,
               controller: _controller,
             ),
-          // on native - sow editor right away,
+          // on native - show editor right away,
           // on web - wait intil initialized
           if (kIsWeb && _controller.initialized || !kIsWeb)
             Expanded(
@@ -187,7 +187,7 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
                     _backgroundWidget(),
                     _hintTextWidget(),
                     child,
-                    _scrollPatch(),
+                    _ScrollPatch(_controller),
                     _sttDictationPreview(),
                     _faultWidget
                   ],
@@ -312,53 +312,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     );
   }
 
-  /// This top overlay widget patches scrolling issues on iOS and Web
-  Widget _scrollPatch() {
-    Size? patchSize;
-    // when work fullscreen - don't block anything
-    if (_controller.editorOptions.expandFullHeight) {
-      return const SizedBox();
-    }
-    //if disabled or read-only - intercept all events
-    if (_controller.isReadOnly || _controller.isDisabled) {
-      if (!kIsWeb) {
-        return const Positioned.fill(
-            child: AbsorbPointer(child: SizedBox.expand()));
-      }
-    } else if (!_controller.hasFocus || kIsWeb) {
-      if (kIsWeb) {
-        if (!_controller.hasFocus) {
-          var scrollPatchKey = GlobalKey();
-          WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-            patchSize = scrollPatchKey.currentContext!
-                .findRenderObject()!
-                .paintBounds
-                .size;
-          });
-          return Positioned.fill(
-            key: scrollPatchKey,
-            child: Listener(
-                onPointerUp: (e) {
-                  _controller.setFocus();
-                },
-                child: PointerInterceptor(
-                    child: SizedBox.fromSize(size: patchSize))),
-          );
-        }
-      } else if (io.Platform.isIOS) {
-        return Positioned.fill(
-          child: GestureDetector(
-              onTap: () {
-                _controller.setFocus();
-              },
-              child: const AbsorbPointer(child: SizedBox.expand())),
-        );
-      }
-    }
-    // Android doesn't need special treatment :)
-    return SizedBox.fromSize(size: patchSize);
-  }
-
   ///
   Widget _hintTextWidget() {
     if (_controller.contentIsEmpty &&
@@ -447,5 +400,64 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       _controller.isReadOnly = widget.isReadOnly!;
     }
     _controller.fault = fault;
+  }
+}
+
+/// Top overlay widget to patch scrolling issues on iOS and Web
+class _ScrollPatch extends StatefulWidget {
+  const _ScrollPatch(this.controller, {Key? key}) : super(key: key);
+
+  final HtmlEditorController controller;
+
+  @override
+  State<_ScrollPatch> createState() => _ScrollPatchState();
+}
+
+class _ScrollPatchState extends State<_ScrollPatch> {
+  Size? patchSize;
+  @override
+  Widget build(BuildContext context) {
+    Size? patchSize;
+    // when work fullscreen - don't block anything
+    if (widget.controller.editorOptions.expandFullHeight) {
+      return const SizedBox();
+    }
+    //if disabled or read-only - intercept all events
+    if (widget.controller.isReadOnly ||
+        widget.controller.isDisabled ||
+        (kIsWeb && !widget.controller.hasFocus)) {
+      if (!kIsWeb) {
+        return const Positioned.fill(
+            child: AbsorbPointer(child: SizedBox.expand()));
+      }
+      var scrollPatchKey = GlobalKey();
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+        patchSize =
+            scrollPatchKey.currentContext!.findRenderObject()!.paintBounds.size;
+      });
+      return Positioned.fill(
+        key: scrollPatchKey,
+        child: Listener(
+            behavior: HitTestBehavior.translucent,
+            onPointerDown: (e) {
+              widget.controller.setFocus();
+              setState(() {});
+            },
+            child:
+                PointerInterceptor(child: SizedBox.fromSize(size: patchSize))),
+      );
+    } else if (!widget.controller.hasFocus) {
+      if (io.Platform.isIOS) {
+        return Positioned.fill(
+          child: GestureDetector(
+              onTap: () {
+                widget.controller.setFocus();
+              },
+              child: const AbsorbPointer(child: SizedBox.expand())),
+        );
+      }
+    }
+    // Android doesn't need special treatment :)
+    return SizedBox.fromSize(size: patchSize);
   }
 }
