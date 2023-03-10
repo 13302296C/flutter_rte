@@ -11,8 +11,12 @@ ____
 ## Under the Hood
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with a few differences:
- * Widget height: wrap content, expand, or explicit, with height ChangeNotifier.
- * ***Summernote*** and ***jQuery*** replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for security, HTML5 compatibility, features, performance and size.
+ * Improved widget height constraints: 
+   - wrap content,
+   - expand, or 
+   - explicit, with height ChangeNotifier.
+ * Summernote and jQuery replaced with [Squire](https://github.com/neilj/Squire) - highly popular and well-maintained HTML5 rich text editor, which provides grat flexibility over generated HTML.
+ * XSS protection enforced by [DOMPurify](https://github.com/cure53/DOMPurify) - super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG.
  * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
 
 
