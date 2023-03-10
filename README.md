@@ -12,11 +12,12 @@ ____
 
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with a few differences:
  * Widget height: wrap content, expand, or explicit, with height ChangeNotifier.
- * ***Summernote*** and ***jQuery*** replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for stricter security, HTML5 compatibility, features, performance and size.
+ * ***Summernote*** and ***jQuery*** replaced with [Squire](https://github.com/neilj/Squire) and [DOMPurify](https://github.com/cure53/DOMPurify) for security, HTML5 compatibility, features, performance and size.
  * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
 
 
 ____
+
 
 ## Basic Implementation
 
@@ -107,8 +108,9 @@ var stylingOptions = HtmlStylingOptions(
     code: HtmlTagAttributes(
         inlineStyle: 'padding: .5em 1em;', cssClass: 'my-custom-li-class'),
 
-    // when sanitizeOnPaste is `true` - editor will strip all 
-    // HTML pasted into the editor down to plain text
+    // when sanitizeOnPaste is `true` - editor will sanitize all incoming HTML.
+    // !!! DANGER !!! Setting this flag to `false` makes your app
+    // vulnerable to XSS attacks.
     sanitizeOnPaste: true,
     );
 

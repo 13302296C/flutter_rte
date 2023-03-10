@@ -334,7 +334,7 @@ https://github.com/neilj/Squire
             break;
 
           case 'scrollToCursor':
-          scrollToCursor();
+            scrollToCursor();
             break;
 
           default:
@@ -478,8 +478,18 @@ https://github.com/neilj/Squire
 
       //willPaste
       editor.addEventListener('willPaste', function(e){
+
+        // interecpt the Ctrl-V, strip all tags, run through [editor.insertHTML].
+        var r = DOMPurify.sanitize(e.fragment, {ALLOWED_TAGS:[]});
+        editor.insertHTML(r);
+
+        // we need to trigger the 'onPaste' callback in Dart code
         postChannelMessage({"view": viewId, 
-        "type": "toDart: onPaste", "text": e.fragment});
+        "type": "toDart: onPaste", "text": r});
+
+        // next two lines block the injection of the clipboard buffer
+        e.preventDefault();
+        return false;
       });
 
       // mouse in

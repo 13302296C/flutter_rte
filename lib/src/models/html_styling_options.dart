@@ -74,8 +74,8 @@ class HtmlStylingOptions {
   HtmlTagAttributes? get a => _tagSettings['a'];
   set a(HtmlTagAttributes? attr) => _tagSettings['a'] = attr;
 
-  /// The editor will strip all tags down to plain text if `true`.
-  /// Otherwise will paste "as is" at your own risk.
+  /// The editor will strip all dangerous HTML if `true`.
+  /// Otherwise will paste "as is" at your own risk (subject to XSS vulnerability).
   bool sanitizeOnPaste;
 
   ///
@@ -122,6 +122,7 @@ class HtmlStylingOptions {
     });
     r += '},\n';
     r += 'isSetHTMLSanitized: $sanitizeOnPaste,\n';
+    r += 'isInsertedHTMLSanitized: $sanitizeOnPaste,\n';
     return r;
   }
 
