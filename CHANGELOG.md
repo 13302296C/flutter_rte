@@ -1,3 +1,7 @@
+## 0.4.9
+* Improve speech-to-text exception handling and display
+* Enforce HTML sanitization, strip HTML tags on Ctrl-V
+
 ## 0.4.8
 * [WEB] Bug fix: `setText()` to and from empty string doesn't update the UI
 
