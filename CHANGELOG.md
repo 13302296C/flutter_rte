@@ -1,3 +1,6 @@
+## 0.4.10
+* Fixes scroll+refresh issue on Web
+
 ## 0.4.9
 * Improve speech-to-text exception handling and display
 * Enforce HTML sanitization, strip HTML tags on Ctrl-V
