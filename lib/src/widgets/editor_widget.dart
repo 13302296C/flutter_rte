@@ -200,43 +200,44 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
   ///
   Widget get _faultWidget => !_controller.hasFault
       ? const SizedBox()
-      : Center(
+      : Align(
+          alignment: Alignment.bottomCenter,
           child: PointerInterceptor(
-          child: Container(
-            decoration: BoxDecoration(
-                color: Theme.of(context).canvasColor,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 8,
-                      offset: const Offset(0, 0))
-                ]),
-            child: Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    color: Colors.red[800]!,
-                    size: 20,
-                  ),
-                  const SizedBox(width: 8),
-                  Text(_controller.fault.toString()),
-                  const SizedBox(width: 16),
-                  TextButton(
-                      onPressed: () {
-                        _controller.resetFault();
-                      },
-                      child: const Text('Ok'))
-                ],
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 8,
+                        offset: const Offset(0, 0))
+                  ]),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.error_outline,
+                      color: Colors.red[800]!,
+                      size: 20,
+                    ),
+                    const SizedBox(width: 8),
+                    Flexible(child: Text(_controller.fault.toString())),
+                    const SizedBox(width: 16),
+                    TextButton(
+                        onPressed: () {
+                          _controller.resetFault();
+                        },
+                        child: const Text('Ok'))
+                  ],
+                ),
               ),
             ),
-          ),
-        ));
+          ));
 
   ///STT popup
   Widget _sttDictationPreview() {
