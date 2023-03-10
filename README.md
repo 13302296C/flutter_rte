@@ -13,7 +13,7 @@ ____
 This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html-editor-enhanced) with a few differences:
  * Improved widget height constraints: 
    - wrap content,
-   - expand, or 
+   - expand full height, or 
    - explicit, with height ChangeNotifier.
  * Summernote and jQuery replaced with [Squire](https://github.com/neilj/Squire) - highly popular and well-maintained HTML5 rich text editor, which provides grat flexibility over generated HTML.
  * XSS protection enforced by [DOMPurify](https://github.com/cure53/DOMPurify) - super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG.
