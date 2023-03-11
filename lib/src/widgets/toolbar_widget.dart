@@ -7,6 +7,7 @@ import 'package:flutter_rte/src/models/editor_settings.dart';
 import 'package:flutter_rte/src/widgets/custom_dropdown_button.dart';
 import 'package:flutter_rte/src/utils/utils.dart';
 import 'package:pointer_interceptor/pointer_interceptor.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 import 'toolbar_expand_icon.dart';
 
 // extensions

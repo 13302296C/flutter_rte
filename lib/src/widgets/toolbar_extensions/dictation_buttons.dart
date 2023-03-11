@@ -21,12 +21,12 @@ extension DictationButtons on ToolbarWidgetState {
       renderBorder: widget.toolbarOptions.renderBorder,
       textStyle: widget.toolbarOptions.textStyle,
       onPressed: (int index) async {
-        if (t.getIcons()[index].icon == Icons.mic_outlined) {
-          if (!widget.controller.isRecording) {
-            await widget.controller.convertSpeechToText((result) async {});
-          } else {
-            await widget.controller.cancelRecording();
-          }
+        if (widget.controller.isRecording) {
+          await widget.controller.cancelRecording();
+        } else if (SpeechToText().hasError) {
+          return;
+        } else {
+          await widget.controller.convertSpeechToText((result) async {});
         }
       },
       isSelected: [widget.controller.isRecording],

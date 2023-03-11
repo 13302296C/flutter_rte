@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:speech_to_text/speech_to_text.dart';
 
 /// Abstract class that all the toolbar classes extend
 abstract class Toolbar {
@@ -7,7 +8,13 @@ abstract class Toolbar {
 
 class VoiceToTextButtons extends Toolbar {
   List<Icon> getIcons() {
-    return <Icon>[const Icon(Icons.mic_outlined)];
+    if (SpeechToText().hasError) {
+      return <Icon>[const Icon(Icons.mic_off_outlined)];
+    } else if (SpeechToText().isListening) {
+      return <Icon>[const Icon(Icons.mic_outlined)];
+    } else {
+      return <Icon>[const Icon(Icons.mic_none_outlined)];
+    }
   }
 
   const VoiceToTextButtons();

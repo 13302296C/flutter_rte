@@ -5,45 +5,27 @@ part of 'package:flutter_rte/src/controllers/editor_controller.dart';
 extension DictationController on HtmlEditorController {
   ///
   Future<bool> _initSpeechToText() async {
-    if (sttAvailable) return true;
-    speechToText ??= SpeechToText();
-
-    await speechToText!
+    if (SpeechToText().hasError) return false;
+    await SpeechToText()
         .initialize(
       onError: (SpeechRecognitionError? err) {
         if (err == null) {
           fault = Exception('Speech-to-Text Error: no details provided.');
         }
         cancelRecording();
-        fault = Exception(
-            'Speech-to-Text Error: ${err?.errorMsg}'); // - ${err?.permanent}
-        sttAvailable = false;
+        setFault(Exception(
+            'Speech-to-Text Error: ${err?.errorMsg}')); // - ${err?.permanent}
         notifyListeners();
-      },
-      onStatus: (String? status) {
-        log('Speech-to-Text Status: $status');
-        if (status == 'notListening' || status == 'done') {
-          if (isRecording) {
-            isRecording = false;
-            notifyListeners();
-          }
-        } else if (status == 'listening') {
-          if (!isRecording) {
-            isRecording = true;
-            notifyListeners();
-          }
-        }
       },
       debugLogging: kDebugMode,
     )
         .then((value) async {
-      sttAvailable = value;
       notifyListeners();
+      return value;
     }).onError((error, stackTrace) {
       log("Speech to text init error:", error: error, stackTrace: stackTrace);
-      sttAvailable = false;
       notifyListeners();
-      return Future.error(error.toString());
+      return false;
     });
     return sttAvailable;
   }
@@ -52,22 +34,33 @@ extension DictationController on HtmlEditorController {
   Future<void> convertSpeechToText(Function(String v) onResult) async {
     if (!await _initSpeechToText()) return;
     sttBuffer = '';
-    await speechToText?.listen(
+    //setIsRecording(true);
+    SpeechToText().statusListener = (String? status) {
+      log('Speech-to-Text Status: $status');
+      if (status == 'notListening' || status == 'done') {
+        if (isRecording) {
+          setIsRecording(false);
+        }
+      } else if (status == 'listening') {
+        if (!isRecording) {
+          setIsRecording(true);
+        }
+      }
+    };
+    await SpeechToText().listen(
         onResult: (SpeechRecognitionResult result) async {
           if (!result.finalResult) {
-            sttBuffer = result.recognizedWords;
-            notifyListeners();
+            setSttBuffer(result.recognizedWords);
             return;
           } else {
             if (result.recognizedWords.isNotEmpty) {
               await insertHtml(result.recognizedWords);
             }
             onResult(result.recognizedWords);
-            sttBuffer = '';
           }
         },
         listenFor: const Duration(seconds: 300),
-        pauseFor: const Duration(seconds: 300),
+        pauseFor: const Duration(seconds: 5),
         partialResults: true,
         cancelOnError: true,
         listenMode: ListenMode.dictation);
@@ -75,13 +68,15 @@ extension DictationController on HtmlEditorController {
 
   /// Triggers result from recognition
   Future<void> stopRecording() async {
-    await speechToText?.stop();
+    setIsRecording(false);
+    await SpeechToText().stop();
     await recalculateContentHeight();
   }
 
   /// Does not trigger result from recognition
   Future<void> cancelRecording() async {
-    await speechToText?.cancel();
+    setIsRecording(false);
+    await SpeechToText().cancel();
     await recalculateContentHeight();
   }
 }

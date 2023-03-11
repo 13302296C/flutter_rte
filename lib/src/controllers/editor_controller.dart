@@ -182,20 +182,34 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   ///
   final Map<String, Completer> _openRequests = {};
 
-  /// Dictation controller
-  SpeechToText? speechToText;
-
   /// is dictation available
-  bool sttAvailable = false;
+  bool get sttAvailable => SpeechToText().isAvailable;
 
   /// is dictation running?
   bool isRecording = false;
+  @internal
+  void setIsRecording(bool value) {
+    isRecording = value;
+    notifyListeners();
+  }
 
   /// Dictation result buffer
   String sttBuffer = '';
 
+  @internal
+  void setSttBuffer(String value) {
+    sttBuffer = value;
+    notifyListeners();
+  }
+
   /// Fault thrown by the editor. Null if there is no fault.
   Exception? fault;
+
+  @internal
+  void setFault(Exception e) {
+    fault = e;
+    notifyListeners();
+  }
 
   /// is there a fault? If there is, the editor will show an error message
   /// instead of the editor itself. The "Ok" button will reset the fault.
