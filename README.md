@@ -18,6 +18,7 @@ This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html
  * Summernote and jQuery replaced with [Squire](https://github.com/neilj/Squire) - very popular and well-maintained HTML5 rich text editor library, which provides great flexibility over generated HTML.
  * XSS protection enforced by [DOMPurify](https://github.com/cure53/DOMPurify) - super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG.
  * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
+ * Built-in dictation feature (primarily for the web platform)
 
 
 ____

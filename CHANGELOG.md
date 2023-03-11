@@ -1,3 +1,6 @@
+## 0.4.11
+* Refactor dictation
+
 ## 0.4.10
 * Fixes scroll+refresh issue on Web
 
