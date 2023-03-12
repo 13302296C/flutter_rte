@@ -1,8 +1,11 @@
 # Flutter Rich Text Editor
 
 Easy to use WYSIWYG HTML editor for Flutter with built-in voice-to-text.
-Try it [here](https://flutter-rich-text.web.app/)
-
+<br />
+<div style="padding:1em 2em; background-color:blue; color:white;border-radius: 5px; margin: 1em auto">
+Try me! [here](https://flutter-rich-text.web.app/)
+</div>
+<br />
 ![Flutter Rich Text Editor Web](./media/screen1.jpg)
 
 ____
@@ -14,11 +17,11 @@ This plugin is a reworked [html_editor_enhanced](https://github.com/tneotia/html
  * Improved widget height constraints: 
    - wrap content,
    - expand full height, or 
-   - explicit, with height ChangeNotifier.
+   - explicit.
  * Summernote and jQuery replaced with [Squire](https://github.com/neilj/Squire) - very popular and well-maintained HTML5 rich text editor library, which provides great flexibility over generated HTML.
  * XSS protection enforced by [DOMPurify](https://github.com/cure53/DOMPurify) - super-fast, uber-tolerant XSS sanitizer for HTML, MathML and SVG.
  * [in_app_webview](https://pub.dev/packages/in_app_webview) replaced with Flutter's own [webview_flutter](https://pub.dev/packages/webview_flutter).
- * Built-in dictation feature (primarily for the web platform)
+ * Built-in dictation feature powered by [speech_to_text](https://pub.dev/packages/speech_to_text) package (primarily for the web platform)
 
 
 ____
@@ -28,14 +31,14 @@ ____
 
 Basic implementation of this editor doesn't require a controller. For simplicity and ease of use, [HtmlEditor] gives you access to the following top-level attributes:
 
-- `height` (`double`) - sets explicit height of the widget
-- `minHeight` (`double`) - sets minimum height of the widget
-- `expandFullHeight` (`bool`) - sizes widget to take all available height
-- `hint` (`String`) - Displays hint when the field is empty
-- `initialValue` (`String`) - initial HTML or text
-- `onChanged` (`String`) - top-level shortcut to `onChanged` callback
-- `isReadOnly` (`bool`) - locks the editor and removes the toolbar
-- `enableDictation` (`bool`) - yay or nay to voice-to-text feature
+- `height` (double) - sets explicit height of the widget
+- `minHeight` (double) - sets minimum height of the widget
+- `expandFullHeight` (bool) - sizes widget to take all available height
+- `hint` (String) - Displays hint when the field is empty
+- `initialValue` (String) - initial HTML or text
+- `onChanged` (String) - top-level shortcut to `onChanged` callback
+- `isReadOnly` (bool) - locks the editor and removes the toolbar
+- `enableDictation` (bool) - yay or nay to voice-to-text feature
 
 
 ```Dart
