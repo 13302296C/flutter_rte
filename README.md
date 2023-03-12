@@ -32,14 +32,16 @@ ____
 
 Basic implementation of this editor doesn't require a controller. For simplicity and ease of use, [HtmlEditor] gives you access to the following top-level attributes:
 
-- `height` (double) - sets explicit height of the widget
-- `minHeight` (double) - sets minimum height of the widget
-- `expandFullHeight` (bool) - sizes widget to take all available height
-- `hint` (String) - Displays hint when the field is empty
-- `initialValue` (String) - initial HTML or text
-- `onChanged` (String) - top-level shortcut to `onChanged` callback
-- `isReadOnly` (bool) - locks the editor and removes the toolbar
-- `enableDictation` (bool) - yay or nay to voice-to-text feature
+| Field | Type | Description |
+| :--- | :----: | :--- |
+| `height` | double | sets explicit height of the widget |
+| `minHeight` | double | sets minimum height of the widget |
+| `expandFullHeight` | bool | sizes widget to take all available height |
+| `hint` | String | Displays hint text when the editor is empty |
+| `initialValue` | String | initial HTML or text |
+| `onChanged` |String  | top-level shortcut to `onChanged` callback of the controller |
+| `isReadOnly` | bool | locks the editor and removes the toolbar |
+| `enableDictation` | bool | yay or nay to voice-to-text feature |
 
 
 ```Dart
@@ -70,8 +72,10 @@ To take advantage of the entire API you'll need to create and configure an insta
  * **Toolbar options** group (all things toolbar)
  * **Editor options** group (all things editor)
 
+When controller is provided, the text of HtmlEditor could be set via `controller.setText()` method, even before the controller is attached to the HtmlEditor in the UI. This is useful for MVVM/MVC situations, where the logic is initialized before the UI is built.
 
-When controller is provided, contents of the editor could be tried and accessed syncronously via a getter:
+
+Contents of the editor could be tried and accessed syncronously via a getter:
 ```dart
 
     if(controller.contentIsNotEmpty){
