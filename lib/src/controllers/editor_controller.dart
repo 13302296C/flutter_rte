@@ -424,7 +424,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// This method compiles HTML document based on various controller settings
   Future<String> getInitialContent() async {
     var textColor = stylingOptions.textColorCssString(context!);
-    var initScript = 'const viewId = \'$viewId\';';
+    var initScript = '''const viewId = '$viewId';
+    const blockTag = '${stylingOptions.blockTag}';
+    ''';
     if (kIsWeb) {
       initScript += '''
 const isNativePlatform = false;

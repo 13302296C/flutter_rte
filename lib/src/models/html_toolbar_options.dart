@@ -158,6 +158,47 @@ class HtmlToolbarOptions {
   List<CustomButtonGroup> customButtonGroups;
 
   /// Sets which options are visible in the toolbar for the editor.
+  ///
+  /// Avaliable options are:
+  /// * [VoiceToTextButtons] - adds voice to text button
+  /// * [StyleButtons] - adds style buttons
+  ///   - style
+  /// * [FontSettingButtons] - adds font setting buttons
+  ///   - fontName
+  ///   - fontSize
+  ///   - fontSizeUnit
+  /// * [FontButtons] - adds font buttons
+  ///  - bold
+  ///  - italic
+  ///  - underline
+  ///  - clearFormatting
+  ///  - strikethrough
+  ///  - superscript
+  ///  - subscript
+  /// * [ColorButtons] - adds color buttons
+  ///   - foregroundColor
+  ///   - highlightColor
+  /// * [ListButtons] - adds list buttons
+  ///   - ul
+  ///   - ol
+  ///   - listStyles
+  /// * [ParagraphButtons] - adds paragraph buttons
+  ///   - alignLeft
+  ///   - alignCenter
+  ///   - alignRight
+  ///   - alignJustify
+  ///   - increaseIndent
+  ///   - decreaseIndent
+  ///   - textDirection
+  ///   - lineHeight
+  ///   - caseConverter
+  /// * [InsertButtons] - adds insert buttons
+  ///   - link
+  /// * [OtherButtons] - adds other buttons
+  ///   - undo
+  ///   - redo
+  ///   - copy
+  ///   - paste
   final List<Toolbar> defaultToolbarButtons;
 
   /// Allows you to set the allowed extensions when a user inserts an image

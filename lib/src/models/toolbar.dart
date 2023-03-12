@@ -47,7 +47,7 @@ class FontButtons extends Toolbar {
   final bool bold;
   final bool italic;
   final bool underline;
-  final bool clearAll;
+  final bool clearFormatting;
   final bool strikethrough;
   final bool superscript;
   final bool subscript;
@@ -56,7 +56,7 @@ class FontButtons extends Toolbar {
     this.bold = true,
     this.italic = true,
     this.underline = true,
-    this.clearAll = true,
+    this.clearFormatting = true,
     this.strikethrough = true,
     this.superscript = true,
     this.subscript = true,
@@ -67,7 +67,7 @@ class FontButtons extends Toolbar {
     if (bold) icons.add(const Icon(Icons.format_bold));
     if (italic) icons.add(const Icon(Icons.format_italic));
     if (underline) icons.add(const Icon(Icons.format_underline));
-    if (clearAll) icons.add(const Icon(Icons.format_clear));
+    if (clearFormatting) icons.add(const Icon(Icons.format_clear));
     return icons;
   }
 

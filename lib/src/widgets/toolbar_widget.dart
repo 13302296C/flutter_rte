@@ -601,7 +601,7 @@ class ToolbarWidgetState extends State<ToolbarWidget> {
         }
       }
       if (t is FontButtons) {
-        if (t.bold || t.italic || t.underline || t.clearAll) {
+        if (t.bold || t.italic || t.underline || t.clearFormatting) {
           toolbarChildren.add(_boldItalic(t));
         }
         if (t.strikethrough || t.superscript || t.subscript) {
