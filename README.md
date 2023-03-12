@@ -2,10 +2,11 @@
 
 Easy to use WYSIWYG HTML editor for Flutter with built-in voice-to-text.
 <br />
-<div style="padding:1em 2em; background-color:blue; color:white;border-radius: 5px; margin: 1em auto">
-Try me! [here](https://flutter-rich-text.web.app/)
-</div>
+
+### Try me [here](https://flutter-rich-text.web.app/)
+
 <br />
+
 ![Flutter Rich Text Editor Web](./media/screen1.jpg)
 
 ____
