@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io' as io;
 import 'dart:math' as math;
 import 'dart:async';
@@ -402,94 +401,6 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
       _controller.isReadOnly = widget.isReadOnly!;
     }
     _controller.fault = fault;
-  }
-}
-
-class _STTDictationWidget extends StatefulWidget {
-  const _STTDictationWidget(this.controller, {Key? key}) : super(key: key);
-
-  final HtmlEditorController controller;
-
-  @override
-  __STTDictationWidgetState createState() => __STTDictationWidgetState();
-}
-
-class __STTDictationWidgetState extends State<_STTDictationWidget> {
-  HtmlEditorController get _controller => widget.controller;
-  HtmlEditorOptions get editorOptions => _controller.editorOptions;
-
-  @override
-  Widget build(BuildContext context) {
-    if (!_controller.isRecording) return const SizedBox();
-    var textColor = editorOptions.dictationPreviewTextColor ??
-        Theme.of(context).textTheme.bodyMedium?.color;
-    log('STT viewId: ${_controller.viewId}');
-    return PointerInterceptor(
-      child: Positioned(
-          left: 10,
-          right: 10,
-          bottom: 10,
-          child: Container(
-            decoration: editorOptions.dictationPreviewDecoration ??
-                BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                          blurRadius: 10,
-                          spreadRadius: 0,
-                          color: Colors.black38)
-                    ]),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.mic_rounded,
-                        color: textColor,
-                      ),
-                      Text(':',
-                          style: TextStyle(
-                            color: textColor,
-                          )),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(_controller.sttBuffer,
-                            style: TextStyle(
-                              color: textColor,
-                            )),
-                      ),
-                    ],
-                  ),
-                  Divider(
-                      color: Theme.of(context).brightness == Brightness.light
-                          ? Colors.black26
-                          : Colors.white24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                          onPressed: _controller.cancelRecording,
-                          child: Text('Discard',
-                              style: TextStyle(
-                                color: textColor,
-                              ))),
-                      const SizedBox(width: 24),
-                      TextButton(
-                          onPressed: _controller.stopRecording,
-                          child: Text('Insert',
-                              style: TextStyle(
-                                color: textColor,
-                              ))),
-                    ],
-                  )
-                ],
-              ),
-            ),
-          )),
-    );
   }
 }
 

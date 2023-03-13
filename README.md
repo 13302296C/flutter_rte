@@ -3,7 +3,7 @@
 Easy to use WYSIWYG HTML editor for Flutter with built-in voice-to-text.
 <br />
 
-### Try me [here](https://flutter-rich-text.web.app/)
+### Try it [here](https://flutter-rich-text.web.app/)
 
 <br />
 
@@ -66,13 +66,13 @@ ____
 
 ## Advanced Implementation
 
-To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the following groups of features:
+To take advantage of the entire API you'll need to create and configure an instance of [HtmlEditorController]. That instance provides access to the following groups of options:
 
  * **Styling options** group (all things CSS, HTML and sanitizing)
  * **Toolbar options** group (all things toolbar)
  * **Editor options** group (all things editor)
 
-When controller is provided, the text of HtmlEditor could be set via `controller.setText()` method, even before the controller is attached to the HtmlEditor in the UI. This is useful for MVVM/MVC situations, where the logic is initialized before the UI is built.
+When using the controller, the text of HtmlEditor could be set via `controller.setText()` method. This could be done before or after the controller is attached to the HtmlEditor in the UI. This is useful for MVVM/MVC situations, where the logic is initialized before the UI is built.
 
 
 Contents of the editor could be tried and accessed syncronously via a getter:
@@ -125,19 +125,19 @@ var stylingOptions = HtmlStylingOptions(
     // !!! DANGER !!! Setting this flag to `false` makes your app
     // vulnerable to XSS attacks.
     sanitizeOnPaste: true,
-    );
+);
 
-    // 2. another way to add global CSS is to call this async method:
-    await stylingOptions.importCssFromFile('path/to/style.css');
+// 2. another way to add global CSS is to call this async method:
+await stylingOptions.importCssFromFile('path/to/style.css');
 
-    // ...
+// ...
 
-    // Now create the editor passing the styling options
-    return HtmlEditor(
-      controller: HtmlEditorController(stylingOptions: stylingOptions),
-      onChanged: (p0) => (p0) {/* TODO */},
-      initialValue: '' /* TODO */,
-    );
+// Now create the editor passing the styling options
+return HtmlEditor(
+    controller: HtmlEditorController(stylingOptions: stylingOptions),
+    onChanged: (p0) => (p0) {/* TODO */},
+    initialValue: '' /* TODO */,
+);
 ```
 
 The code above should result in the following HTML being generated for each paragraph:
@@ -201,7 +201,7 @@ ____
 
 All toolbar-related options are contained within [ToolbarOptions] of [HtmlEditorController] class. Toolbar could be positionned:
 
- * __above__, __below__ the editor container, by setting the `toolbarPosition` attribute;
+ * __above__ or __below__ the editor container, by setting the `toolbarPosition` attribute;
 
 
 #### Above editor:
@@ -225,7 +225,7 @@ ____
 
 Toolbar button groups could be enabled/disabled via `defaultToolbarButtons` attribute of [HtmlToolbarOptions] class within the controller. You can customize the toolbar by overriding the default value of this attribute.
 <br /><br />
-Adding your own button groups to the toolbar is very simple - just provide a list of [CustomButtonGroup] objects to the `customButtonGroups` attribute. Each button group will consist of a list of [CustomToolbarButton] objects, each with its own icon, tap callback and an `isSelected` flag to let the toolbar know if the icon button should be highlighted.
+To add your own button group to the toolbar, you need to provide a list of [CustomButtonGroup] objects to the `customButtonGroups` attribute. Each button group will consist of a list of [CustomToolbarButton] objects, each with its own icon, tap callback and an `isSelected` flag to let the toolbar know if the icon button should be highlighted.
 
 
 ```Dart
@@ -261,7 +261,7 @@ ____
 
 ## Special Considerations and Gotchas
 
-1. Due to some framework issues on ***Web***, this plugin is only compatible with Flutter 3.3. If you want to use this plugin with earlier versions of Flutter - downgrade pointer_interceptor in this dependency to __0.9.0+1__.
+1. Due to some framework issues on ***Web***, this plugin is only compatible with Flutter 3.3 and up. If you want to use this plugin with earlier versions of Flutter - make sure to downgrade pointer_interceptor dependency in your project to __0.9.0+1__.
 
 2. Following needs to be done to make things work on each platform:
 

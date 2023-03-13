@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// Custom toolbar buttons for the HtmlEditor are grouped into CustomButtonGroup
+/// objects. Each group is placed in the toolbar at the index specified by the
+/// group's index property.
 class CustomButtonGroup {
   /// index in the toolbar at which to place the group
   int? index;
@@ -13,6 +16,9 @@ class CustomButtonGroup {
   });
 }
 
+/// Custom toolbar buttons are a part of CustomButtonGroup objects. Each button
+/// has an icon, an action to perform when the button is pressed, and a
+/// highlight state.
 class CustomToolbarButton {
   /// Icon to show in the toolbar
   IconData icon;
