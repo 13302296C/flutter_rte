@@ -362,34 +362,61 @@ https://github.com/neilj/Squire
 
   function onSelectionChange() {
     let {anchorNode, anchorOffset, focusNode, focusOffset} = document.getSelection();
-    var isBold = editor.hasFormat('b');
-    var isItalic = editor.hasFormat('i');
-    var isUnderline = editor.hasFormat('u');
-    var isStrikethrough = editor.hasFormat('s');
-    var isSuperscript = editor.hasFormat('sup');
-    var isSubscript = editor.hasFormat('sub');
-    var isUL = editor.hasFormat('ul');
-    var isOL = editor.hasFormat('ol');
-    var isLink = editor.hasFormat('a');
-    var isRight = window.getSelection().focusNode.closest(blockTag).classList.contains('align-right');
-    var isCenter = window.getSelection().focusNode.closest(blockTag).classList.contains('align-center');
-    var isFull = window.getSelection().focusNode.closest(blockTag).classList.contains('align-justify');
-    var isLeft = window.getSelection().focusNode.closest(blockTag).classList.contains('align-left') || (!isRight && !isCenter && !isFull);
+    var isBold = false;
+    var isItalic = false;
+    var isUnderline = false;
+    var isStrikethrough = false;
+    var isSuperscript = false;
+    var isSubscript = false;
+    var isUL = false;
+    var isOL = false;
+    var isLink = false;
+    var isLeft = false;
+    var isRight = false;
+    var isCenter = false;
+    var isFull = false;
     var parent;
     var fontName;
     var fontSize = 16;
     var foreColor = "000000";
     var backColor = "FFFF00";
+    // var focusNode2 = window.getSelection().focusNode; //$(window.getSelection().focusNode);
+    // var parentList = focusNode2.closest("div.note-editable ol, div.note-editable ul");
     var parentListType = 'none'; //parentList.css('list-style-type'); 
     var lineHeight = '1.5'; //$(focusNode.parentNode).css('line-height');
     var direction = 'ltr'; // $(focusNode.parentNode).css('direction');
+    if (document.queryCommandState) {
+      isBold = document.queryCommandState('bold');
+      isItalic = document.queryCommandState('italic');
+      isUnderline = document.queryCommandState('underline');
+      isStrikethrough = document.queryCommandState('strikeThrough');
+      isSuperscript = document.queryCommandState('superscript');
+      isSubscript = document.queryCommandState('subscript');
+      isUL = document.queryCommandState('insertUnorderedList');
+      isOL = document.queryCommandState('insertOrderedList');
+      isLink = editor.hasFormat('a');
+      isLeft = document.queryCommandState('justifyLeft');
+      isRight = document.queryCommandState('justifyRight');
+      isCenter = document.queryCommandState('justifyCenter');
+      isFull = document.queryCommandState('justifyFull');
+      // console.log(`queryCommandState:justifyLeft ${isLeft}`);
+      // console.log(`queryCommandState:justifyRight ${isRight}`);
+      // console.log(`queryCommandState:justifyCenter ${isCenter}`);
+      // console.log(`queryCommandState:justifyFull ${isFull}`);
 
+    }
     if (document.queryCommandValue) {
+      
       parent = document.queryCommandValue('formatBlock');
       fontSize = document.queryCommandValue('fontSize');
       foreColor = document.queryCommandValue('foreColor');
       backColor = document.queryCommandValue('backColor');
       fontName = document.queryCommandValue('fontName');
+      // console.log(`queryCommandValue:formatBlock ${parent}`);
+      // console.log(`queryCommandValue:fontSize ${fontSize}`);
+      // console.log(`queryCommandValue:foreColor ${foreColor}`);
+      // console.log(`queryCommandValue:highlightColor ${backColor}`);
+      // console.log(`queryCommandValue:fontName ${fontName}`);
     }
     var message = {
       'view': viewId, 

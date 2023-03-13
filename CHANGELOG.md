@@ -1,5 +1,5 @@
-## 0.4.12
-* Retire `document.queryCommandState`
+## 0.4.13
+* Update docs
 
 ## 0.4.11
 * Refactor dictation
