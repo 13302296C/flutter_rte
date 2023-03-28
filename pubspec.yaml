@@ -2,7 +2,7 @@ name: flutter_rte
 description: >-
   HTML editor for Flutter (WYSIWYG, rich text) with built-in speech-to-text.
 
-version: 0.4.13
+version: 1.0.0
 
 publish_to:
 
