@@ -353,19 +353,19 @@ class _HtmlEditorState extends State<HtmlEditor> with TickerProviderStateMixin {
     if (widget.controller != null) {
       if (widget.callbacks != null) {
         fault = Exception(
-            'Cannot have widget callbacks when controller is provided. Please use controller callbacks.');
+            'Cannot use widget callbacks when controller is provided. Please use controller callbacks.');
       }
     }
     // redundancy fuse: can't set both widget.onChanged and callbacks.onChanged set
     if (widget.callbacks != null && widget.onChanged != null) {
       fault = Exception(
-          'Cannot have both onChanged and Callbacks.onChangeContent. Please pick one.');
+          'Cannot use both onChanged and Callbacks.onChangeContent. Please pick one.');
     }
 
     // redundancy fuse: can't set both widget.onChanged and callbacks.onChanged set
     if (widget.controller != null && widget.onChanged != null) {
       fault = Exception(
-          'Cannot have both onChanged and controller. Please use constroller callbacks.');
+          'Cannot use widget onChanged callback with the controller. Please use controller\'s onChanged callback.');
     }
 
     // if controller is not provided - initialize internal controller
