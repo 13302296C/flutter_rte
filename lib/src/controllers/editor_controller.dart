@@ -160,11 +160,12 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   /// The default value is false.
   final bool processNewLineAsBr;
 
-  /// Determines whether text processing should happen on output HTML, e.g.
-  /// whether <p><br></p> is returned as "". For reference, Summernote uses
-  /// that HTML as the default HTML (when no text is in the editor).
+  /// Determines whether empty paragraph should be disregarded as a value,
+  /// e.g. whether `<p><br></p>` is returned as "". Editor uses that HTML
+  /// as the initial HTML for an opening paragraph (when no text has been
+  /// entered in the editor).
   ///
-  /// The default value is true.
+  /// The default value is `true`.
   final bool processOutputHtml;
 
   /// Internally tracks the character count in the editor
@@ -223,13 +224,25 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   // ignore: prefer_final_fields
   String _buffer = '';
-  String get content => _buffer;
+
+  /// Gets the current content of the editor.
+  ///
+  /// If the editor only has one empty paragraph- it will return an empty string.
+  String get content {
+    // do not count the empty paragraph as a valuable content.
+    // this is needed to properly evaluate the `contentIsEmpty` property
+    if (processOutputHtml && textHasNoValue(_buffer)) {
+      return '';
+    }
+
+    return _buffer;
+  }
 
   /// Checks if the editor is empty
-  bool get contentIsEmpty => _buffer.isEmpty;
+  bool get contentIsEmpty => content.isEmpty;
 
   /// Checks if the editor is not empty
-  bool get contentIsNotEmpty => _buffer.isNotEmpty;
+  bool get contentIsNotEmpty => content.isNotEmpty;
 
   /// Sets the initial text of the editor. This is useful when you want to
   /// initialize the editor with some text.
@@ -319,15 +332,16 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Gets the text from the editor and returns it as a [String].
   Future<String> getText() async {
-    if (_openRequests.keys.contains('toDart: getText')) {
-      return _openRequests['toDart: getText']?.future as Future<String>;
+    // if there is already a request for the text, complete it with an error
+    if (_openRequests.keys.contains('getText')) {
+      //return _openRequests['getText']?.future as Future<String>;
 
-      // _openRequests['toDart: getText']?.completeError('Duplicate request');
-      // _openRequests.remove('toDart: getText');
+      _openRequests['getText']?.completeError('Duplicate [getText] request');
+      // _openRequests.remove('getText');
     }
-    _openRequests.addEntries({'toDart: getText': Completer<String>()}.entries);
+    _openRequests.addEntries({'getText': Completer<String>()}.entries);
     unawaited(evaluateJavascript(data: {'type': 'toIframe: getText'}));
-    return _openRequests['toDart: getText']?.future as Future<String>;
+    return _openRequests['getText']?.future as Future<String>;
   }
 
   /// Clears the editor of any text.
@@ -340,8 +354,14 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
     evaluateJavascript(data: {'type': 'toIframe: toggleCode'});
   }
 
-  ///
+  /// Gets the selected text from the editor and returns it as a [String].
   Future<String> getSelectedText() async {
+    // if there is already a request for the selected text, return its future
+    if (_openRequests.keys.contains('getSelectedTextHtml')) {
+      //return _openRequests['getSelectedTextHtml']?.future as Future<String>;
+      _openRequests['getSelectedTextHtml']
+          ?.completeError('Duplicate [getSelectedTextHtml] request');
+    }
     _openRequests
         .addEntries({'getSelectedTextHtml': Completer<String>()}.entries);
     unawaited(
