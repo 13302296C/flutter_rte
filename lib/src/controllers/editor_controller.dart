@@ -268,6 +268,14 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   void scrollToCursor() =>
       evaluateJavascript(data: {'type': 'toIframe: scrollToCursor'});
 
+  /// Move the cursor to the end of the editor
+  void moveCursorToEnd() =>
+      evaluateJavascript(data: {'type': 'toIframe: moveCursorToEnd'});
+
+  /// Move the cursor to the start of the editor
+  void moveCursorToStart() =>
+      evaluateJavascript(data: {'type': 'toIframe: moveCursorToStart'});
+
   /// Clears the focus from the webview
   void clearFocus() =>
       evaluateJavascript(data: {'type': 'toIframe: clearFocus'});

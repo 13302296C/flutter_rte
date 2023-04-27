@@ -177,10 +177,14 @@ https://github.com/neilj/Squire
           //   break;
           // case 'setSelection':
           //   break;
-          // case 'moveCursorToStart':
-          //   break;
-          // case 'moveCursorToEnd':
-          //   break;
+          case 'moveCursorToStart':
+            editor.moveCursorToStart();
+            editor.focus();
+            break;
+          case 'moveCursorToEnd':
+            editor.moveCursorToEnd();
+            editor.focus();
+            break;
           // case 'saveUndoState':
           //   break;
 

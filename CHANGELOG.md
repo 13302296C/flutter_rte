@@ -1,6 +1,7 @@
 ## 1.0.0
 * Fix hang on `getText()` method
 * Disregard empty paragraph as a value (`<p><br></p>`) when the `processOutputHtml` is set to `true` (If the HTML content of the editor has only one empty paragraph - the `content` returns empty string, `contentIsEmpty` returns `true`, `contentIsNotEmpty` returns `false`)
+* Add `moveCursorToStart()` and `moveCursorToEnd()` controller methods
 
 ## 0.4.13
 * Update docs
