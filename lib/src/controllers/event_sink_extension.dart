@@ -129,12 +129,34 @@ extension StreamProcessor on HtmlEditorController {
         break;
 
       case 'onFocus':
+        // if we are in the middle of moving cursor to the end or to the start
+        // we focus the editor and do not notify listeners
+        if (_openRequests.containsKey('moveCursorToEnd') ||
+            _openRequests.containsKey('moveCursorToStart')) break;
+
+        // otherwise we notify listeners and update toolbar
         hasFocus = true;
         focusNode?.requestFocus();
         maybeScrollIntoView();
         callbacks.onFocus?.call();
         notifyListeners();
         unawaited(updateToolbar());
+        break;
+
+      case 'moveCursorToEnd':
+        if (_openRequests.containsKey('moveCursorToEnd')) {
+          _buffer = response['text'];
+          _openRequests['moveCursorToEnd']?.complete(_buffer);
+          _openRequests.remove('moveCursorToEnd');
+        }
+        break;
+
+      case 'moveCursorToStart':
+        if (_openRequests.containsKey('moveCursorToStart')) {
+          _buffer = response['text'];
+          _openRequests['moveCursorToStart']?.complete(_buffer);
+          _openRequests.remove('moveCursorToStart');
+        }
         break;
 
       case 'onBlur':

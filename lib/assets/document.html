@@ -177,14 +177,21 @@ https://github.com/neilj/Squire
           //   break;
           // case 'setSelection':
           //   break;
+
           case 'moveCursorToStart':
             editor.moveCursorToStart();
             editor.focus();
+            postChannelMessage({
+              "type": "toDart: moveCursorToStart", "text": editor.getHTML()});
             break;
+
           case 'moveCursorToEnd':
             editor.moveCursorToEnd();
             editor.focus();
+            postChannelMessage({
+              "type": "toDart: moveCursorToEnd", "text": editor.getHTML()});
             break;
+            
           // case 'saveUndoState':
           //   break;
 

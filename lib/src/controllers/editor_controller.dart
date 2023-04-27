@@ -269,12 +269,32 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
       evaluateJavascript(data: {'type': 'toIframe: scrollToCursor'});
 
   /// Move the cursor to the end of the editor
-  void moveCursorToEnd() =>
-      evaluateJavascript(data: {'type': 'toIframe: moveCursorToEnd'});
+  Future<String> moveCursorToEnd() async {
+    // if there is already a request for the text, complete it with an error
+    if (_openRequests.keys.contains('moveCursorToEnd')) {
+      _openRequests['moveCursorToEnd']
+          ?.completeError('Duplicate [moveCursorToEnd] request');
+      _openRequests.remove('moveCursorToEnd');
+    }
+    _openRequests.addEntries({'moveCursorToEnd': Completer<String>()}.entries);
+    unawaited(evaluateJavascript(data: {'type': 'toIframe: moveCursorToEnd'}));
+    return _openRequests['moveCursorToEnd']?.future as Future<String>;
+  }
 
   /// Move the cursor to the start of the editor
-  void moveCursorToStart() =>
-      evaluateJavascript(data: {'type': 'toIframe: moveCursorToStart'});
+  Future<String> moveCursorToStart() async {
+    // if there is already a request for the text, complete it with an error
+    if (_openRequests.keys.contains('moveCursorToStart')) {
+      _openRequests['moveCursorToStart']
+          ?.completeError('Duplicate [moveCursorToStart] request');
+      _openRequests.remove('moveCursorToStart');
+    }
+    _openRequests
+        .addEntries({'moveCursorToStart': Completer<String>()}.entries);
+    unawaited(
+        evaluateJavascript(data: {'type': 'toIframe: moveCursorToStart'}));
+    return _openRequests['moveCursorToStart']?.future as Future<String>;
+  }
 
   /// Clears the focus from the webview
   void clearFocus() =>
@@ -342,10 +362,8 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   Future<String> getText() async {
     // if there is already a request for the text, complete it with an error
     if (_openRequests.keys.contains('getText')) {
-      //return _openRequests['getText']?.future as Future<String>;
-
       _openRequests['getText']?.completeError('Duplicate [getText] request');
-      // _openRequests.remove('getText');
+      _openRequests.remove('getText');
     }
     _openRequests.addEntries({'getText': Completer<String>()}.entries);
     unawaited(evaluateJavascript(data: {'type': 'toIframe: getText'}));
@@ -366,9 +384,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
   Future<String> getSelectedText() async {
     // if there is already a request for the selected text, return its future
     if (_openRequests.keys.contains('getSelectedTextHtml')) {
-      //return _openRequests['getSelectedTextHtml']?.future as Future<String>;
       _openRequests['getSelectedTextHtml']
           ?.completeError('Duplicate [getSelectedTextHtml] request');
+      _openRequests.remove('getSelectedTextHtml');
     }
     _openRequests
         .addEntries({'getSelectedTextHtml': Completer<String>()}.entries);
