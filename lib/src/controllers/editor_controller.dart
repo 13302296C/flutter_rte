@@ -38,6 +38,9 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
                 blockTagAttributes:
                     HtmlTagAttributes(inlineStyle: 'text-align:justify;')) {
     viewId = getRandString(10).substring(0, 14);
+    if (editorOptions?.initialText?.isNotEmpty ?? false) {
+      _buffer = editorOptions?.initialText ?? '';
+    }
   }
 
   /// This context is used __only__ if you need to provide a context other than
@@ -438,17 +441,14 @@ class HtmlEditorController with ChangeNotifier, PlatformSpecificMixin {
 
   /// Helper function to process input html
   String _processHtml(String html) {
-    // if (processInputHtml) {
-    //   html = html.replaceAll('\n', '').replaceAll('\r', '');
-    // }
     if (processNewLineAsBr) {
       html = html.replaceAll('\n', '<br />');
     } else {
       html = html.replaceAll('\n', '&#10;').replaceAll('\r', '&#13;');
     }
     html = html.replaceAll('<br>', '<br />');
-    html = html.replaceAll("'", '&quot;');
-    //return HtmlEscape().convert(html);
+    html = html.replaceAll(
+        "'", '&#39;'); // &apos; is not supported in HTML4, use &#39; instead.
     return html;
   }
 

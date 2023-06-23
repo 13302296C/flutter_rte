@@ -2,6 +2,9 @@
 * Fix hang on `getText()` method
 * Disregard empty paragraph as a value (`<p><br></p>`) when the `processOutputHtml` is set to `true` (If the HTML content of the editor has only one empty paragraph - the `content` returns empty string, `contentIsEmpty` returns `true`, `contentIsNotEmpty` returns `false`)
 * Add `moveCursorToStart()` and `moveCursorToEnd()` controller methods
+* Fix single quote escaping
+* Fix hint text not disappearing when controller is pre-loaded with initialText
+
 
 ## 0.4.13
 * Update docs
