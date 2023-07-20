@@ -1,3 +1,6 @@
+## 1.0.0-s
+* strips newlines from pasted text
+
 ## 1.0.0
 * Fix hang on `getText()` method
 * Disregard empty paragraph as a value (`<p><br></p>`) when the `processOutputHtml` is set to `true` (If the HTML content of the editor has only one empty paragraph - the `content` returns empty string, `contentIsEmpty` returns `true`, `contentIsNotEmpty` returns `false`)
