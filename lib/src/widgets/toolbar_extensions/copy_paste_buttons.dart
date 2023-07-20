@@ -44,7 +44,8 @@ extension ToolbarCopyPasteButtons on ToolbarWidgetState {
                 (error, stackTrace) => throw Exception(
                     'There was an error pasting from clipboard: ${error.toString()}'));
             if (data != null) {
-              var text = data.text!;
+              var text = data.text!.replaceAll(RegExp(r'\r\n|\r|\n'), '');
+
               await widget.controller.insertHtml(text);
             }
           }

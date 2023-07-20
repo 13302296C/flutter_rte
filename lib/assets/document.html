@@ -492,7 +492,7 @@ https://github.com/neilj/Squire
 
         // interecpt the Ctrl-V, strip all tags, run through [editor.insertHTML].
         var r = DOMPurify.sanitize(e.fragment, {ALLOWED_TAGS:[]});
-        editor.insertHTML(r);
+        editor.insertHTML(r.replace(/(?:\r\n|\r|\n)/g, ''));
 
         // we need to trigger the 'onPaste' callback in Dart code
         postChannelMessage({"view": viewId, 
